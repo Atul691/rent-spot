@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - RentSpot</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-body">
+
+  <div class="auth-topbar">
+    <div class="auth-brand">RentSpot</div>
+    <div class="auth-top-links">
+      <a href="/">Home</a>
+      <a href="/login">Login</a>
+    </div>
+  </div>
+
+  <div class="auth-page-wrap">
+    <div class="auth-box">
+
+      <div class="auth-welcome purple-panel">
+        <div class="welcome-content">
+          <h2>Join RentSpot</h2>
+          <p>Already have an account?</p>
+          <a href="/login" class="welcome-btn">Login</a>
+        </div>
+      </div>
+
+      <div class="auth-form-side">
+        <h1>Register</h1>
+
+        <form action="/register" method="POST" class="auth-form">
+          <div class="input-group">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <span>👤</span>
+          </div>
+
+          <div class="input-group">
+            <input type="email" name="email" placeholder="Email" required>
+            <span>✉</span>
+          </div>
+
+          <div class="input-group">
+            <input type="password" name="password" placeholder="Password" required>
+            <span>🔒</span>
+          </div>
+
+          <button type="submit" class="primary-auth-btn">Register</button>
+        </form>
+
+        <p class="social-text">Create your account to continue</p>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

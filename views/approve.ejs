@@ -1,0 +1,36 @@
+<%- include("partials/header") %>
+
+<div class="admin-page">
+  <div class="admin-top">
+    <div>
+      <p class="admin-small">Admin Panel</p>
+      <h1>Approve Users</h1>
+      <p class="admin-subtext">Approve newly registered users.</p>
+    </div>
+    <div class="admin-top-actions">
+      <a href="/admin" class="admin-secondary-btn">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <% if(users.length === 0){ %>
+      <p class="empty-text">No pending users.</p>
+    <% } else { %>
+      <div class="admin-list">
+        <% users.forEach(function(u){ %>
+          <div class="admin-list-item">
+            <div>
+              <strong><%= u.name %></strong>
+              <p><%= u.email %></p>
+            </div>
+            <div class="list-actions">
+              <a href="/approve/<%= u.id %>" class="mini-btn view-mini">Approve</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

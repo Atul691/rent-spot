@@ -1,0 +1,62 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+
+    <div class="payment-head">
+      <div>
+        <p class="admin-small">Secure Payment</p>
+        <h1>Complete Your Payment</h1>
+        <p class="payment-subtext">Scan the QR code or pay using the UPI ID below.</p>
+      </div>
+
+      <a href="/" class="admin-secondary-btn">Back to Home</a>
+    </div>
+
+    <div class="payment-grid">
+
+      <div class="payment-box">
+        <h3>UPI Payment</h3>
+
+        <div class="upi-box">
+          <span class="upi-label">UPI ID</span>
+          <div class="upi-value">
+            <%= setting && setting.upi ? setting.upi : "Not set" %>
+          </div>
+        </div>
+
+        <div class="payment-info">
+          <p>1. Open any UPI app like PhonePe, Google Pay, Paytm or BHIM.</p>
+          <p>2. Enter the UPI ID shown above.</p>
+          <p>3. Complete the payment for your booking.</p>
+          <p>4. Keep a screenshot for confirmation.</p>
+        </div>
+      </div>
+
+      <div class="payment-box">
+        <h3>Scan QR Code</h3>
+
+        <% if(setting && setting.qr_image){ %>
+          <div class="qr-card">
+            <img src="/uploads/<%= setting.qr_image %>" alt="QR Code" class="payment-qr">
+          </div>
+        <% } else { %>
+          <div class="no-qr-box">
+            <p>QR code not uploaded yet.</p>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+
+    <div class="payment-note-box">
+      <h3>Important Note</h3>
+      <p>
+        After payment, contact the admin through WhatsApp or message section and share your payment screenshot for faster confirmation.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,47 @@
+<%- include("partials/header") %>
+
+<div class="admin-page">
+  <div class="admin-top">
+    <div>
+      <p class="admin-small">Admin Panel</p>
+      <h1>All Users</h1>
+      <p class="admin-subtext">All registered users are listed here.</p>
+    </div>
+    <div class="admin-top-actions">
+      <a href="/admin" class="admin-secondary-btn">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <% if(users.length === 0){ %>
+      <p class="empty-text">No users found.</p>
+    <% } else { %>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Approved</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(function(u){ %>
+              <tr>
+                <td><%= u.id %></td>
+                <td><%= u.name %></td>
+                <td><%= u.email %></td>
+                <td><%= u.role %></td>
+                <td><%= u.approved == 1 ? "Yes" : "No" %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

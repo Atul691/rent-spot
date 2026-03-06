@@ -1,0 +1,58 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="form-card booking-card">
+    <div class="addpg-head">
+      <div>
+        <p class="admin-small">Booking Form</p>
+        <h2>Book <%= pg.title %></h2>
+        <p class="addpg-subtext">Fill your details before payment.</p>
+      </div>
+
+      <a href="/pg/<%= pg.id %>" class="admin-secondary-btn">Back to PG</a>
+    </div>
+
+    <form action="/book/<%= pg.id %>" method="POST" class="addpg-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" name="phone" placeholder="Enter phone number" required>
+        </div>
+
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" name="age" placeholder="Enter age" required>
+        </div>
+
+        <div class="form-group">
+          <label>Date of Entry</label>
+          <input type="date" name="entry_date" required>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Additional Notes</label>
+        <textarea name="notes" placeholder="Any extra details"></textarea>
+      </div>
+
+      <div class="booking-summary-box">
+        <h3>PG Details</h3>
+        <p><strong>PG Name:</strong> <%= pg.title %></p>
+        <p><strong>Location:</strong> <%= pg.location %></p>
+        <p><strong>Price:</strong> ₹ <%= pg.price %></p>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="admin-primary-btn submit-btn">Continue to Payment</button>
+        <a href="/pg/<%= pg.id %>" class="admin-secondary-btn">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

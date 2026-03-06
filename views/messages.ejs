@@ -1,0 +1,34 @@
+<%- include("partials/header") %>
+
+<div class="admin-page">
+  <div class="admin-top">
+    <div>
+      <p class="admin-small">Admin Panel</p>
+      <h1>User Messages</h1>
+      <p class="admin-subtext">Here you can read messages sent by users.</p>
+    </div>
+
+    <div class="admin-top-actions">
+      <a href="/admin" class="admin-secondary-btn">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <% if(messages && messages.length > 0){ %>
+      <div class="admin-list">
+        <% messages.forEach(function(m){ %>
+          <div class="admin-list-item">
+            <div>
+              <strong>User ID: <%= m.user_id %></strong>
+              <p><%= m.message %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="empty-text">No messages found.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

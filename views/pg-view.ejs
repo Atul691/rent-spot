@@ -1,0 +1,108 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="pg-view-card">
+
+    <div class="pg-view-top">
+      <div>
+        <h1><%= pg.title %></h1>
+        <p class="pg-view-location"><%= pg.location %></p>
+        <p class="pg-view-price">₹ <%= pg.price %></p>
+      </div>
+
+      <div class="pg-view-actions">
+        <% if(user){ %>
+          <a href="/book/<%= pg.id %>" class="book-btn">Book Now</a>
+        <% } else { %>
+          <a href="/login" class="book-btn">Login to Book</a>
+        <% } %>
+
+        <% if(pg.whatsapp){ %>
+          <a href="https://wa.me/<%= pg.whatsapp %>" target="_blank" class="wa-btn">WhatsApp</a>
+        <% } %>
+
+        <% if(pg.map){ %>
+          <a href="<%= pg.map %>" target="_blank" class="map-btn">Open Google Map</a>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="pg-view-section">
+      <h3>Gallery</h3>
+
+      <% if(images && images.length > 0){ %>
+        <div class="pg-image-grid">
+          <% images.forEach(function(img){ %>
+            <div class="pg-image-box">
+              <img src="/uploads/<%= img.image %>" alt="PG Image">
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="no-image-box">
+          <p>No image uploaded for this PG.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="pg-view-section">
+      <h3>Description</h3>
+      <p><%= pg.description %></p>
+    </div>
+
+    <div class="pg-view-section">
+      <h3>Location</h3>
+      <% if(pg.map){ %>
+        <a href="<%= pg.map %>" target="_blank" class="map-big-btn">View Location in Google Maps</a>
+      <% } else { %>
+        <p class="empty-text">Map location not added.</p>
+      <% } %>
+    </div>
+
+    <% if(user){ %>
+      <div class="pg-view-section">
+        <h3>Send Message to Admin</h3>
+        <form action="/message" method="POST" class="rating-form">
+          <textarea name="message" placeholder="Write your message to admin" required></textarea>
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+      </div>
+    <% } %>
+
+    <div class="pg-view-section">
+      <h3>Ratings</h3>
+
+      <% if(user){ %>
+        <form action="/rate/<%= pg.id %>" method="POST" class="rating-form">
+          <select name="rating" required>
+            <option value="">Select Rating</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Star</option>
+            <option value="3">3 Star</option>
+            <option value="4">4 Star</option>
+            <option value="5">5 Star</option>
+          </select>
+
+          <textarea name="comment" placeholder="Write review"></textarea>
+          <button type="submit" class="submit-btn">Submit Rating</button>
+        </form>
+      <% } %>
+
+      <% if(ratings && ratings.length > 0){ %>
+        <div class="rating-list">
+          <% ratings.forEach(function(r){ %>
+            <div class="rating-box">
+              <strong>Rating: <%= r.rating %>/5</strong>
+              <p><%= r.comment %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>No ratings yet.</p>
+      <% } %>
+    </div>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

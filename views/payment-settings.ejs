@@ -1,0 +1,46 @@
+<%- include("partials/header") %>
+
+<div class="admin-page">
+  <div class="admin-top">
+    <div>
+      <p class="admin-small">Admin Panel</p>
+      <h1>Payment Settings</h1>
+      <p class="admin-subtext">Update UPI ID and QR image for payment.</p>
+    </div>
+    <div class="admin-top-actions">
+      <a href="/admin" class="admin-secondary-btn">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <form action="/payment-settings" method="POST" enctype="multipart/form-data" class="notify-form">
+      <label style="display:block; margin-bottom:8px; font-weight:700;">UPI ID</label>
+      <input 
+        type="text" 
+        name="upi" 
+        value="<%= setting && setting.upi ? setting.upi : '' %>" 
+        placeholder="Enter UPI ID"
+        style="width:100%; padding:14px; border:1px solid #ddd; border-radius:14px; margin-bottom:16px;"
+        required
+      >
+
+      <label style="display:block; margin-bottom:8px; font-weight:700;">Upload QR Image</label>
+      <input 
+        type="file" 
+        name="qr_image"
+        style="width:100%; padding:10px; border:1px solid #ddd; border-radius:14px; margin-bottom:16px;"
+      >
+
+      <% if(setting && setting.qr_image){ %>
+        <div style="margin-bottom:16px;">
+          <p style="margin-bottom:10px;">Current QR:</p>
+          <img src="/uploads/<%= setting.qr_image %>" alt="QR Code" class="qr-preview">
+        </div>
+      <% } %>
+
+      <button type="submit" class="admin-primary-btn full-btn">Save Payment Settings</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

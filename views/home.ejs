@@ -1,0 +1,113 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+
+  <div class="home-head">
+    <h1>Available PG / Rooms</h1>
+    <p>Select a PG and use the working buttons below.</p>
+  </div>
+
+  <% if(notes && notes.length > 0){ %>
+    <div class="notification-list">
+      <% notes.slice(0,3).forEach(function(n){ %>
+        <div class="notification-box">
+          <strong>Admin Notice:</strong> <%= n.text %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label for="searchName">Search by PG Name</label>
+      <input type="text" id="searchName" placeholder="Enter PG name">
+    </div>
+
+    <div class="filter-group">
+      <label for="searchPrice">Filter by Max Price</label>
+      <input type="number" id="searchPrice" placeholder="Enter max price">
+    </div>
+
+    <div class="filter-group filter-btn-group">
+      <button type="button" onclick="filterPGs()" class="filter-btn">Search</button>
+      <button type="button" onclick="resetPGs()" class="reset-btn">Reset</button>
+    </div>
+  </div>
+
+  <div class="pg-list" id="pgList">
+
+    <% if(pg.length === 0){ %>
+      <div class="empty-box">
+        <h3>No PG available</h3>
+        <p>Admin can add PG from dashboard.</p>
+      </div>
+    <% } %>
+
+    <% pg.forEach(function(p){ %>
+      <div 
+        class="pg-card pg-item"
+        data-name="<%= p.title.toLowerCase() %>"
+        data-price="<%= p.price %>"
+      >
+        <% if(p.firstImage){ %>
+          <img src="/uploads/<%= p.firstImage %>" class="pg-image" alt="PG Image">
+        <% } else { %>
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80" class="pg-image" alt="PG Image">
+        <% } %>
+
+        <div class="pg-content">
+          <div class="pg-title"><%= p.title %></div>
+          <div class="pg-location"><%= p.location %></div>
+          <div class="pg-price">₹ <%= p.price %></div>
+
+          <div class="pg-buttons">
+            <a href="/pg/<%= p.id %>" class="view-btn">View</a>
+
+            <% if(user){ %>
+              <a href="/book/<%= p.id %>" class="book-btn">Book</a>
+            <% } else { %>
+              <a href="/login" class="book-btn">Login to Book</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+
+  </div>
+
+</div>
+
+<script>
+  function filterPGs() {
+    const nameValue = document.getElementById("searchName").value.toLowerCase().trim();
+    const priceValue = document.getElementById("searchPrice").value.trim();
+
+    const cards = document.querySelectorAll(".pg-item");
+
+    cards.forEach(card => {
+      const pgName = card.getAttribute("data-name");
+      const pgPrice = parseInt(card.getAttribute("data-price")) || 0;
+
+      const nameMatch = !nameValue || pgName.includes(nameValue);
+      const priceMatch = !priceValue || pgPrice <= parseInt(priceValue);
+
+      if (nameMatch && priceMatch) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
+
+  function resetPGs() {
+    document.getElementById("searchName").value = "";
+    document.getElementById("searchPrice").value = "";
+
+    const cards = document.querySelectorAll(".pg-item");
+    cards.forEach(card => {
+      card.style.display = "block";
+    });
+  }
+</script>
+
+<%- include("partials/footer") %>

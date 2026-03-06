@@ -1,0 +1,164 @@
+<%- include("partials/header") %>
+
+<div class="admin-page">
+  <div class="admin-top">
+    <div>
+      <p class="admin-small">Control Panel</p>
+      <h1>Admin Dashboard</h1>
+      <p class="admin-subtext">Manage users, PG listings, bookings, messages, and notifications.</p>
+    </div>
+
+    <div class="admin-top-actions">
+      <a href="/addpg" class="admin-primary-btn">+ Add PG</a>
+      <a href="/" class="admin-secondary-btn">View Website</a>
+    </div>
+  </div>
+
+  <div class="admin-stats">
+    <div class="admin-stat-card">
+      <div class="stat-icon blue">👤</div>
+      <div>
+        <p>Total Users</p>
+        <h2><%= users.length %></h2>
+      </div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div class="stat-icon orange">⏳</div>
+      <div>
+        <p>Pending Users</p>
+        <h2><%= users.filter(u => u.approved == 0).length %></h2>
+      </div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div class="stat-icon green">🏠</div>
+      <div>
+        <p>Total Properties</p>
+        <h2><%= pg.length %></h2>
+      </div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div class="stat-icon purple">💬</div>
+      <div>
+        <p>Messages</p>
+        <h2><%= messages.length %></h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-main-grid">
+    <div class="admin-panel">
+      <div class="panel-head">
+        <h3>Quick Actions</h3>
+      </div>
+
+      <div class="quick-actions-grid">
+        <a href="/users" class="quick-box">
+          <span>👥</span>
+          <strong>Manage Users</strong>
+          <small>View all registered users</small>
+        </a>
+
+        <a href="/approve-list" class="quick-box">
+          <span>✅</span>
+          <strong>Approve Users</strong>
+          <small>Approve new registrations</small>
+        </a>
+
+        <a href="/addpg" class="quick-box">
+          <span>🏠</span>
+          <strong>Add PG</strong>
+          <small>Create new property listing</small>
+        </a>
+
+        <a href="/bookings" class="quick-box">
+          <span>📘</span>
+          <strong>Bookings</strong>
+          <small>Check all booking requests</small>
+        </a>
+
+        <a href="/messages" class="quick-box">
+          <span>✉️</span>
+          <strong>Messages</strong>
+          <small>Read user messages</small>
+        </a>
+
+        <a href="/payment-settings" class="quick-box">
+          <span>💳</span>
+          <strong>Payment Settings</strong>
+          <small>Set UPI and QR details</small>
+        </a>
+      </div>
+    </div>
+
+    <div class="admin-panel">
+      <h3>Send Notification to Users</h3>
+
+      <form action="/notify" method="POST" class="rating-form">
+        <textarea
+          name="text"
+          placeholder="Write notification for users"
+          required
+        ></textarea>
+
+        <button type="submit" class="admin-primary-btn">
+          Send Notification
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-bottom-grid">
+    <div class="admin-panel">
+      <div class="panel-head">
+        <h3>Recent Properties</h3>
+      </div>
+
+      <% if(pg.length === 0){ %>
+        <p class="empty-text">No PG added yet.</p>
+      <% } else { %>
+        <div class="admin-list">
+          <% pg.slice(0,5).forEach(function(item){ %>
+            <div class="admin-list-item">
+              <div>
+                <strong><%= item.title %></strong>
+                <p><%= item.location %></p>
+                <p>₹ <%= item.price %></p>
+              </div>
+
+              <div class="list-actions">
+                <a href="/pg/<%= item.id %>" class="mini-btn view-mini">View</a>
+                <a href="/deletepg/<%= item.id %>" class="mini-btn delete-mini" onclick="return confirm('Delete this PG?')">Delete</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="admin-panel">
+      <div class="panel-head">
+        <h3>Recent Messages</h3>
+      </div>
+
+      <% if(messages.length === 0){ %>
+        <p class="empty-text">No messages available.</p>
+      <% } else { %>
+        <div class="admin-list">
+          <% messages.slice(0,5).forEach(function(msg){ %>
+            <div class="admin-list-item">
+              <div>
+                <strong>User ID: <%= msg.user_id %></strong>
+                <p><%= msg.message %></p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
