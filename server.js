@@ -6,12 +6,12 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const db = require("./database");
+
+const { pool, initDb } = require("./database");
 
 const app = express();
 
 app.set("view engine", "ejs");
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
@@ -62,24 +62,39 @@ function admin(req, res, next) {
 
 /* -------------------- HOME -------------------- */
 
-app.get("/", (req, res) => {
-  const pgList = db.prepare("SELECT * FROM pg ORDER BY id DESC").all();
-  const notes = db.prepare("SELECT * FROM notifications ORDER BY id DESC").all();
+app.get("/", async (req, res) => {
+  try {
+    const pgListResult = await pool.query('SELECT * FROM pg ORDER BY id DESC');
+    const notesResult = await pool.query('SELECT * FROM notifications ORDER BY id DESC');
 
-  const pg = pgList.map((item) => {
-    const firstImage = db.prepare("SELECT * FROM images WHERE pg_id=? ORDER BY id ASC LIMIT 1").get(item.id);
-    return {
-      ...item,
-      firstImage: firstImage ? firstImage.image : null
-    };
-  });
+    const pgList = pgListResult.rows;
+    const notes = notesResult.rows;
 
-  res.render("home", {
-    pg,
-    notes,
-    user: req.session.user
-  });
+    const pg = [];
+
+    for (const item of pgList) {
+      const firstImageResult = await pool.query(
+        'SELECT * FROM images WHERE pg_id=$1 ORDER BY id ASC LIMIT 1',
+        [item.id]
+      );
+
+      pg.push({
+        ...item,
+        firstImage: firstImageResult.rows[0] ? firstImageResult.rows[0].image : null
+      });
+    }
+
+    res.render("home", {
+      pg,
+      notes,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("HOME ERROR:", error);
+    res.send("Error loading home page");
+  }
 });
+
 /* -------------------- LOGIN / REGISTER -------------------- */
 
 app.get("/login", (req, res) => {
@@ -91,61 +106,81 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  if (!name || !email || !password) {
-    return res.send("Please fill all fields");
+    if (!name || !email || !password) {
+      return res.send("Please fill all fields");
+    }
+
+    const existingResult = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      [email]
+    );
+
+    if (existingResult.rows[0]) {
+      return res.send("Email already registered");
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      `INSERT INTO users(name,email,password)
+       VALUES($1,$2,$3)`,
+      [name, email, hash]
+    );
+
+    res.redirect("/login");
+  } catch (error) {
+    console.log("REGISTER ERROR:", error);
+    res.send("Register failed");
   }
-
-  const existing = db.prepare("SELECT * FROM users WHERE email=?").get(email);
-  if (existing) {
-    return res.send("Email already registered");
-  }
-
-  const hash = await bcrypt.hash(password, 10);
-
-  db.prepare(`
-    INSERT INTO users(name,email,password)
-    VALUES(?,?,?)
-  `).run(name, email, hash);
-
-  res.redirect("/login");
 });
 
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  if (
-    email === process.env.ADMIN_EMAIL &&
-    password === process.env.ADMIN_PASSWORD
-  ) {
-    req.session.user = {
-      id: 0,
-      name: "Admin",
-      email: process.env.ADMIN_EMAIL,
-      role: "admin"
-    };
-    return res.redirect("/admin");
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      req.session.user = {
+        id: 0,
+        name: "Admin",
+        email: process.env.ADMIN_EMAIL,
+        role: "admin"
+      };
+      return res.redirect("/admin");
+    }
+
+    const userResult = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      [email]
+    );
+
+    const user = userResult.rows[0];
+
+    if (!user) {
+      return res.send("User not found");
+    }
+
+    const ok = await bcrypt.compare(password, user.password);
+
+    if (!ok) {
+      return res.send("Wrong password");
+    }
+
+    if (Number(user.approved) === 0) {
+      return res.send("Admin approval pending");
+    }
+
+    req.session.user = user;
+    res.redirect("/");
+  } catch (error) {
+    console.log("LOGIN ERROR:", error);
+    res.send("Login failed");
   }
-
-  const user = db.prepare("SELECT * FROM users WHERE email=?").get(email);
-
-  if (!user) {
-    return res.send("User not found");
-  }
-
-  const ok = await bcrypt.compare(password, user.password);
-
-  if (!ok) {
-    return res.send("Wrong password");
-  }
-
-  if (user.approved === 0) {
-    return res.send("Admin approval pending");
-  }
-
-  req.session.user = user;
-  res.redirect("/");
 });
 
 app.get("/logout", (req, res) => {
@@ -156,42 +191,67 @@ app.get("/logout", (req, res) => {
 
 /* -------------------- ADMIN DASHBOARD -------------------- */
 
-app.get("/admin", admin, (req, res) => {
-  const users = db.prepare("SELECT * FROM users ORDER BY id DESC").all();
-  const pg = db.prepare("SELECT * FROM pg ORDER BY id DESC").all();
-  const messages = db.prepare("SELECT * FROM messages ORDER BY id DESC").all();
+app.get("/admin", admin, async (req, res) => {
+  try {
+    const usersResult = await pool.query("SELECT * FROM users ORDER BY id DESC");
+    const pgResult = await pool.query("SELECT * FROM pg ORDER BY id DESC");
+    const messagesResult = await pool.query("SELECT * FROM messages ORDER BY id DESC");
 
-  res.render("admin", {
-    users,
-    pg,
-    messages,
-    user: req.session.user
-  });
+    res.render("admin", {
+      users: usersResult.rows,
+      pg: pgResult.rows,
+      messages: messagesResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("ADMIN ERROR:", error);
+    res.send("Error loading admin dashboard");
+  }
 });
 
 /* -------------------- USERS -------------------- */
 
-app.get("/users", admin, (req, res) => {
-  const users = db.prepare("SELECT * FROM users ORDER BY id DESC").all();
+app.get("/users", admin, async (req, res) => {
+  try {
+    const usersResult = await pool.query("SELECT * FROM users ORDER BY id DESC");
 
-  res.render("users", {
-    users,
-    user: req.session.user
-  });
+    res.render("users", {
+      users: usersResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("USERS ERROR:", error);
+    res.send("Error loading users");
+  }
 });
 
-app.get("/approve-list", admin, (req, res) => {
-  const users = db.prepare("SELECT * FROM users WHERE approved=0 ORDER BY id DESC").all();
+app.get("/approve-list", admin, async (req, res) => {
+  try {
+    const usersResult = await pool.query(
+      "SELECT * FROM users WHERE approved=0 ORDER BY id DESC"
+    );
 
-  res.render("approve", {
-    users,
-    user: req.session.user
-  });
+    res.render("approve", {
+      users: usersResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("APPROVE LIST ERROR:", error);
+    res.send("Error loading approve list");
+  }
 });
 
-app.get("/approve/:id", admin, (req, res) => {
-  db.prepare("UPDATE users SET approved=1 WHERE id=?").run(req.params.id);
-  res.redirect("/approve-list");
+app.get("/approve/:id", admin, async (req, res) => {
+  try {
+    await pool.query(
+      "UPDATE users SET approved=1 WHERE id=$1",
+      [req.params.id]
+    );
+    res.redirect("/approve-list");
+  } catch (error) {
+    console.log("APPROVE USER ERROR:", error);
+    res.send("Error approving user");
+  }
 });
 
 /* -------------------- ADD PG -------------------- */
@@ -202,7 +262,7 @@ app.get("/addpg", admin, (req, res) => {
   });
 });
 
-app.post("/addpg", admin, upload.array("images", 10), (req, res) => {
+app.post("/addpg", admin, upload.array("images", 10), async (req, res) => {
   try {
     const { title, price, location, description, whatsapp, map } = req.body;
 
@@ -210,29 +270,23 @@ app.post("/addpg", admin, upload.array("images", 10), (req, res) => {
       return res.send("Please fill all required PG details");
     }
 
-    const result = db.prepare(`
-      INSERT INTO pg(title,price,location,description,whatsapp,map)
-      VALUES(?,?,?,?,?,?)
-    `).run(
-      title,
-      price,
-      location,
-      description,
-      whatsapp || "",
-      map || ""
+    const result = await pool.query(
+      `INSERT INTO pg(title,price,location,description,whatsapp,map)
+       VALUES($1,$2,$3,$4,$5,$6)
+       RETURNING id`,
+      [title, price, location, description, whatsapp || "", map || ""]
     );
 
-    const pgId = result.lastInsertRowid;
-
-    console.log("FILES RECEIVED:", req.files);
+    const pgId = result.rows[0].id;
 
     if (req.files && req.files.length > 0) {
-      req.files.forEach((file) => {
-        db.prepare(`
-          INSERT INTO images(pg_id,image)
-          VALUES(?,?)
-        `).run(pgId, file.filename);
-      });
+      for (const file of req.files) {
+        await pool.query(
+          `INSERT INTO images(pg_id,image)
+           VALUES($1,$2)`,
+          [pgId, file.filename]
+        );
+      }
     }
 
     res.redirect("/admin");
@@ -242,70 +296,65 @@ app.post("/addpg", admin, upload.array("images", 10), (req, res) => {
   }
 });
 
-app.get("/deletepg/:id", admin, (req, res) => {
-  const pgId = req.params.id;
-
-  const images = db.prepare("SELECT * FROM images WHERE pg_id=?").all(pgId);
-
-  images.forEach((img) => {
-    const imgPath = path.join(uploadDir, img.image);
-    if (fs.existsSync(imgPath)) {
-      fs.unlinkSync(imgPath);
-    }
-  });
-
-  db.prepare("DELETE FROM images WHERE pg_id=?").run(pgId);
-  db.prepare("DELETE FROM ratings WHERE pg_id=?").run(pgId);
-  db.prepare("DELETE FROM bookings WHERE pg_id=?").run(pgId);
-  db.prepare("DELETE FROM pg WHERE id=?").run(pgId);
-
-  res.redirect("/admin");
-});
-
-
-/* PG VIEW PAGE */
-app.get("/pg/:id", (req, res) => {
+app.get("/deletepg/:id", admin, async (req, res) => {
   try {
-    const pg = db.prepare("SELECT * FROM pg WHERE id=?").get(req.params.id);
+    const pgId = req.params.id;
 
-    if (!pg) {
-      return res.send("PG not found");
+    const imagesResult = await pool.query(
+      "SELECT * FROM images WHERE pg_id=$1",
+      [pgId]
+    );
+
+    const images = imagesResult.rows;
+
+    for (const img of images) {
+      const imgPath = path.join(uploadDir, img.image);
+      if (fs.existsSync(imgPath)) {
+        fs.unlinkSync(imgPath);
+      }
     }
 
-    const images = db.prepare("SELECT * FROM images WHERE pg_id=? ORDER BY id DESC").all(req.params.id);
-    const ratings = db.prepare("SELECT * FROM ratings WHERE pg_id=? ORDER BY id DESC").all(req.params.id);
+    await pool.query("DELETE FROM images WHERE pg_id=$1", [pgId]);
+    await pool.query("DELETE FROM ratings WHERE pg_id=$1", [pgId]);
+    await pool.query("DELETE FROM bookings WHERE pg_id=$1", [pgId]);
+    await pool.query("DELETE FROM pg WHERE id=$1", [pgId]);
 
-    res.render("pg", {
-      pg,
-      images,
-      ratings,
-      user: req.session.user
-    });
-
+    res.redirect("/admin");
   } catch (error) {
-    console.log("PG VIEW ERROR:", error);
-    res.send("Error loading PG page");
+    console.log("DELETE PG ERROR:", error);
+    res.send("Error deleting PG");
   }
 });
 
-
 /* -------------------- PG DETAILS -------------------- */
 
-app.get("/pg/:id", (req, res) => {
+app.get("/pg/:id", async (req, res) => {
   try {
-    const pg = db.prepare("SELECT * FROM pg WHERE id=?").get(req.params.id);
+    const pgResult = await pool.query(
+      "SELECT * FROM pg WHERE id=$1",
+      [req.params.id]
+    );
+
+    const pg = pgResult.rows[0];
 
     if (!pg) {
       return res.send("PG not found");
     }
 
-    const images = db.prepare("SELECT * FROM images WHERE pg_id=? ORDER BY id ASC").all(req.params.id);
-    const ratings = db.prepare("SELECT * FROM ratings WHERE pg_id=? ORDER BY id DESC").all(req.params.id);
+    const imagesResult = await pool.query(
+      "SELECT * FROM images WHERE pg_id=$1 ORDER BY id ASC",
+      [req.params.id]
+    );
+
+    const ratingsResult = await pool.query(
+      "SELECT * FROM ratings WHERE pg_id=$1 ORDER BY id DESC",
+      [req.params.id]
+    );
 
     res.render("pg", {
       pg,
-      images,
-      ratings,
+      images: imagesResult.rows,
+      ratings: ratingsResult.rows,
       user: req.session.user
     });
   } catch (error) {
@@ -316,133 +365,202 @@ app.get("/pg/:id", (req, res) => {
 
 /* -------------------- BOOKINGS -------------------- */
 
-app.get("/book/:id", auth, (req, res) => {
-  const pg = db.prepare("SELECT * FROM pg WHERE id=?").get(req.params.id);
+app.get("/book/:id", auth, async (req, res) => {
+  try {
+    const pgResult = await pool.query(
+      "SELECT * FROM pg WHERE id=$1",
+      [req.params.id]
+    );
 
-  if (!pg) {
-    return res.send("PG not found");
+    const pg = pgResult.rows[0];
+
+    if (!pg) {
+      return res.send("PG not found");
+    }
+
+    res.render("booking-form", {
+      pg,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("BOOK PAGE ERROR:", error);
+    res.send("Error loading booking form");
   }
-
-  res.render("booking-form", {
-    pg,
-    user: req.session.user
-  });
 });
 
-app.post("/book/:id", auth, (req, res) => {
-  const pg = db.prepare("SELECT * FROM pg WHERE id=?").get(req.params.id);
+app.post("/book/:id", auth, async (req, res) => {
+  try {
+    const pgResult = await pool.query(
+      "SELECT * FROM pg WHERE id=$1",
+      [req.params.id]
+    );
 
-  if (!pg) {
-    return res.send("PG not found");
+    const pg = pgResult.rows[0];
+
+    if (!pg) {
+      return res.send("PG not found");
+    }
+
+    const { full_name, phone, age, entry_date, notes } = req.body;
+
+    if (!full_name || !phone || !age || !entry_date) {
+      return res.send("Please fill all booking details");
+    }
+
+    await pool.query(
+      `INSERT INTO bookings(user_id,pg_id,full_name,phone,age,entry_date,notes,status)
+       VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
+      [
+        req.session.user.id,
+        req.params.id,
+        full_name,
+        phone,
+        age,
+        entry_date,
+        notes || "",
+        "pending"
+      ]
+    );
+
+    res.redirect("/payment");
+  } catch (error) {
+    console.log("BOOKING SUBMIT ERROR:", error);
+    res.send("Error submitting booking");
   }
+});
 
-  const { full_name, phone, age, entry_date, notes } = req.body;
+app.get("/bookings", admin, async (req, res) => {
+  try {
+    const bookingsResult = await pool.query(`
+      SELECT bookings.*, pg.title AS pg_title
+      FROM bookings
+      LEFT JOIN pg ON bookings.pg_id = pg.id
+      ORDER BY bookings.id DESC
+    `);
 
-  if (!full_name || !phone || !age || !entry_date) {
-    return res.send("Please fill all booking details");
+    res.render("bookings", {
+      bookings: bookingsResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("BOOKINGS ERROR:", error);
+    res.send("Error loading bookings");
   }
-
-  db.prepare(`
-    INSERT INTO bookings(user_id,pg_id,full_name,phone,age,entry_date,notes,status)
-    VALUES(?,?,?,?,?,?,?,?)
-  `).run(
-    req.session.user.id,
-    req.params.id,
-    full_name,
-    phone,
-    age,
-    entry_date,
-    notes || "",
-    "pending"
-  );
-
-  res.redirect("/payment");
 });
 
-app.get("/bookings", admin, (req, res) => {
-  const bookings = db.prepare(`
-    SELECT bookings.*, 
-           pg.title AS pg_title
-    FROM bookings
-    LEFT JOIN pg ON bookings.pg_id = pg.id
-    ORDER BY bookings.id DESC
-  `).all();
-
-  res.render("bookings", {
-    bookings,
-    user: req.session.user
-  });
+app.get("/approve-booking/:id", admin, async (req, res) => {
+  try {
+    await pool.query(
+      "UPDATE bookings SET status='approved' WHERE id=$1",
+      [req.params.id]
+    );
+    res.redirect("/bookings");
+  } catch (error) {
+    console.log("APPROVE BOOKING ERROR:", error);
+    res.send("Error approving booking");
+  }
 });
 
-app.get("/approve-booking/:id", admin, (req, res) => {
-  db.prepare("UPDATE bookings SET status='approved' WHERE id=?").run(req.params.id);
-  res.redirect("/bookings");
+app.get("/reject-booking/:id", admin, async (req, res) => {
+  try {
+    await pool.query(
+      "UPDATE bookings SET status='rejected' WHERE id=$1",
+      [req.params.id]
+    );
+    res.redirect("/bookings");
+  } catch (error) {
+    console.log("REJECT BOOKING ERROR:", error);
+    res.send("Error rejecting booking");
+  }
 });
 
-app.get("/reject-booking/:id", admin, (req, res) => {
-  db.prepare("UPDATE bookings SET status='rejected' WHERE id=?").run(req.params.id);
-  res.redirect("/bookings");
-});
+app.get("/my-bookings", auth, async (req, res) => {
+  try {
+    const bookingsResult = await pool.query(`
+      SELECT bookings.*, 
+             pg.title AS pg_title,
+             pg.location AS pg_location,
+             pg.price AS pg_price
+      FROM bookings
+      LEFT JOIN pg ON bookings.pg_id = pg.id
+      WHERE bookings.user_id = $1
+      ORDER BY bookings.id DESC
+    `, [req.session.user.id]);
 
-app.get("/my-bookings", auth, (req, res) => {
-  const bookings = db.prepare(`
-    SELECT bookings.*, 
-           pg.title AS pg_title,
-           pg.location AS pg_location,
-           pg.price AS pg_price
-    FROM bookings
-    LEFT JOIN pg ON bookings.pg_id = pg.id
-    WHERE bookings.user_id = ?
-    ORDER BY bookings.id DESC
-  `).all(req.session.user.id);
-
-  res.render("my-bookings", {
-    bookings,
-    user: req.session.user
-  });
+    res.render("my-bookings", {
+      bookings: bookingsResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("MY BOOKINGS ERROR:", error);
+    res.send("Error loading my bookings");
+  }
 });
 
 /* -------------------- PAYMENT -------------------- */
 
-app.get("/payment", auth, (req, res) => {
-  const setting = db.prepare("SELECT * FROM settings WHERE id=1").get();
+app.get("/payment", auth, async (req, res) => {
+  try {
+    const settingResult = await pool.query(
+      "SELECT * FROM settings WHERE id=1"
+    );
 
-  res.render("payment", {
-    user: req.session.user,
-    setting
-  });
-});
-
-app.get("/payment-settings", admin, (req, res) => {
-  const setting = db.prepare("SELECT * FROM settings WHERE id=1").get();
-
-  res.render("payment-settings", {
-    user: req.session.user,
-    setting
-  });
-});
-
-app.post("/payment-settings", admin, upload.single("qr_image"), (req, res) => {
-  const current = db.prepare("SELECT * FROM settings WHERE id=1").get();
-
-  let qrImage = current ? current.qr_image : "";
-
-  if (req.file) {
-    qrImage = req.file.filename;
+    res.render("payment", {
+      user: req.session.user,
+      setting: settingResult.rows[0]
+    });
+  } catch (error) {
+    console.log("PAYMENT PAGE ERROR:", error);
+    res.send("Error loading payment page");
   }
+});
 
-  db.prepare(`
-    UPDATE settings
-    SET upi=?, qr_image=?
-    WHERE id=1
-  `).run(req.body.upi, qrImage);
+app.get("/payment-settings", admin, async (req, res) => {
+  try {
+    const settingResult = await pool.query(
+      "SELECT * FROM settings WHERE id=1"
+    );
 
-  res.redirect("/payment-settings");
+    res.render("payment-settings", {
+      user: req.session.user,
+      setting: settingResult.rows[0]
+    });
+  } catch (error) {
+    console.log("PAYMENT SETTINGS PAGE ERROR:", error);
+    res.send("Error loading payment settings");
+  }
+});
+
+app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res) => {
+  try {
+    const currentResult = await pool.query(
+      "SELECT * FROM settings WHERE id=1"
+    );
+
+    const current = currentResult.rows[0];
+    let qrImage = current ? current.qr_image : "";
+
+    if (req.file) {
+      qrImage = req.file.filename;
+    }
+
+    await pool.query(
+      `UPDATE settings
+       SET upi=$1, qr_image=$2
+       WHERE id=1`,
+      [req.body.upi, qrImage]
+    );
+
+    res.redirect("/payment-settings");
+  } catch (error) {
+    console.log("PAYMENT SETTINGS UPDATE ERROR:", error);
+    res.send("Error updating payment settings");
+  }
 });
 
 /* -------------------- RATINGS -------------------- */
 
-app.post("/rate/:id", auth, (req, res) => {
+app.post("/rate/:id", auth, async (req, res) => {
   try {
     const pgId = req.params.id;
     const rating = req.body.rating;
@@ -451,14 +569,10 @@ app.post("/rate/:id", auth, (req, res) => {
       return res.send("Please select a rating");
     }
 
-    db.prepare(`
-      INSERT INTO ratings(user_id, pg_id, rating, comment)
-      VALUES(?,?,?,?)
-    `).run(
-      req.session.user.id,
-      pgId,
-      rating,
-      ""
+    await pool.query(
+      `INSERT INTO ratings(user_id, pg_id, rating, comment)
+       VALUES($1,$2,$3,$4)`,
+      [req.session.user.id, pgId, rating, ""]
     );
 
     res.redirect("/pg/" + pgId);
@@ -470,45 +584,64 @@ app.post("/rate/:id", auth, (req, res) => {
 
 /* -------------------- MESSAGES -------------------- */
 
-app.post("/message", auth, (req, res) => {
-  const { message } = req.body;
+app.post("/message", auth, async (req, res) => {
+  try {
+    const { message } = req.body;
 
-  if (!message) {
-    return res.send("Message cannot be empty");
+    if (!message) {
+      return res.send("Message cannot be empty");
+    }
+
+    await pool.query(
+      `INSERT INTO messages(user_id,message)
+       VALUES($1,$2)`,
+      [req.session.user.id, message]
+    );
+
+    res.redirect("/");
+  } catch (error) {
+    console.log("MESSAGE ERROR:", error);
+    res.send("Error sending message");
   }
-
-  db.prepare(`
-    INSERT INTO messages(user_id,message)
-    VALUES(?,?)
-  `).run(req.session.user.id, message);
-
-  res.redirect("/");
 });
 
-app.get("/messages", admin, (req, res) => {
-  const messages = db.prepare("SELECT * FROM messages ORDER BY id DESC").all();
+app.get("/messages", admin, async (req, res) => {
+  try {
+    const messagesResult = await pool.query(
+      "SELECT * FROM messages ORDER BY id DESC"
+    );
 
-  res.render("messages", {
-    messages,
-    user: req.session.user
-  });
+    res.render("messages", {
+      messages: messagesResult.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("MESSAGES PAGE ERROR:", error);
+    res.send("Error loading messages");
+  }
 });
 
 /* -------------------- NOTIFICATIONS -------------------- */
 
-app.post("/notify", admin, (req, res) => {
-  const { text } = req.body;
+app.post("/notify", admin, async (req, res) => {
+  try {
+    const { text } = req.body;
 
-  if (!text) {
-    return res.send("Notification text cannot be empty");
+    if (!text) {
+      return res.send("Notification text cannot be empty");
+    }
+
+    await pool.query(
+      `INSERT INTO notifications(text)
+       VALUES($1)`,
+      [text]
+    );
+
+    res.redirect("/admin");
+  } catch (error) {
+    console.log("NOTIFY ERROR:", error);
+    res.send("Error sending notification");
   }
-
-  db.prepare(`
-    INSERT INTO notifications(text)
-    VALUES(?)
-  `).run(text);
-
-  res.redirect("/admin");
 });
 
 /* -------------------- ABOUT -------------------- */
@@ -521,7 +654,14 @@ app.get("/about", (req, res) => {
 
 /* -------------------- SERVER -------------------- */
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+
+initDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log("Server running on port " + PORT);
+    });
+  })
+  .catch((err) => {
+    console.error("DB INIT ERROR:", err);
+  });

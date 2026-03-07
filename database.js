@@ -1,92 +1,95 @@
-const Database = require("better-sqlite3");
+require("dotenv").config();
+const { Pool } = require("pg");
 
-const db = new Database("rentspot.db");
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS users(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL,
-  role TEXT DEFAULT 'user',
-  approved INTEGER DEFAULT 0
-)
-`).run();
+async function initDb() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users(
+      id SERIAL PRIMARY KEY,
+      name TEXT,
+      email TEXT UNIQUE,
+      password TEXT,
+      role TEXT DEFAULT 'user',
+      approved INTEGER DEFAULT 0
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS pg(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT NOT NULL,
-  price TEXT NOT NULL,
-  location TEXT NOT NULL,
-  description TEXT NOT NULL,
-  whatsapp TEXT DEFAULT '',
-  map TEXT DEFAULT ''
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS pg(
+      id SERIAL PRIMARY KEY,
+      title TEXT,
+      price TEXT,
+      location TEXT,
+      description TEXT,
+      whatsapp TEXT,
+      map TEXT
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS images(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  pg_id INTEGER NOT NULL,
-  image TEXT NOT NULL
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS images(
+      id SERIAL PRIMARY KEY,
+      pg_id INTEGER,
+      image TEXT
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS bookings(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  pg_id INTEGER NOT NULL,
-  full_name TEXT NOT NULL,
-  phone TEXT NOT NULL,
-  age TEXT NOT NULL,
-  entry_date TEXT NOT NULL,
-  notes TEXT DEFAULT '',
-  status TEXT DEFAULT 'pending'
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS bookings(
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER,
+      pg_id INTEGER,
+      full_name TEXT,
+      phone TEXT,
+      age TEXT,
+      entry_date TEXT,
+      notes TEXT,
+      status TEXT DEFAULT 'pending'
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS ratings(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  pg_id INTEGER NOT NULL,
-  rating INTEGER NOT NULL,
-  comment TEXT DEFAULT ''
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS ratings(
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER,
+      pg_id INTEGER,
+      rating INTEGER,
+      comment TEXT DEFAULT ''
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS messages(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  message TEXT NOT NULL
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS messages(
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER,
+      message TEXT
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS notifications(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  text TEXT NOT NULL
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notifications(
+      id SERIAL PRIMARY KEY,
+      text TEXT
+    )
+  `);
 
-db.prepare(`
-CREATE TABLE IF NOT EXISTS settings(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  upi TEXT DEFAULT '',
-  qr_image TEXT DEFAULT ''
-)
-`).run();
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS settings(
+      id INTEGER PRIMARY KEY,
+      upi TEXT,
+      qr_image TEXT
+    )
+  `);
 
-const setting = db.prepare("SELECT * FROM settings WHERE id = 1").get();
-
-if (!setting) {
-  db.prepare(`
+  await pool.query(`
     INSERT INTO settings(id, upi, qr_image)
-    VALUES(1, ?, ?)
-  `).run("atul@upi", "");
+    VALUES(1, $1, $2)
+    ON CONFLICT (id) DO NOTHING
+  `, [process.env.UPI_ID || "atul@upi", ""]);
 }
 
-module.exports = db;
+module.exports = { pool, initDb };
