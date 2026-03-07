@@ -360,9 +360,43 @@ app.post("/book/:id", auth, (req, res) => {
 });
 
 app.get("/bookings", admin, (req, res) => {
-  const bookings = db.prepare("SELECT * FROM bookings ORDER BY id DESC").all();
+  const bookings = db.prepare(`
+    SELECT bookings.*, 
+           pg.title AS pg_title
+    FROM bookings
+    LEFT JOIN pg ON bookings.pg_id = pg.id
+    ORDER BY bookings.id DESC
+  `).all();
 
   res.render("bookings", {
+    bookings,
+    user: req.session.user
+  });
+});
+
+app.get("/approve-booking/:id", admin, (req, res) => {
+  db.prepare("UPDATE bookings SET status='approved' WHERE id=?").run(req.params.id);
+  res.redirect("/bookings");
+});
+
+app.get("/reject-booking/:id", admin, (req, res) => {
+  db.prepare("UPDATE bookings SET status='rejected' WHERE id=?").run(req.params.id);
+  res.redirect("/bookings");
+});
+
+app.get("/my-bookings", auth, (req, res) => {
+  const bookings = db.prepare(`
+    SELECT bookings.*, 
+           pg.title AS pg_title,
+           pg.location AS pg_location,
+           pg.price AS pg_price
+    FROM bookings
+    LEFT JOIN pg ON bookings.pg_id = pg.id
+    WHERE bookings.user_id = ?
+    ORDER BY bookings.id DESC
+  `).all(req.session.user.id);
+
+  res.render("my-bookings", {
     bookings,
     user: req.session.user
   });

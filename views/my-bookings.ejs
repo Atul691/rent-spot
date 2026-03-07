@@ -1,0 +1,85 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+
+<div class="payment-card">
+
+<div class="payment-head">
+
+<div>
+<p class="admin-small">User Panel</p>
+<h1>My Bookings</h1>
+<p class="payment-subtext">Check your booking status</p>
+</div>
+
+<a href="/" class="admin-secondary-btn">Home</a>
+
+</div>
+
+
+<% if(bookings && bookings.length > 0){ %>
+
+<div class="table-wrap">
+
+<table class="admin-table">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>PG</th>
+<th>Location</th>
+<th>Price</th>
+<th>Entry Date</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+<% bookings.forEach(function(b){ %>
+
+<tr>
+
+<td><%= b.id %></td>
+
+<td><%= b.pg_title %></td>
+
+<td><%= b.pg_location %></td>
+
+<td>₹ <%= b.pg_price %></td>
+
+<td><%= b.entry_date %></td>
+
+<td>
+
+<% if(b.status==="approved"){ %>
+<span class="status approved">Approved</span>
+<% }else if(b.status==="rejected"){ %>
+<span class="status rejected">Rejected</span>
+<% }else{ %>
+<span class="status pending">Pending</span>
+<% } %>
+
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
+</table>
+
+</div>
+
+<% } else { %>
+
+<p>You have no bookings yet</p>
+
+<% } %>
+
+</div>
+
+</div>
+
+<%- include("partials/footer") %>
