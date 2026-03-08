@@ -5,9 +5,13 @@
 
     <div class="pg-view-top">
       <div>
-        <h1><%= pg.title %></h1>
-        <p class="pg-view-location"><%= pg.location %></p>
-        <p class="pg-view-price">₹ <%= pg.price %></p>
+       <h1 class="pg-title"><%= pg.title %></h1>
+
+<p class="pg-location">
+<i class="fas fa-map-marker-alt"></i> <%= pg.location %>
+</p>
+
+<p class="pg-view-price">₹ <%= pg.price %></p>
       </div>
 
       <div class="pg-view-actions">
@@ -47,8 +51,10 @@
 
     <div class="pg-view-section">
       <h3>Description</h3>
-      <p><%= pg.description %></p>
-    </div>
+      <div class="pg-description">
+<h3>About this PG</h3>
+<p><%= pg.description %></p>
+</div>
 
     <div class="pg-view-section">
       <h3>Location</h3>
