@@ -4,32 +4,26 @@
   <div class="pg-view-card">
 
     <div class="pg-view-top">
-      <div>
-       <h1 class="pg-title"><%= pg.title %></h1>
-
-<p class="pg-location">
-<i class="fas fa-map-marker-alt"></i> <%= pg.location %>
-</p>
-
-<p class="pg-view-price">₹ <%= pg.price %></p>
-      </div>
-
-      <div class="pg-view-actions">
-        <% if(user){ %>
-          <a href="/book/<%= pg.id %>" class="book-btn">Book Now</a>
-        <% } else { %>
-          <a href="/login" class="book-btn">Login to Book</a>
-        <% } %>
-
-        <% if(pg.whatsapp){ %>
-          <a href="https://wa.me/<%= pg.whatsapp %>" target="_blank" class="wa-btn">WhatsApp</a>
-        <% } %>
-
-        <% if(pg.map){ %>
-          <a href="<%= pg.map %>" target="_blank" class="map-btn">Open Google Map</a>
-        <% } %>
-      </div>
+  <div class="pg-info">
+    <h1 class="pg-title"><%= pg.title %></h1>
+    <p class="pg-location">📍 <%= pg.location %></p>
+    <p class="pg-view-price">₹ <%= pg.price %> <span>/ month</span></p>
+    <div class="pg-badge-row">
+      <span class="pg-badge verified">Verified</span>
+      <span class="pg-badge popular">Popular PG</span>
     </div>
+  </div>
+
+  <div class="pg-view-actions">
+    <% if(pg.whatsapp){ %>
+      <a href="https://wa.me/<%= pg.whatsapp %>" target="_blank" class="wa-btn">WhatsApp</a>
+    <% } %>
+
+    <% if(pg.map){ %>
+      <a href="<%= pg.map %>" target="_blank" class="map-btn">Open Map</a>
+    <% } %>
+  </div>
+</div>
 
     <div class="pg-view-section">
       <h3>Gallery</h3>
@@ -50,10 +44,10 @@
     </div>
 
     <div class="pg-view-section">
-      <h3>Description</h3>
-      <div class="pg-description">
-<h3>About this PG</h3>
-<p><%= pg.description %></p>
+  <h3>Description</h3>
+  <div class="pg-description">
+    <p><%= pg.description %></p>
+  </div>
 </div>
 
     <div class="pg-view-section">
