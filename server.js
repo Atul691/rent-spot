@@ -291,7 +291,7 @@ app.post("/addpg", admin, upload.array("images", 10), async (req, res) => {
         await pool.query(
           `INSERT INTO images(pg_id,image)
            VALUES($1,$2)`,
-          [pgId, file.filename]
+          [pgId, file.path]
         );
       }
     }
