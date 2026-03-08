@@ -4,12 +4,22 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+const cloudinary =
+require("cloudinary").v2;
+const { CloudinaryStorage } =
+require("multer-storage-cloudinary");
 const path = require("path");
 const fs = require("fs");
 
 const { pool, initDb } = require("./database");
 
 const app = express();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -31,14 +41,11 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 /* -------------------- MULTER SETUP -------------------- */
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const safeName = Date.now() + "-" + file.originalname.replace(/\s+/g, "-");
-    cb(null, safeName);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "rent-spot",
+    allowed_formats: ["jpg", "png", "jpeg", "webp"]
   }
 });
 
