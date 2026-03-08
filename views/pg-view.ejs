@@ -49,7 +49,56 @@
     <p><%= pg.description %></p>
   </div>
 </div>
+<div class="pg-main-grid">
 
+  <div class="pg-left-content">
+
+    <div class="pg-view-section">
+      <h3>Description</h3>
+      <div class="pg-description">
+        <p><%= pg.description %></p>
+      </div>
+    </div>
+
+    <div class="pg-view-section">
+      <h3>Facilities</h3>
+      <div class="pg-facilities">
+        <div class="facility-box">🛏️ Bed</div>
+        <div class="facility-box">📶 WiFi</div>
+        <div class="facility-box">🍽️ Food</div>
+        <div class="facility-box">🛁 Bathroom</div>
+      </div>
+    </div>
+
+    <div class="pg-view-section">
+      <h3>Location</h3>
+      <% if(pg.map){ %>
+        <a href="<%= pg.map %>" target="_blank" class="map-link-btn">Open in Google Maps</a>
+      <% } else { %>
+        <p>Location map not added yet.</p>
+      <% } %>
+    </div>
+
+  </div>
+
+  <div class="pg-side-card">
+    <div class="side-price">₹ <%= pg.price %> <span>/ month</span></div>
+    <p class="side-location">📍 <%= pg.location %></p>
+
+    <% if(user){ %>
+      <a href="/book/<%= pg.id %>" class="side-book-btn">Book Now</a>
+    <% } else { %>
+      <a href="/login" class="side-book-btn">Login to Book</a>
+    <% } %>
+
+    <% if(pg.whatsapp){ %>
+      <a href="https://wa.me/<%= pg.whatsapp %>?text=Hello%20I%20want%20more%20details%20about%20<%= pg.title %>" target="_blank" class="side-wa-btn">
+        WhatsApp Owner
+      </a>
+    <% } %>
+  </div>
+
+</div>
     <div class="pg-view-section">
       <h3>Location</h3>
       <% if(pg.map){ %>

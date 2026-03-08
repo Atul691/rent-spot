@@ -3430,3 +3430,135 @@ color:#007bff;
   font-size:16px;
   line-height:1.7;
 }
+.pg-main-grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:24px;
+  margin-top:28px;
+}
+
+.pg-left-content{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.pg-view-section{
+  background:#ffffff;
+  border:1px solid #e9eefc;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.05);
+}
+
+.pg-view-section h3{
+  font-size:24px;
+  font-weight:800;
+  color:#1f3c88;
+  margin-bottom:12px;
+}
+
+.pg-description{
+  background:#f8faff;
+  padding:16px;
+  border-radius:12px;
+  border:1px solid #e5ecff;
+}
+
+.pg-description p{
+  margin:0;
+  color:#374151;
+  font-size:16px;
+  line-height:1.8;
+  font-weight:500;
+}
+
+.pg-facilities{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.facility-box{
+  background:#f4f8ff;
+  border:1px solid #dfe8ff;
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:700;
+  color:#31456a;
+}
+
+.pg-side-card{
+  background:#ffffff;
+  border:1px solid #e9eefc;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+  height:fit-content;
+  position:sticky;
+  top:20px;
+}
+
+.side-price{
+  font-size:30px;
+  font-weight:800;
+  color:#0d6efd;
+  margin-bottom:10px;
+}
+
+.side-price span{
+  font-size:15px;
+  color:#6b7280;
+  font-weight:600;
+}
+
+.side-location{
+  color:#555;
+  font-size:16px;
+  margin-bottom:18px;
+}
+
+.side-book-btn,
+.side-wa-btn,
+.map-link-btn{
+  display:block;
+  width:100%;
+  text-align:center;
+  text-decoration:none;
+  padding:12px 16px;
+  border-radius:12px;
+  font-weight:700;
+  margin-top:12px;
+}
+
+.side-book-btn{
+  background:linear-gradient(135deg,#0d6efd,#0056d6);
+  color:#fff;
+}
+
+.side-wa-btn{
+  background:linear-gradient(135deg,#25d366,#1ca955);
+  color:#fff;
+}
+
+.map-link-btn{
+  background:#fff3f0;
+  color:#d94841;
+  border:1px solid #ffd4ce;
+}
+
+.side-book-btn:hover,
+.side-wa-btn:hover,
+.map-link-btn:hover{
+  opacity:0.95;
+}
+
+@media (max-width: 900px){
+  .pg-main-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .pg-side-card{
+    position:static;
+  }
+}
