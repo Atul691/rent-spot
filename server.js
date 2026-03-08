@@ -548,7 +548,7 @@ app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res)
     let qrImage = current ? current.qr_image : "";
 
     if (req.file) {
-      qrImage = req.file.filename;
+      qrImage = req.file.path;
     }
 
     await pool.query(
