@@ -48,11 +48,10 @@
         </a>
       <% } %>
 
-      <% if(pg.map){ %>
-        <a href="<%= pg.map %>" target="_blank" class="icon-action">
-          <span class="icon-circle">📍</span>
-          <span>Direction</span>
-        </a>
+      <a href="<%= pg.map ? pg.map : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pg.location) %>" target="_blank" class="icon-action">
+  <span class="icon-circle">📍</span>
+  <span>Direction</span>
+</a>
       <% } else { %>
         <a href="/pg/<%= pg.id %>" class="icon-action">
           <span class="icon-circle">📍</span>
@@ -96,13 +95,11 @@
     </div>
 
     <div class="detail-info-box">
-      <h3>Location</h3>
-      <% if(pg.map){ %>
-        <a href="<%= pg.map %>" target="_blank" class="map-link-btn">Open in Google Maps</a>
-      <% } else { %>
-        <p>Location map not added yet.</p>
-      <% } %>
-    </div>
+  <h3>Location</h3>
+  <a href="<%= pg.map ? pg.map : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pg.location) %>" target="_blank" class="map-link-btn">
+    Open in Google Maps
+  </a>
+</div>
 
     <div class="detail-info-box">
       <h3>Gallery</h3>
