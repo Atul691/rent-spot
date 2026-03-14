@@ -17,12 +17,16 @@
     </div>
   <% } %>
 
-<div class="filter-scroll">
-  <div class="filter-pill active">Sort & Filter</div>
-  <div class="filter-pill">Occupancy</div>
-  <div class="filter-pill">Girls/Boys</div>
-  <div class="filter-pill">Tenants</div>
-</div>
+  <div class="filter-scroll">
+    <div class="filter-pill active" onclick="clearExtraFilters(this)">Sort & Filter</div>
+    <div class="filter-pill" onclick="setOccupancyFilter('single', this)">Single</div>
+    <div class="filter-pill" onclick="setOccupancyFilter('double', this)">Double</div>
+    <div class="filter-pill" onclick="setGenderFilter('boys', this)">Boys</div>
+    <div class="filter-pill" onclick="setGenderFilter('girls', this)">Girls</div>
+    <div class="filter-pill" onclick="setGenderFilter('coed', this)">Coed</div>
+    <div class="filter-pill" onclick="setTenantFilter('student', this)">Students</div>
+    <div class="filter-pill" onclick="setTenantFilter('working', this)">Working</div>
+  </div>
 
   <div class="filter-bar">
     <div class="filter-group">
@@ -41,133 +45,202 @@
     </div>
   </div>
 
- <% if(pg.length === 0){ %>
-  <div class="empty-box">
-    <h3>No PG available</h3>
-    <p>Admin can add PG from dashboard.</p>
-  </div>
-<% } %>
+  <input type="hidden" id="occupancyFilter" value="">
+  <input type="hidden" id="genderFilter" value="">
+  <input type="hidden" id="tenantFilter" value="">
 
-<% pg.forEach(function(p){ %>
-  <div class="zolo-card pg-item"
-       data-name="<%= p.title.toLowerCase() %>"
-       data-price="<%= p.price %>">
+  <div class="pg-list" id="pgList">
 
-    <div class="zolo-top">
-      <div class="verified-tag">✓ Partner verified</div>
-      <div class="code-tag">Coed</div>
-    </div>
-
-    <div class="zolo-main">
-      <div class="zolo-image-wrap">
-        <% if(p.firstImage){ %>
-          <img src="<%= p.firstImage %>" class="zolo-image" alt="PG Image">
-        <% } else { %>
-          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="zolo-image" alt="PG Image">
-        <% } %>
-        <div class="photo-badge">+ More Photos</div>
+    <% if(pg.length === 0){ %>
+      <div class="empty-box">
+        <h3>No PG available</h3>
+        <p>Admin can add PG from dashboard.</p>
       </div>
+    <% } %>
 
-      <div class="zolo-content">
-        <div class="zolo-price-row">
-          <div class="zolo-price">₹ <%= p.price %></div>
-          <div class="zolo-onwards">Onwards</div>
-          <div class="zolo-rating">4.5⭐</div>
-        </div>
+    <% pg.forEach(function(p){ %>
+      <div class="zolo-card pg-item"
+           data-name="<%= p.title.toLowerCase() %>"
+           data-price="<%= p.price %>"
+           data-occupancy="<%= p.id % 2 === 0 ? 'double' : 'single' %>"
+           data-gender="<%= p.id % 3 === 0 ? 'girls' : (p.id % 2 === 0 ? 'boys' : 'coed') %>"
+           data-tenant="<%= p.id % 2 === 0 ? 'working' : 'student' %>">
 
-        <div class="zolo-type">PG/Paying Guest</div>
-        <div class="zolo-location">📍 in <%= p.location %></div>
-
-        <div class="bed-badge">✓ BEDS AVAILABLE</div>
-
-        <div class="facility-line">
-          <span>• Wifi</span>
-          <span>• AC</span>
-          <span>• Food</span>
-          <span>+13 More</span>
-        </div>
-
-        <div class="sharing-row">
-          <div class="share-box">
-            <div class="share-title">Single Room</div>
-            <div class="share-price">₹ <%= p.price %></div>
-          </div>
-
-          <div class="share-box">
-            <div class="share-title">Twin Sharing</div>
-            <div class="share-price">₹ <%= Number(p.price) + 2000 %></div>
+        <div class="zolo-top">
+          <div class="verified-tag">✓ Partner verified</div>
+          <div class="code-tag">
+            <%= p.id % 3 === 0 ? 'Girls' : (p.id % 2 === 0 ? 'Boys' : 'Coed') %>
           </div>
         </div>
 
-        <div class="zolo-desc">
-          <%= p.description ? p.description.substring(0, 85) : "Comfortable PG with student friendly facilities." %>
-          <% if(p.description && p.description.length > 85){ %>...<% } %>
-          <a href="/pg/<%= p.id %>" class="more-link">More</a>
-        </div>
+        <div class="zolo-main">
+          <div class="zolo-image-wrap">
+            <% if(p.firstImage){ %>
+              <img src="<%= p.firstImage %>" class="zolo-image" alt="PG Image">
+            <% } else { %>
+              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="zolo-image" alt="PG Image">
+            <% } %>
+            <div class="photo-badge">+ More Photos</div>
+          </div>
 
-        <div class="highlight-line">
-          ✅ Best locality and all facilities near by.
-        </div>
+          <div class="zolo-content">
+            <div class="zolo-price-row">
+              <div class="zolo-price">₹ <%= p.price %></div>
+              <div class="zolo-onwards">Onwards</div>
+              <div class="zolo-rating">4.5⭐</div>
+            </div>
 
-        <div class="action-row">
-          <% if(p.whatsapp){ %>
-            <a href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20more%20details%20about%20<%= p.title %>" target="_blank" class="owner-btn">
-              Contact Owner
-            </a>
-          <% } else { %>
-            <a href="/pg/<%= p.id %>" class="owner-btn">Contact Owner</a>
-          <% } %>
+            <div class="zolo-type">PG/Paying Guest</div>
+            <div class="zolo-location">📍 in <%= p.location %></div>
 
-          <a href="/pg/<%= p.id %>" class="phone-btn">View Details</a>
-        </div>
+            <div class="bed-badge">✓ BEDS AVAILABLE</div>
 
-        <div class="bottom-map-row">
-          <div class="distance-text">📍 Near college area</div>
-          <% if(p.map){ %>
-            <a href="<%= p.map %>" target="_blank" class="map-view-link">View on map</a>
-          <% } else { %>
-            <a href="/pg/<%= p.id %>" class="map-view-link">View on map</a>
-          <% } %>
+            <div class="tenant-badge">
+              Suitable for:
+              <strong><%= p.id % 2 === 0 ? 'Working Professionals' : 'Students' %></strong>
+            </div>
+
+            <div class="facility-line">
+              <span>• Wifi</span>
+              <span>• AC</span>
+              <span><%= p.id % 2 === 0 ? '• Food' : '• Laundry' %></span>
+              <span>+13 More</span>
+            </div>
+
+            <div class="sharing-row">
+              <div class="share-box">
+                <div class="share-title">
+                  <%= p.id % 2 === 0 ? 'Twin Sharing' : 'Single Room' %>
+                </div>
+                <div class="share-price">₹ <%= p.price %></div>
+              </div>
+
+              <div class="share-box">
+                <div class="share-title">
+                  <%= p.id % 2 === 0 ? 'Triple Sharing' : 'Twin Sharing' %>
+                </div>
+                <div class="share-price">₹ <%= Number(p.price) + 2000 %></div>
+              </div>
+            </div>
+
+            <div class="zolo-desc">
+              <%= p.description ? p.description.substring(0, 85) : "Comfortable PG with student friendly facilities." %>
+              <% if(p.description && p.description.length > 85){ %>...<% } %>
+              <a href="/pg/<%= p.id %>" class="more-link">More</a>
+            </div>
+
+            <div class="highlight-line">
+              ✅ Best locality and all facilities near by.
+            </div>
+
+            <div class="action-row">
+              <% if(p.whatsapp){ %>
+                <a href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20more%20details%20about%20<%= p.title %>" target="_blank" class="owner-btn">
+                  Contact Owner
+                </a>
+              <% } else { %>
+                <a href="/pg/<%= p.id %>" class="owner-btn">Contact Owner</a>
+              <% } %>
+
+              <a href="/pg/<%= p.id %>" class="phone-btn">View Details</a>
+            </div>
+
+            <div class="bottom-map-row">
+              <div class="distance-text">📍 Near college area</div>
+              <% if(p.map){ %>
+                <a href="<%= p.map %>" target="_blank" class="map-view-link">View on map</a>
+              <% } else { %>
+                <a href="/pg/<%= p.id %>" class="map-view-link">View on map</a>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-<% }) %>
+    <% }) %>
+
   </div>
 
 </div>
 
 <script>
-  function filterPGs() {
-    const nameValue = document.getElementById("searchName").value.toLowerCase().trim();
-    const priceValue = document.getElementById("searchPrice").value.trim();
+function filterPGs() {
+  const nameValue = document.getElementById("searchName").value.toLowerCase().trim();
+  const priceValue = document.getElementById("searchPrice").value.trim();
+  const occupancyValue = document.getElementById("occupancyFilter").value.trim();
+  const genderValue = document.getElementById("genderFilter").value.trim();
+  const tenantValue = document.getElementById("tenantFilter").value.trim();
 
-    const cards = document.querySelectorAll(".pg-item");
+  const cards = document.querySelectorAll(".pg-item");
 
-    cards.forEach(card => {
-      const pgName = card.getAttribute("data-name");
-      const pgPrice = parseInt(card.getAttribute("data-price")) || 0;
+  cards.forEach(card => {
+    const pgName = card.getAttribute("data-name") || "";
+    const pgPrice = parseInt(card.getAttribute("data-price")) || 0;
+    const pgOccupancy = card.getAttribute("data-occupancy") || "";
+    const pgGender = card.getAttribute("data-gender") || "";
+    const pgTenant = card.getAttribute("data-tenant") || "";
 
-      const nameMatch = !nameValue || pgName.includes(nameValue);
-      const priceMatch = !priceValue || pgPrice <= parseInt(priceValue);
+    const nameMatch = !nameValue || pgName.includes(nameValue);
+    const priceMatch = !priceValue || pgPrice <= parseInt(priceValue);
+    const occupancyMatch = !occupancyValue || pgOccupancy === occupancyValue;
+    const genderMatch = !genderValue || pgGender === genderValue;
+    const tenantMatch = !tenantValue || pgTenant === tenantValue;
 
-      if (nameMatch && priceMatch) {
-        card.style.display = "block";
-      } else {
-        card.style.display = "none";
-      }
-    });
-  }
-
-  function resetPGs() {
-    document.getElementById("searchName").value = "";
-    document.getElementById("searchPrice").value = "";
-
-    const cards = document.querySelectorAll(".pg-item");
-    cards.forEach(card => {
+    if (nameMatch && priceMatch && occupancyMatch && genderMatch && tenantMatch) {
       card.style.display = "block";
-    });
-  }
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+function setOccupancyFilter(value, el) {
+  document.getElementById("occupancyFilter").value = value;
+  setActivePill(el);
+  filterPGs();
+}
+
+function setGenderFilter(value, el) {
+  document.getElementById("genderFilter").value = value;
+  setActivePill(el);
+  filterPGs();
+}
+
+function setTenantFilter(value, el) {
+  document.getElementById("tenantFilter").value = value;
+  setActivePill(el);
+  filterPGs();
+}
+
+function clearExtraFilters(el) {
+  document.getElementById("occupancyFilter").value = "";
+  document.getElementById("genderFilter").value = "";
+  document.getElementById("tenantFilter").value = "";
+  setActivePill(el);
+  filterPGs();
+}
+
+function setActivePill(activeEl) {
+  const pills = document.querySelectorAll(".filter-pill");
+  pills.forEach(pill => pill.classList.remove("active"));
+  activeEl.classList.add("active");
+}
+
+function resetPGs() {
+  document.getElementById("searchName").value = "";
+  document.getElementById("searchPrice").value = "";
+  document.getElementById("occupancyFilter").value = "";
+  document.getElementById("genderFilter").value = "";
+  document.getElementById("tenantFilter").value = "";
+
+  const cards = document.querySelectorAll(".pg-item");
+  cards.forEach(card => {
+    card.style.display = "block";
+  });
+
+  const pills = document.querySelectorAll(".filter-pill");
+  pills.forEach(pill => pill.classList.remove("active"));
+  document.querySelector(".filter-pill").classList.add("active");
+}
 </script>
 
 <%- include("partials/footer") %>
