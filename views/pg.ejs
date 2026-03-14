@@ -5,7 +5,7 @@
 
     <div class="hero-image-box">
       <% if(images && images.length > 0){ %>
-        <img src="/uploads/<%= images[0].image %>" alt="PG Image" class="hero-image">
+        <img src="<%= images[0].image %>" alt="PG Image" class="hero-image">
         <div class="hero-photo-count">+<%= images.length %> Photos</div>
       <% } else { %>
         <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" alt="PG Image" class="hero-image">
@@ -109,8 +109,8 @@
       <div class="gallery-grid">
         <% if(images && images.length > 0){ %>
           <% images.forEach(function(img){ %>
-            <a href="/uploads/<%= img.image %>" target="_blank" class="gallery-item">
-              <img src="/uploads/<%= img.image %>" alt="PG Image">
+            <a href="<%= img.image %>" target="_blank" class="gallery-item">
+              <img src="<%= img.image %>" alt="PG Image">
             </a>
           <% }) %>
         <% } else { %>
