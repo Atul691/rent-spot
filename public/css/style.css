@@ -3562,3 +3562,303 @@ color:#007bff;
     position:static;
   }
 }
+.filter-scroll{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:8px 0 14px;
+  margin-bottom:12px;
+}
+
+.filter-pill{
+  white-space:nowrap;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:24px;
+  padding:10px 16px;
+  font-weight:600;
+  color:#444;
+}
+
+.filter-pill.active{
+  background:#8a8a8a;
+  color:#fff;
+}
+
+.zolo-card{
+  background:#fff;
+  border:1px solid #e7e7e7;
+  border-radius:10px;
+  margin-bottom:18px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.zolo-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.verified-tag{
+  background:#d9c07a;
+  color:#5a4918;
+  font-size:14px;
+  font-weight:700;
+  padding:8px 14px;
+  border-bottom-right-radius:16px;
+}
+
+.code-tag{
+  background:#efe1a3;
+  color:#7b6415;
+  font-size:14px;
+  font-weight:700;
+  padding:8px 16px;
+  border-bottom-left-radius:16px;
+}
+
+.zolo-main{
+  display:flex;
+  gap:14px;
+  padding:14px;
+}
+
+.zolo-image-wrap{
+  width:270px;
+  min-width:270px;
+  position:relative;
+}
+
+.zolo-image{
+  width:100%;
+  height:210px;
+  object-fit:cover;
+  border-radius:6px;
+  display:block;
+}
+
+.photo-badge{
+  position:absolute;
+  left:8px;
+  bottom:8px;
+  background:rgba(0,0,0,0.82);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:4px;
+}
+
+.zolo-content{
+  flex:1;
+}
+
+.zolo-price-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+
+.zolo-price{
+  color:#d8232a;
+  font-size:19px;
+  font-weight:800;
+}
+
+.zolo-onwards{
+  color:#666;
+  font-size:15px;
+  font-weight:600;
+}
+
+.zolo-rating{
+  background:#f3df9a;
+  color:#634b00;
+  padding:3px 8px;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.zolo-type{
+  color:#555;
+  font-size:16px;
+  margin-bottom:4px;
+}
+
+.zolo-location{
+  color:#444;
+  font-size:16px;
+  margin-bottom:10px;
+}
+
+.bed-badge{
+  display:inline-block;
+  border:1px solid #87d0c2;
+  color:#178a7d;
+  background:#f2fffc;
+  border-radius:8px;
+  padding:7px 12px;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.facility-line{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#444;
+  font-size:15px;
+  margin-bottom:12px;
+}
+
+.sharing-row{
+  display:flex;
+  border-top:1px solid #ececec;
+  border-bottom:1px solid #ececec;
+  margin-bottom:12px;
+}
+
+.share-box{
+  flex:1;
+  padding:12px 10px;
+}
+
+.share-box:first-child{
+  border-right:1px solid #ececec;
+}
+
+.share-title{
+  color:#565656;
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.share-price{
+  color:#222;
+  font-weight:800;
+  font-size:17px;
+}
+
+.zolo-desc{
+  color:#444;
+  font-size:15px;
+  line-height:1.5;
+  margin-bottom:10px;
+}
+
+.more-link{
+  color:#444;
+  font-weight:700;
+  text-decoration:underline;
+  margin-left:4px;
+}
+
+.highlight-line{
+  color:#4d4d4d;
+  font-size:15px;
+  margin-bottom:14px;
+}
+
+.action-row{
+  display:flex;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.owner-btn,
+.phone-btn{
+  flex:1;
+  text-align:center;
+  text-decoration:none;
+  padding:14px 10px;
+  border-radius:6px;
+  font-size:17px;
+  font-weight:700;
+}
+
+.owner-btn{
+  background:#f8e5e5;
+  color:#c62b2b;
+}
+
+.phone-btn{
+  background:#df2027;
+  color:#fff;
+}
+
+.bottom-map-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.distance-text{
+  color:#444;
+  font-size:15px;
+  font-weight:500;
+}
+
+.map-view-link{
+  color:#b92024;
+  font-weight:700;
+  text-decoration:underline;
+}
+
+@media (max-width: 900px){
+  .zolo-main{
+    flex-direction:column;
+  }
+
+  .zolo-image-wrap{
+    width:100%;
+    min-width:100%;
+  }
+
+  .zolo-image{
+    height:220px;
+  }
+}
+
+@media (max-width: 600px){
+  .zolo-main{
+    padding:10px;
+  }
+
+  .zolo-image{
+    height:180px;
+  }
+
+  .zolo-price{
+    font-size:17px;
+  }
+
+  .zolo-type,
+  .zolo-location,
+  .facility-line,
+  .zolo-desc,
+  .highlight-line{
+    font-size:14px;
+  }
+
+  .action-row{
+    gap:10px;
+  }
+
+  .owner-btn,
+  .phone-btn{
+    font-size:15px;
+    padding:12px 8px;
+  }
+
+  .distance-text,
+  .map-view-link{
+    font-size:14px;
+  }
+}

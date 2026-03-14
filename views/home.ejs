@@ -17,6 +17,13 @@
     </div>
   <% } %>
 
+<div class="filter-scroll">
+  <div class="filter-pill active">Sort & Filter</div>
+  <div class="filter-pill">Occupancy</div>
+  <div class="filter-pill">Girls/Boys</div>
+  <div class="filter-pill">Tenants</div>
+</div>
+
   <div class="filter-bar">
     <div class="filter-group">
       <label for="searchName">Search by PG Name</label>
@@ -34,45 +41,98 @@
     </div>
   </div>
 
-  <div class="pg-list" id="pgList">
+ <% if(pg.length === 0){ %>
+  <div class="empty-box">
+    <h3>No PG available</h3>
+    <p>Admin can add PG from dashboard.</p>
+  </div>
+<% } %>
 
-    <% if(pg.length === 0){ %>
-      <div class="empty-box">
-        <h3>No PG available</h3>
-        <p>Admin can add PG from dashboard.</p>
-      </div>
-    <% } %>
+<% pg.forEach(function(p){ %>
+  <div class="zolo-card pg-item"
+       data-name="<%= p.title.toLowerCase() %>"
+       data-price="<%= p.price %>">
 
-    <% pg.forEach(function(p){ %>
-      <div 
-        class="pg-card pg-item"
-        data-name="<%= p.title.toLowerCase() %>"
-        data-price="<%= p.price %>"
-      >
+    <div class="zolo-top">
+      <div class="verified-tag">✓ Partner verified</div>
+      <div class="code-tag">Coed</div>
+    </div>
+
+    <div class="zolo-main">
+      <div class="zolo-image-wrap">
         <% if(p.firstImage){ %>
-          <img src="<%= p.firstImage %>" class="no-image" alt="PG Image">
+          <img src="<%= p.firstImage %>" class="zolo-image" alt="PG Image">
         <% } else { %>
-          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80" class="pg-image" alt="PG Image">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="zolo-image" alt="PG Image">
         <% } %>
+        <div class="photo-badge">+ More Photos</div>
+      </div>
 
-        <div class="pg-content">
-          <div class="pg-title"><%= p.title %></div>
-          <div class="pg-location"><%= p.location %></div>
-          <div class="pg-price">₹ <%= p.price %></div>
+      <div class="zolo-content">
+        <div class="zolo-price-row">
+          <div class="zolo-price">₹ <%= p.price %></div>
+          <div class="zolo-onwards">Onwards</div>
+          <div class="zolo-rating">4.5⭐</div>
+        </div>
 
-          <div class="pg-buttons">
-            <a href="/pg/<%= p.id %>" class="view-btn">View</a>
+        <div class="zolo-type">PG/Paying Guest</div>
+        <div class="zolo-location">📍 in <%= p.location %></div>
 
-            <% if(user){ %>
-              <a href="/book/<%= p.id %>" class="book-btn">Book</a>
-            <% } else { %>
-              <a href="/login" class="book-btn">Login to Book</a>
-            <% } %>
+        <div class="bed-badge">✓ BEDS AVAILABLE</div>
+
+        <div class="facility-line">
+          <span>• Wifi</span>
+          <span>• AC</span>
+          <span>• Food</span>
+          <span>+13 More</span>
+        </div>
+
+        <div class="sharing-row">
+          <div class="share-box">
+            <div class="share-title">Single Room</div>
+            <div class="share-price">₹ <%= p.price %></div>
+          </div>
+
+          <div class="share-box">
+            <div class="share-title">Twin Sharing</div>
+            <div class="share-price">₹ <%= Number(p.price) + 2000 %></div>
           </div>
         </div>
-      </div>
-    <% }) %>
 
+        <div class="zolo-desc">
+          <%= p.description ? p.description.substring(0, 85) : "Comfortable PG with student friendly facilities." %>
+          <% if(p.description && p.description.length > 85){ %>...<% } %>
+          <a href="/pg/<%= p.id %>" class="more-link">More</a>
+        </div>
+
+        <div class="highlight-line">
+          ✅ Best locality and all facilities near by.
+        </div>
+
+        <div class="action-row">
+          <% if(p.whatsapp){ %>
+            <a href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20more%20details%20about%20<%= p.title %>" target="_blank" class="owner-btn">
+              Contact Owner
+            </a>
+          <% } else { %>
+            <a href="/pg/<%= p.id %>" class="owner-btn">Contact Owner</a>
+          <% } %>
+
+          <a href="/pg/<%= p.id %>" class="phone-btn">View Details</a>
+        </div>
+
+        <div class="bottom-map-row">
+          <div class="distance-text">📍 Near college area</div>
+          <% if(p.map){ %>
+            <a href="<%= p.map %>" target="_blank" class="map-view-link">View on map</a>
+          <% } else { %>
+            <a href="/pg/<%= p.id %>" class="map-view-link">View on map</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% }) %>
   </div>
 
 </div>
