@@ -2,6 +2,11 @@
 
 <div class="detail-page">
   <div class="detail-card">
+    <%
+      const mapUrl = pg.map && pg.map.trim() !== ""
+        ? pg.map
+        : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(pg.location || "");
+    %>
 
     <div class="hero-image-box">
       <% if(images && images.length > 0){ %>
@@ -48,16 +53,10 @@
         </a>
       <% } %>
 
-      <a href="<%= pg.map ? pg.map : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pg.location) %>" target="_blank" class="icon-action">
-  <span class="icon-circle">📍</span>
-  <span>Direction</span>
-</a>
-      <% } else { %>
-        <a href="/pg/<%= pg.id %>" class="icon-action">
-          <span class="icon-circle">📍</span>
-          <span>Direction</span>
-        </a>
-      <% } %>
+      <a href="<%= mapUrl %>" target="_blank" class="icon-action">
+        <span class="icon-circle">📍</span>
+        <span>Direction</span>
+      </a>
 
       <button type="button" class="icon-action" onclick="sharePG()">
         <span class="icon-circle">↗</span>
@@ -95,11 +94,11 @@
     </div>
 
     <div class="detail-info-box">
-  <h3>Location</h3>
-  <a href="<%= pg.map ? pg.map : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pg.location) %>" target="_blank" class="map-link-btn">
-    Open in Google Maps
-  </a>
-</div>
+      <h3>Location</h3>
+      <a href="<%= mapUrl %>" target="_blank" class="map-link-btn">
+        Open in Google Maps
+      </a>
+    </div>
 
     <div class="detail-info-box">
       <h3>Gallery</h3>
