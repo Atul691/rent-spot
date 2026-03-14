@@ -3888,6 +3888,9 @@ color:#007bff;
 .hero-image-box{
   position:relative;
   margin-bottom:18px;
+  width:90%;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .hero-image{
