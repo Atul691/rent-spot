@@ -503,7 +503,151 @@ app.get("/my-bookings", auth, async (req, res) => {
     res.send("Error loading my bookings");
   }
 });
+/* -------------------- NEGOTIATIONS -------------------- */
 
+app.post("/negotiate/:pgId", async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect("/login");
+    }
+
+    const pgId = req.params.pgId;
+    const userId = req.session.user.id;
+    const offeredPrice = parseInt(req.body.offered_price, 10);
+    const message = req.body.message || "";
+
+    if (!offeredPrice || offeredPrice <= 0) {
+      return res.send("Invalid offer price");
+    }
+
+    await pool.query(
+      `INSERT INTO negotiations (user_id, pg_id, offered_price, message, status)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [userId, pgId, offeredPrice, message, "pending"]
+    );
+
+    res.redirect("/my-negotiations");
+  } catch (error) {
+    console.log("NEGOTIATION SUBMIT ERROR:", error);
+    res.send("Error sending offer");
+  }
+});
+
+app.get("/my-negotiations", async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect("/login");
+    }
+
+    const result = await pool.query(
+      `SELECT n.*, p.title AS pg_title, p.price AS original_price
+       FROM negotiations n
+       JOIN pg p ON p.id = n.pg_id
+       WHERE n.user_id = $1
+       ORDER BY n.id DESC`,
+      [req.session.user.id]
+    );
+
+    res.render("my-negotiations", {
+      user: req.session.user,
+      negotiations: result.rows
+    });
+  } catch (error) {
+    console.log("MY NEGOTIATIONS ERROR:", error);
+    res.send("Error loading negotiations");
+  }
+});
+
+app.get("/admin-negotiations", async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== "admin") {
+      return res.redirect("/login");
+    }
+
+    const result = await pool.query(
+      `SELECT n.*, u.name AS user_name, u.email, p.title AS pg_title, p.price AS original_price
+       FROM negotiations n
+       JOIN users u ON u.id = n.user_id
+       JOIN pg p ON p.id = n.pg_id
+       ORDER BY n.id DESC`
+    );
+
+    res.render("admin-negotiations", {
+      user: req.session.user,
+      negotiations: result.rows
+    });
+  } catch (error) {
+    console.log("ADMIN NEGOTIATIONS ERROR:", error);
+    res.send("Error loading admin negotiations");
+  }
+});
+
+app.get("/accept-negotiation/:id", async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== "admin") {
+      return res.redirect("/login");
+    }
+
+    await pool.query(
+      `UPDATE negotiations
+       SET status = 'accepted'
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.redirect("/admin-negotiations");
+  } catch (error) {
+    console.log("ACCEPT NEGOTIATION ERROR:", error);
+    res.send("Error accepting negotiation");
+  }
+});
+
+app.get("/reject-negotiation/:id", async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== "admin") {
+      return res.redirect("/login");
+    }
+
+    await pool.query(
+      `UPDATE negotiations
+       SET status = 'rejected'
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.redirect("/admin-negotiations");
+  } catch (error) {
+    console.log("REJECT NEGOTIATION ERROR:", error);
+    res.send("Error rejecting negotiation");
+  }
+});
+
+app.post("/counter-negotiation/:id", async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== "admin") {
+      return res.redirect("/login");
+    }
+
+    const counterPrice = parseInt(req.body.counter_price, 10);
+
+    if (!counterPrice || counterPrice <= 0) {
+      return res.send("Invalid counter price");
+    }
+
+    await pool.query(
+      `UPDATE negotiations
+       SET status = 'countered',
+           counter_price = $1
+       WHERE id = $2`,
+      [counterPrice, req.params.id]
+    );
+
+    res.redirect("/admin-negotiations");
+  } catch (error) {
+    console.log("COUNTER NEGOTIATION ERROR:", error);
+    res.send("Error sending counter offer");
+  }
+});
 /* -------------------- PAYMENT -------------------- */
 
 app.get("/payment", auth, async (req, res) => {

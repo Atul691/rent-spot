@@ -7,6 +7,8 @@ const pool = new Pool({
 });
 
 async function initDb() {
+
+  /* ---------------- USERS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users(
       id SERIAL PRIMARY KEY,
@@ -18,6 +20,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- PG ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS pg(
       id SERIAL PRIMARY KEY,
@@ -30,6 +33,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- IMAGES ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS images(
       id SERIAL PRIMARY KEY,
@@ -38,6 +42,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- BOOKINGS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS bookings(
       id SERIAL PRIMARY KEY,
@@ -52,6 +57,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- RATINGS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS ratings(
       id SERIAL PRIMARY KEY,
@@ -62,6 +68,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- MESSAGES ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS messages(
       id SERIAL PRIMARY KEY,
@@ -70,6 +77,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- NOTIFICATIONS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS notifications(
       id SERIAL PRIMARY KEY,
@@ -77,6 +85,7 @@ async function initDb() {
     )
   `);
 
+  /* ---------------- SETTINGS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS settings(
       id INTEGER PRIMARY KEY,
@@ -90,6 +99,22 @@ async function initDb() {
     VALUES(1, $1, $2)
     ON CONFLICT (id) DO NOTHING
   `, [process.env.UPI_ID || "atul@upi", ""]);
+
+
+  /* 🔥 ---------------- NEGOTIATION TABLE (NEW FEATURE) ---------------- */
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS negotiations(
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL,
+      pg_id INTEGER NOT NULL,
+      offered_price INTEGER NOT NULL,
+      counter_price INTEGER,
+      status TEXT DEFAULT 'pending',
+      message TEXT DEFAULT '',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
 }
 
 module.exports = { pool, initDb };

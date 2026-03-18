@@ -1,0 +1,39 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+    <h2>My Negotiations</h2>
+
+    <% if(negotiations && negotiations.length > 0){ %>
+      <div class="rating-list">
+        <% negotiations.forEach(function(n){ %>
+          <div class="rating-box">
+            <h3><%= n.pg_title %></h3>
+            <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
+            <p><strong>Your Offer:</strong> ₹ <%= n.offered_price %></p>
+
+            <% if(n.counter_price){ %>
+              <p><strong>Counter Offer:</strong> ₹ <%= n.counter_price %></p>
+            <% } %>
+
+            <p><strong>Status:</strong> <%= n.status %></p>
+
+            <% if(n.message){ %>
+              <p><strong>Your Message:</strong> <%= n.message %></p>
+            <% } %>
+
+            <p><strong>Sent On:</strong> <%= n.created_at %></p>
+
+            <% if(n.status === "accepted"){ %>
+              <a href="/pg/<%= n.pg_id %>" class="book-main-btn">Proceed to Book</a>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No negotiations yet.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

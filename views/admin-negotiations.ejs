@@ -1,0 +1,47 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+    <h2>Negotiation Requests</h2>
+
+    <% if(negotiations && negotiations.length > 0){ %>
+      <div class="rating-list">
+        <% negotiations.forEach(function(n){ %>
+          <div class="rating-box">
+            <h3><%= n.pg_title %></h3>
+            <p><strong>User:</strong> <%= n.user_name %> (<%= n.email %>)</p>
+            <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
+            <p><strong>Offered Price:</strong> ₹ <%= n.offered_price %></p>
+            <p><strong>Status:</strong> <%= n.status %></p>
+
+            <% if(n.message){ %>
+              <p><strong>User Message:</strong> <%= n.message %></p>
+            <% } %>
+
+            <% if(n.counter_price){ %>
+              <p><strong>Counter Price:</strong> ₹ <%= n.counter_price %></p>
+            <% } %>
+
+            <% if(n.status === "pending" || n.status === "countered"){ %>
+              <div class="action-btns">
+                <a href="/accept-negotiation/<%= n.id %>" class="approve-btn">Accept</a>
+                <a href="/reject-negotiation/<%= n.id %>" class="reject-btn">Reject</a>
+              </div>
+
+              <form action="/counter-negotiation/<%= n.id %>" method="POST" class="rating-form" style="margin-top:12px;">
+                <input type="number" name="counter_price" placeholder="Counter offer price" min="1" required>
+                <button type="submit" class="submit-btn">Send Counter Offer</button>
+              </form>
+            <% } else { %>
+              <span class="done-text">Finalized</span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No negotiation requests.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

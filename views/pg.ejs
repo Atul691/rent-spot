@@ -87,8 +87,8 @@
       <h3>Facilities</h3>
       <div class="facility-tags">
         <span>🛏️ Bed</span>
-        <span>📶 WiFi</span>
-        <span>🍽️ Food</span>
+        <span>📶 exta charges for WiFi</span>
+        <span>🍽️ without Food</span>
         <span>🛁 Bathroom</span>
       </div>
     </div>
@@ -113,6 +113,30 @@
           <p>No image uploaded for this PG.</p>
         <% } %>
       </div>
+    </div>
+
+    <div class="detail-info-box">
+      <h3>Negotiate Price</h3>
+
+      <% if(user){ %>
+        <form action="/negotiate/<%= pg.id %>" method="POST" class="rating-form">
+          <input
+            type="number"
+            name="offered_price"
+            placeholder="Enter your offer price"
+            min="1"
+            required
+          >
+          <textarea
+            name="message"
+            placeholder="Optional message for admin (example: I am a student, please reduce the rent)"
+          ></textarea>
+          <button type="submit" class="submit-btn">Send Offer</button>
+        </form>
+      <% } else { %>
+        <p>Please login to negotiate rent.</p>
+        <a href="/login" class="book-main-btn">Login</a>
+      <% } %>
     </div>
 
     <% if(user){ %>

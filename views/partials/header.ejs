@@ -12,14 +12,20 @@
 <div class="site-shell">
   <div class="top-nav">
     <div class="brand">RentSpot</div>
+<div class="nav-center">
+  <a href="/">Properties</a>
+  <a href="/about">About</a>
 
-    <div class="nav-center">
-      <a href="/">Properties</a>
-      <a href="/about">About</a>
-      <% if(user && user.role=="admin"){ %>
-        <a href="/admin">Admin</a>
-      <% } %>
-    </div>
+  <% if(user){ %>
+    <a href="/my-bookings">My Bookings</a>
+    <a href="/my-negotiations">My Negotiations</a>
+  <% } %>
+
+  <% if(user && user.role==="admin"){ %>
+    <a href="/admin">Admin</a>
+    <a href="/admin-negotiations">Negotiations</a>
+  <% } %>
+</div>
 
     <div class="nav-actions">
       <% if(user){ %>

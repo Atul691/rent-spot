@@ -4474,3 +4474,53 @@ color:#007bff;
     grid-template-columns:repeat(2,1fr);
   }
 }
+.detail-info-box input[type="number"]{
+  width:100%;
+  padding:12px;
+  border:1px solid #d7d7d7;
+  border-radius:12px;
+  font-size:15px;
+  outline:none;
+  margin-bottom:12px;
+}
+
+.payment-card h2{
+  margin-bottom:20px;
+}
+
+.rating-box h3{
+  margin:0 0 10px;
+  color:#152c6b;
+}
+
+.action-btns{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.approve-btn,
+.reject-btn{
+  display:inline-block;
+  min-width:110px;
+  text-align:center;
+  padding:10px 14px;
+  border-radius:10px;
+  text-decoration:none;
+  color:#fff;
+  font-weight:700;
+}
+
+.approve-btn{
+  background:#28a745;
+}
+
+.reject-btn{
+  background:#dc3545;
+}
+
+.done-text{
+  color:#777;
+  font-weight:600;
+}
