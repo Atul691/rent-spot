@@ -648,6 +648,100 @@ app.post("/counter-negotiation/:id", async (req, res) => {
     res.send("Error sending counter offer");
   }
 });
+/* -------------------- ROOMMATE MATCHING -------------------- */
+
+app.get("/roommate-profile", auth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM user_preferences WHERE user_id=$1",
+      [req.session.user.id]
+    );
+
+    res.render("roommate-profile", {
+      user: req.session.user,
+      pref: result.rows[0] || null
+    });
+  } catch (error) {
+    console.log("ROOMMATE PROFILE PAGE ERROR:", error);
+    res.send("Error loading roommate profile");
+  }
+});
+
+app.post("/roommate-profile", auth, async (req, res) => {
+  try {
+    const { budget, smoking, sleep_time, occupation } = req.body;
+
+    await pool.query(
+      `INSERT INTO user_preferences (user_id, budget, smoking, sleep_time, occupation)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (user_id)
+       DO UPDATE SET
+         budget = EXCLUDED.budget,
+         smoking = EXCLUDED.smoking,
+         sleep_time = EXCLUDED.sleep_time,
+         occupation = EXCLUDED.occupation`,
+      [
+        req.session.user.id,
+        budget || "",
+        smoking || "",
+        sleep_time || "",
+        occupation || ""
+      ]
+    );
+
+    res.redirect("/roommate-matches");
+  } catch (error) {
+    console.log("ROOMMATE PROFILE SAVE ERROR:", error);
+    res.send("Error saving roommate profile");
+  }
+});
+
+app.get("/roommate-matches", auth, async (req, res) => {
+  try {
+    const myPrefResult = await pool.query(
+      "SELECT * FROM user_preferences WHERE user_id=$1",
+      [req.session.user.id]
+    );
+
+    const myPref = myPrefResult.rows[0];
+
+    if (!myPref) {
+      return res.redirect("/roommate-profile");
+    }
+
+    const usersResult = await pool.query(
+      `SELECT u.id, u.name, u.email, p.*
+       FROM users u
+       JOIN user_preferences p ON p.user_id = u.id
+       WHERE u.id != $1 AND u.approved = 1
+       ORDER BY u.id DESC`,
+      [req.session.user.id]
+    );
+
+    const matches = usersResult.rows.map(item => {
+      let score = 0;
+
+      if (myPref.budget && item.budget && myPref.budget === item.budget) score += 30;
+      if (myPref.smoking && item.smoking && myPref.smoking === item.smoking) score += 25;
+      if (myPref.sleep_time && item.sleep_time && myPref.sleep_time === item.sleep_time) score += 25;
+      if (myPref.occupation && item.occupation && myPref.occupation === item.occupation) score += 20;
+
+      return {
+        ...item,
+        match_score: score
+      };
+    }).sort((a, b) => b.match_score - a.match_score);
+
+    res.render("roommate-matches", {
+      user: req.session.user,
+      myPref,
+      matches
+    });
+  } catch (error) {
+    console.log("ROOMMATE MATCH ERROR:", error);
+    res.send("Error loading roommate matches");
+  }
+});
 /* -------------------- PAYMENT -------------------- */
 
 app.get("/payment", auth, async (req, res) => {

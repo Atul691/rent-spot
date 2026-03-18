@@ -4524,3 +4524,13 @@ color:#007bff;
   color:#777;
   font-weight:600;
 }
+.rating-form select{
+  width:100%;
+  padding:12px;
+  border:1px solid #d7d7d7;
+  border-radius:12px;
+  font-size:15px;
+  margin-bottom:12px;
+  outline:none;
+  background:#fff;
+}

@@ -17,9 +17,12 @@
   <a href="/about">About</a>
 
   <% if(user){ %>
-    <a href="/my-bookings">My Bookings</a>
-    <a href="/my-negotiations">My Negotiations</a>
-  <% } %>
+  <a href="/my-bookings">My Bookings</a>
+  <a href="/my-negotiations">My Negotiations</a>
+
+  <a href="/roommate-profile">Roommate Profile</a>
+  <a href="/roommate-matches">Roommate Match</a>
+<% } %>
 
   <% if(user && user.role==="admin"){ %>
     <a href="/admin">Admin</a>

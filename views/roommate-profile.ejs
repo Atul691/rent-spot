@@ -1,0 +1,39 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+    <h2>Roommate Profile</h2>
+    <p>Fill your habits and preferences to find a matching roommate.</p>
+
+    <form action="/roommate-profile" method="POST" class="rating-form">
+      <select name="budget" required>
+        <option value="">Select Budget</option>
+        <option value="low" <%= pref && pref.budget === "low" ? "selected" : "" %>>Low Budget</option>
+        <option value="medium" <%= pref && pref.budget === "medium" ? "selected" : "" %>>Medium Budget</option>
+        <option value="high" <%= pref && pref.budget === "high" ? "selected" : "" %>>High Budget</option>
+      </select>
+
+      <select name="smoking" required>
+        <option value="">Smoking Habit</option>
+        <option value="no" <%= pref && pref.smoking === "no" ? "selected" : "" %>>Non-Smoker</option>
+        <option value="yes" <%= pref && pref.smoking === "yes" ? "selected" : "" %>>Smoker</option>
+      </select>
+
+      <select name="sleep_time" required>
+        <option value="">Sleep Time</option>
+        <option value="early" <%= pref && pref.sleep_time === "early" ? "selected" : "" %>>Early Sleeper</option>
+        <option value="late" <%= pref && pref.sleep_time === "late" ? "selected" : "" %>>Night Owl</option>
+      </select>
+
+      <select name="occupation" required>
+        <option value="">Occupation</option>
+        <option value="student" <%= pref && pref.occupation === "student" ? "selected" : "" %>>Student</option>
+        <option value="job" <%= pref && pref.occupation === "job" ? "selected" : "" %>>Job / Working Professional</option>
+      </select>
+
+      <button type="submit" class="submit-btn">Save Profile</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
