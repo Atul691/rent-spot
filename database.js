@@ -115,7 +115,6 @@ async function initDb() {
     )
   `);
 
-}
 await pool.query(`
   CREATE TABLE IF NOT EXISTS user_preferences(
     id SERIAL PRIMARY KEY,
@@ -127,5 +126,5 @@ await pool.query(`
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )
 `);
-
+}
 module.exports = { pool, initDb };
