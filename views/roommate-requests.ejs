@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+    <h2>Roommate Requests</h2>
+
+    <% if(requests.length > 0){ %>
+      <% requests.forEach(function(r){ %>
+        <div class="rating-box">
+          <h3><%= r.name %></h3>
+          <p><%= r.email %></p>
+
+          <% if(r.status === "pending"){ %>
+            <a href="/accept-roommate/<%= r.id %>" class="book-main-btn">Accept</a>
+            <a href="/reject-roommate/<%= r.id %>" class="reject-btn">Reject</a>
+          <% } else { %>
+            <p>Status: <%= r.status %></p>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No requests yet</p>
+    <% } %>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

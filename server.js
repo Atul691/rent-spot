@@ -748,6 +748,53 @@ app.post("/roommate-profile", auth, async (req, res) => {
   }
 });
 
+app.get("/roommate-requests", auth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT rr.*, u.name, u.email
+       FROM roommate_requests rr
+       JOIN users u ON u.id = rr.sender_id
+       WHERE rr.receiver_id = $1
+       ORDER BY rr.id DESC`,
+      [req.session.user.id]
+    );
+
+    res.render("roommate-requests", {
+      requests: result.rows,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("ROOMMATE REQUEST ERROR:", error);
+    res.send("Error loading requests");
+  }
+});
+
+app.get("/accept-roommate/:id", auth, async (req, res) => {
+  try {
+    await pool.query(
+      "UPDATE roommate_requests SET status='accepted' WHERE id=$1",
+      [req.params.id]
+    );
+    res.redirect("/roommate-requests");
+  } catch (error) {
+    console.log("ACCEPT ROOMMATE ERROR:", error);
+    res.send("Error accepting roommate request");
+  }
+});
+
+app.get("/reject-roommate/:id", auth, async (req, res) => {
+  try {
+    await pool.query(
+      "UPDATE roommate_requests SET status='rejected' WHERE id=$1",
+      [req.params.id]
+    );
+    res.redirect("/roommate-requests");
+  } catch (error) {
+    console.log("REJECT ROOMMATE ERROR:", error);
+    res.send("Error rejecting roommate request");
+  }
+});
+
 app.get("/roommate-matches", auth, async (req, res) => {
   try {
     const myPrefResult = await pool.query(
@@ -761,28 +808,30 @@ app.get("/roommate-matches", auth, async (req, res) => {
       return res.redirect("/roommate-profile");
     }
 
-   const usersResult = await pool.query(
-  `SELECT u.id, u.name, u.email, u.phone, p.*
-   FROM users u
-   JOIN user_preferences p ON p.user_id = u.id
-   WHERE u.id != $1 AND u.approved = 1
-   ORDER BY u.id DESC`,
-  [req.session.user.id]
-);
+    const usersResult = await pool.query(
+      `SELECT u.id, u.name, u.email, u.phone, p.*
+       FROM users u
+       JOIN user_preferences p ON p.user_id = u.id
+       WHERE u.id != $1 AND u.approved = 1
+       ORDER BY u.id DESC`,
+      [req.session.user.id]
+    );
 
-    const matches = usersResult.rows.map(item => {
-      let score = 0;
+    const matches = usersResult.rows
+      .map(item => {
+        let score = 0;
 
-      if (myPref.budget && item.budget && myPref.budget === item.budget) score += 30;
-      if (myPref.smoking && item.smoking && myPref.smoking === item.smoking) score += 25;
-      if (myPref.sleep_time && item.sleep_time && myPref.sleep_time === item.sleep_time) score += 25;
-      if (myPref.occupation && item.occupation && myPref.occupation === item.occupation) score += 20;
+        if (myPref.budget && item.budget && myPref.budget === item.budget) score += 30;
+        if (myPref.smoking && item.smoking && myPref.smoking === item.smoking) score += 25;
+        if (myPref.sleep_time && item.sleep_time && myPref.sleep_time === item.sleep_time) score += 25;
+        if (myPref.occupation && item.occupation && myPref.occupation === item.occupation) score += 20;
 
-      return {
-        ...item,
-        match_score: score
-      };
-    }).sort((a, b) => b.match_score - a.match_score);
+        return {
+          ...item,
+          match_score: score
+        };
+      })
+      .sort((a, b) => b.match_score - a.match_score);
 
     res.render("roommate-matches", {
       user: req.session.user,
