@@ -759,6 +759,9 @@ app.get("/roommate-requests", auth, async (req, res) => {
       [req.session.user.id]
     );
 
+    console.log("LOGGED USER ID:", req.session.user.id);
+    console.log("REQUESTS:", result.rows);
+
     res.render("roommate-requests", {
       requests: result.rows,
       user: req.session.user
