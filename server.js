@@ -794,7 +794,37 @@ app.get("/reject-roommate/:id", auth, async (req, res) => {
     res.send("Error rejecting roommate request");
   }
 });
+app.post("/send-roommate-request/:receiverId", auth, async (req, res) => {
+  try {
+    const senderId = req.session.user.id;
+    const receiverId = parseInt(req.params.receiverId, 10);
 
+    if (!receiverId || senderId === receiverId) {
+      return res.send("Invalid roommate request");
+    }
+
+    const existingResult = await pool.query(
+      `SELECT * FROM roommate_requests
+       WHERE sender_id = $1 AND receiver_id = $2`,
+      [senderId, receiverId]
+    );
+
+    if (existingResult.rows.length > 0) {
+      return res.redirect("/roommate-matches");
+    }
+
+    await pool.query(
+      `INSERT INTO roommate_requests(sender_id, receiver_id, status)
+       VALUES($1, $2, $3)`,
+      [senderId, receiverId, "pending"]
+    );
+
+    res.redirect("/roommate-matches");
+  } catch (error) {
+    console.log("SEND ROOMMATE REQUEST ERROR:", error);
+    res.send("Error sending roommate request");
+  }
+});
 app.get("/roommate-matches", auth, async (req, res) => {
   try {
     const myPrefResult = await pool.query(

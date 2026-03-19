@@ -1,40 +1,65 @@
 <%- include("partials/header") %>
 
 <div class="page-wrap">
-  <div class="payment-card">
-    <h2>Roommate Matches</h2>
+  <div class="payment-card roommate-page-card">
+    <div class="roommate-top-bar">
+      <h2>Roommate Matches</h2>
 
-    <a href="/roommate-profile" class="book-main-btn" style="display:inline-block; margin-bottom:16px;">
-      Edit Profile
-    </a>
+      <a href="/roommate-profile" class="book-main-btn edit-profile-btn">
+        Edit Profile
+      </a>
+    </div>
 
     <% if(matches && matches.length > 0){ %>
-      <div class="rating-list">
+      <div class="roommate-match-list">
 
         <% matches.forEach(function(m){ %>
-          <div class="rating-box">
+          <div class="roommate-match-card">
 
-            <h3><%= m.name %></h3>
+            <div class="roommate-card-header">
+              <h3><%= m.name %></h3>
+              <span class="match-badge"><%= m.match_score %>% Match</span>
+            </div>
 
-            <p><strong>Match Score:</strong> <%= m.match_score %>%</p>
-            <p><strong>Budget:</strong> <%= m.budget %></p>
-            <p><strong>Smoking:</strong> <%= m.smoking %></p>
-            <p><strong>Sleep Time:</strong> <%= m.sleep_time %></p>
-            <p><strong>Occupation:</strong> <%= m.occupation %></p>
+            <div class="roommate-info-grid">
+              <div class="info-chip">
+                <span class="info-label">Budget</span>
+                <span class="info-value"><%= m.budget %></span>
+              </div>
 
-            <!-- WhatsApp Button -->
-            <% if(m.phone && m.phone.trim() !== ""){ %>
-              <a
-                href="https://wa.me/<%= m.phone %>?text=Hello%20I%20found%20your%20profile%20on%20RentSpot%20for%20roommate%20matching."
-                target="_blank"
-                class="book-main-btn"
-                style="margin-top:10px;"
-              >
-                Chat on WhatsApp
-              </a>
-            <% } else { %>
-              <p style="margin-top:8px; color:gray;">WhatsApp not available</p>
-            <% } %>
+              <div class="info-chip">
+                <span class="info-label">Smoking</span>
+                <span class="info-value"><%= m.smoking %></span>
+              </div>
+
+              <div class="info-chip">
+                <span class="info-label">Sleep Time</span>
+                <span class="info-value"><%= m.sleep_time %></span>
+              </div>
+
+              <div class="info-chip">
+                <span class="info-label">Occupation</span>
+                <span class="info-value"><%= m.occupation %></span>
+              </div>
+            </div>
+
+            <div class="roommate-action-row">
+              <form action="/send-roommate-request/<%= m.id %>" method="POST" class="roommate-form-btn">
+                <button type="submit" class="submit-btn roommate-btn">Send Request</button>
+              </form>
+
+              <% if(m.phone && m.phone.trim() !== ""){ %>
+                <a
+                  href="https://wa.me/<%= m.phone %>?text=Hello%20I%20found%20your%20profile%20on%20RentSpot%20for%20roommate%20matching."
+                  target="_blank"
+                  class="book-main-btn roommate-btn"
+                >
+                  Chat on WhatsApp
+                </a>
+              <% } else { %>
+                <span class="no-whatsapp-text">WhatsApp not available</span>
+              <% } %>
+            </div>
 
           </div>
         <% }) %>

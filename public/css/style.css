@@ -4980,3 +4980,198 @@ html, body {
   background:#fef3c7;
   color:#92400e;
 }
+/* ROOMMATE MATCH PAGE */
+.roommate-page-card{
+  padding: 24px;
+}
+
+.roommate-top-bar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.edit-profile-btn{
+  min-width: 160px;
+  text-align: center;
+}
+
+.roommate-match-list{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.roommate-match-card{
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
+
+.roommate-card-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.roommate-card-header h3{
+  margin: 0;
+  font-size: 28px;
+  color: #1d4ed8;
+}
+
+.match-badge{
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.roommate-info-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.info-chip{
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-label{
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.info-value{
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  word-break: break-word;
+}
+
+.roommate-action-row{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.roommate-form-btn{
+  margin: 0;
+}
+
+.roommate-btn{
+  min-width: 190px;
+  text-align: center;
+}
+
+.no-whatsapp-text{
+  color: #6b7280;
+  font-weight: 600;
+  display: inline-block;
+  padding: 10px 0;
+}
+
+/* TABLET */
+@media (max-width: 992px){
+  .roommate-info-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .roommate-card-header h3{
+    font-size: 24px;
+  }
+
+  .info-value{
+    font-size: 20px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+  .roommate-page-card{
+    padding: 16px;
+  }
+
+  .roommate-top-bar{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .edit-profile-btn{
+    width: 100%;
+  }
+
+  .roommate-match-card{
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .roommate-card-header{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .roommate-card-header h3{
+    font-size: 22px;
+  }
+
+  .match-badge{
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+
+  .roommate-info-grid{
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .info-chip{
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .info-label{
+    font-size: 12px;
+  }
+
+  .info-value{
+    font-size: 18px;
+  }
+
+  .roommate-action-row{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .roommate-form-btn,
+  .roommate-form-btn button,
+  .roommate-btn{
+    width: 100%;
+  }
+
+  .no-whatsapp-text{
+    text-align: center;
+  }
+}
