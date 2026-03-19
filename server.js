@@ -72,7 +72,22 @@ function admin(req, res, next) {
 app.get("/", async (req, res) => {
   try {
     const pgListResult = await pool.query('SELECT * FROM pg ORDER BY id DESC');
-    const notesResult = await pool.query('SELECT * FROM notifications ORDER BY id DESC');
+    let notesResult;
+
+if (req.session.user) {
+  notesResult = await pool.query(
+    `SELECT * FROM notifications
+     WHERE user_id IS NULL OR user_id = $1
+     ORDER BY id DESC`,
+    [req.session.user.id]
+  );
+} else {
+  notesResult = await pool.query(
+    `SELECT * FROM notifications
+     WHERE user_id IS NULL
+     ORDER BY id DESC`
+  );
+}
 
     const pgList = pgListResult.rows;
     const notes = notesResult.rows;
@@ -114,7 +129,7 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     if (!name || !email || !password) {
       return res.send("Please fill all fields");
@@ -132,9 +147,9 @@ app.post("/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     await pool.query(
-      `INSERT INTO users(name,email,password)
-       VALUES($1,$2,$3)`,
-      [name, email, hash]
+      `INSERT INTO users(name,email,password,phone)
+       VALUES($1,$2,$3,$4)`,
+      [name, email, hash, phone]
     );
 
     res.redirect("/login");
@@ -634,6 +649,17 @@ app.post("/counter-negotiation/:id", async (req, res) => {
       return res.send("Invalid counter price");
     }
 
+    const negotiationResult = await pool.query(
+      "SELECT * FROM negotiations WHERE id = $1",
+      [req.params.id]
+    );
+
+    const negotiation = negotiationResult.rows[0];
+
+    if (!negotiation) {
+      return res.send("Negotiation not found");
+    }
+
     await pool.query(
       `UPDATE negotiations
        SET status = 'countered',
@@ -642,7 +668,18 @@ app.post("/counter-negotiation/:id", async (req, res) => {
       [counterPrice, req.params.id]
     );
 
+    // 🔥 IMPORTANT: notification insert
+    await pool.query(
+      `INSERT INTO notifications(text, user_id)
+       VALUES($1, $2)`,
+      [
+        `Admin sent you a counter offer of ₹${counterPrice}`,
+        negotiation.user_id
+      ]
+    );
+
     res.redirect("/admin-negotiations");
+
   } catch (error) {
     console.log("COUNTER NEGOTIATION ERROR:", error);
     res.send("Error sending counter offer");
@@ -709,14 +746,14 @@ app.get("/roommate-matches", auth, async (req, res) => {
       return res.redirect("/roommate-profile");
     }
 
-    const usersResult = await pool.query(
-      `SELECT u.id, u.name, u.email, p.*
-       FROM users u
-       JOIN user_preferences p ON p.user_id = u.id
-       WHERE u.id != $1 AND u.approved = 1
-       ORDER BY u.id DESC`,
-      [req.session.user.id]
-    );
+   const usersResult = await pool.query(
+  `SELECT u.id, u.name, u.email, u.phone, p.*
+   FROM users u
+   JOIN user_preferences p ON p.user_id = u.id
+   WHERE u.id != $1 AND u.approved = 1
+   ORDER BY u.id DESC`,
+  [req.session.user.id]
+);
 
     const matches = usersResult.rows.map(item => {
       let score = 0;

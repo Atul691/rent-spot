@@ -20,6 +20,10 @@ async function initDb() {
     )
   `);
 
+  await pool.query(`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT DEFAULT ''
+  `);
+
   /* ---------------- PG ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS pg(
@@ -85,6 +89,10 @@ async function initDb() {
     )
   `);
 
+  await pool.query(`
+    ALTER TABLE notifications ADD COLUMN IF NOT EXISTS user_id INTEGER
+  `);
+
   /* ---------------- SETTINGS ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS settings(
@@ -100,8 +108,7 @@ async function initDb() {
     ON CONFLICT (id) DO NOTHING
   `, [process.env.UPI_ID || "atul@upi", ""]);
 
-
-  /* 🔥 ---------------- NEGOTIATION TABLE (NEW FEATURE) ---------------- */
+  /* ---------------- NEGOTIATION TABLE ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS negotiations(
       id SERIAL PRIMARY KEY,
@@ -115,16 +122,29 @@ async function initDb() {
     )
   `);
 
-await pool.query(`
-  CREATE TABLE IF NOT EXISTS user_preferences(
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE,
-    budget TEXT,
-    smoking TEXT DEFAULT '',
-    sleep_time TEXT DEFAULT '',
-    occupation TEXT DEFAULT '',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+  /* ---------------- ROOMMATE PREFERENCES ---------------- */
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS user_preferences(
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER UNIQUE,
+      budget TEXT,
+      smoking TEXT DEFAULT '',
+      sleep_time TEXT DEFAULT '',
+      occupation TEXT DEFAULT '',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  /* ---------------- ROOMMATE REQUESTS ---------------- */
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS roommate_requests(
+      id SERIAL PRIMARY KEY,
+      sender_id INTEGER NOT NULL,
+      receiver_id INTEGER NOT NULL,
+      status TEXT DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
 }
+
 module.exports = { pool, initDb };

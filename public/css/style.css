@@ -4534,3 +4534,115 @@ color:#007bff;
   outline:none;
   background:#fff;
 }
+/* ===== MOBILE FIX FOR NEGOTIATIONS + ROOMMATE PAGES ===== */
+@media (max-width: 768px) {
+  .page-wrap,
+  .detail-page {
+    padding: 12px;
+  }
+
+  .payment-card,
+  .detail-card,
+  .detail-info-box,
+  .rating-box {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .rating-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .rating-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rating-box h3,
+  .rating-box p,
+  .detail-info-box h3,
+  .detail-info-box p,
+  .payment-card h2 {
+    word-break: break-word;
+    line-height: 1.5;
+  }
+
+  .action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .approve-btn,
+  .reject-btn,
+  .submit-btn,
+  .book-main-btn,
+  .map-link-btn {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    box-sizing: border-box;
+  }
+
+  .rating-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rating-form input,
+  .rating-form select,
+  .rating-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  .nav-center {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .nav-center a {
+    display: inline-block;
+    font-size: 14px;
+  }
+
+  .top-nav {
+    display: block;
+  }
+
+  .nav-actions {
+    margin-top: 12px;
+  }
+
+  .match-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .match-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* safer global overflow fix */
+html, body {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -3,21 +3,42 @@
 <div class="page-wrap">
   <div class="payment-card">
     <h2>Roommate Matches</h2>
-    <a href="/roommate-profile" class="book-main-btn" style="display:inline-block; margin-bottom:16px;">Edit Profile</a>
+
+    <a href="/roommate-profile" class="book-main-btn" style="display:inline-block; margin-bottom:16px;">
+      Edit Profile
+    </a>
 
     <% if(matches && matches.length > 0){ %>
       <div class="rating-list">
+
         <% matches.forEach(function(m){ %>
           <div class="rating-box">
+
             <h3><%= m.name %></h3>
-            <p><strong>Email:</strong> <%= m.email %></p>
+
             <p><strong>Match Score:</strong> <%= m.match_score %>%</p>
             <p><strong>Budget:</strong> <%= m.budget %></p>
             <p><strong>Smoking:</strong> <%= m.smoking %></p>
             <p><strong>Sleep Time:</strong> <%= m.sleep_time %></p>
             <p><strong>Occupation:</strong> <%= m.occupation %></p>
+
+            <!-- WhatsApp Button -->
+            <% if(m.phone && m.phone.trim() !== ""){ %>
+              <a
+                href="https://wa.me/<%= m.phone %>?text=Hello%20I%20found%20your%20profile%20on%20RentSpot%20for%20roommate%20matching."
+                target="_blank"
+                class="book-main-btn"
+                style="margin-top:10px;"
+              >
+                Chat on WhatsApp
+              </a>
+            <% } else { %>
+              <p style="margin-top:8px; color:gray;">WhatsApp not available</p>
+            <% } %>
+
           </div>
         <% }) %>
+
       </div>
     <% } else { %>
       <p>No roommate matches found yet.</p>
