@@ -2,100 +2,106 @@
 
 <div class="admin-page">
 
-<div class="admin-top">
+  <div class="admin-top">
 
-<div>
-<p class="admin-small">Admin Panel</p>
-<h1>Manage Bookings</h1>
-<p class="admin-subtext">Approve or reject booking requests.</p>
-</div>
+    <div>
+      <p class="admin-small">Admin Panel</p>
+      <h1>Manage Bookings</h1>
+      <p class="admin-subtext">Approve or reject booking requests.</p>
+    </div>
 
-<a href="/admin" class="admin-secondary-btn">Back</a>
+    <a href="/admin" class="admin-secondary-btn">Back</a>
 
-</div>
+  </div>
 
+  <div class="admin-panel">
 
-<div class="admin-panel">
+    <% if(bookings && bookings.length > 0){ %>
 
-<% if(bookings && bookings.length > 0){ %>
+      <div class="table-wrap">
 
-<div class="table-wrap">
+        <table class="admin-table">
 
-<table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>PG</th>
+              <th>User</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Age</th>
+              <th>Entry Date</th>
+              <th>Booking Type</th>
+              <th>Roommate</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-<thead>
-<tr>
-<th>ID</th>
-<th>PG</th>
-<th>User</th>
-<th>Name</th>
-<th>Phone</th>
-<th>Age</th>
-<th>Entry Date</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-</thead>
+          <tbody>
 
-<tbody>
+            <% bookings.forEach(function(b){ %>
 
-<% bookings.forEach(function(b){ %>
+              <tr>
 
-<tr>
+                <td><%= b.id %></td>
+                <td><%= b.pg_title || b.pg_id %></td>
+                <td><%= b.user_id %></td>
+                <td><%= b.full_name %></td>
+                <td><%= b.phone %></td>
+                <td><%= b.age %></td>
+                <td><%= b.entry_date %></td>
 
-<td><%= b.id %></td>
-<td><%= b.pg_title || b.pg_id %></td>
-<td><%= b.user_id %></td>
-<td><%= b.full_name %></td>
-<td><%= b.phone %></td>
-<td><%= b.age %></td>
-<td><%= b.entry_date %></td>
+                <td>
+                  <%= b.booking_type || "solo" %>
+                </td>
 
-<td>
+                <td>
+                  <% if(b.roommate_name){ %>
+                    <%= b.roommate_name %>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
 
-<% if(b.status==="approved"){ %>
-<span class="status approved">Approved</span>
-<% }else if(b.status==="rejected"){ %>
-<span class="status rejected">Rejected</span>
-<% }else{ %>
-<span class="status pending">Pending</span>
-<% } %>
+                <td>
+                  <% if(b.status==="approved"){ %>
+                    <span class="status approved">Approved</span>
+                  <% }else if(b.status==="rejected"){ %>
+                    <span class="status rejected">Rejected</span>
+                  <% }else{ %>
+                    <span class="status pending">Pending</span>
+                  <% } %>
+                </td>
 
-</td>
+                <td>
+                  <% if(b.status==="pending"){ %>
+                    <div class="action-btns">
+                      <a href="/approve-booking/<%= b.id %>" class="approve-btn">Approve</a>
+                      <a href="/reject-booking/<%= b.id %>" class="reject-btn">Reject</a>
+                    </div>
+                  <% } else { %>
+                    <span class="done-text">Done</span>
+                  <% } %>
+                </td>
 
-<td>
+              </tr>
 
-<% if(b.status==="pending"){ %>
+            <% }) %>
 
-<a href="/approve-booking/<%= b.id %>" class="approve-btn">Approve</a>
+          </tbody>
 
-<a href="/reject-booking/<%= b.id %>" class="reject-btn">Reject</a>
+        </table>
 
-<% } else { %>
+      </div>
 
-<span class="done-text">Done</span>
+    <% } else { %>
 
-<% } %>
+      <p>No bookings found</p>
 
-</td>
+    <% } %>
 
-</tr>
-
-<% }) %>
-
-</tbody>
-
-</table>
-
-</div>
-
-<% } else { %>
-
-<p>No bookings found</p>
-
-<% } %>
-
-</div>
+  </div>
 
 </div>
 

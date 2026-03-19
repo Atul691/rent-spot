@@ -400,9 +400,20 @@ app.get("/book/:id", auth, async (req, res) => {
       return res.send("PG not found");
     }
 
+    const roommatesResult = await pool.query(
+      `SELECT u.id, u.name, u.email
+       FROM roommate_requests rr
+       JOIN users u ON u.id = rr.sender_id OR u.id = rr.receiver_id
+       WHERE rr.status = 'accepted'
+         AND (rr.sender_id = $1 OR rr.receiver_id = $1)
+         AND u.id != $1`,
+      [req.session.user.id]
+    );
+
     res.render("booking-form", {
       pg,
-      user: req.session.user
+      user: req.session.user,
+      roommates: roommatesResult.rows
     });
   } catch (error) {
     console.log("BOOK PAGE ERROR:", error);
@@ -423,27 +434,28 @@ app.post("/book/:id", auth, async (req, res) => {
       return res.send("PG not found");
     }
 
-    const { full_name, phone, age, entry_date, notes } = req.body;
+    const { full_name, phone, age, entry_date, notes, booking_type, roommate_user_id } = req.body;
 
     if (!full_name || !phone || !age || !entry_date) {
       return res.send("Please fill all booking details");
     }
 
-    await pool.query(
-      `INSERT INTO bookings(user_id,pg_id,full_name,phone,age,entry_date,notes,status)
-       VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
-      [
-        req.session.user.id,
-        req.params.id,
-        full_name,
-        phone,
-        age,
-        entry_date,
-        notes || "",
-        "pending"
-      ]
-    );
-
+   await pool.query(
+  `INSERT INTO bookings(user_id,pg_id,full_name,phone,age,entry_date,notes,status,roommate_user_id,booking_type)
+   VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+  [
+    req.session.user.id,
+    req.params.id,
+    full_name,
+    phone,
+    age,
+    entry_date,
+    notes || "",
+    "pending",
+    booking_type === "roommate" && roommate_user_id ? roommate_user_id : null,
+    booking_type || "solo"
+  ]
+);
     res.redirect("/payment");
   } catch (error) {
     console.log("BOOKING SUBMIT ERROR:", error);
@@ -454,11 +466,14 @@ app.post("/book/:id", auth, async (req, res) => {
 app.get("/bookings", admin, async (req, res) => {
   try {
     const bookingsResult = await pool.query(`
-      SELECT bookings.*, pg.title AS pg_title
-      FROM bookings
-      LEFT JOIN pg ON bookings.pg_id = pg.id
-      ORDER BY bookings.id DESC
-    `);
+  SELECT bookings.*, 
+         pg.title AS pg_title,
+         u2.name AS roommate_name
+  FROM bookings
+  LEFT JOIN pg ON bookings.pg_id = pg.id
+  LEFT JOIN users u2 ON bookings.roommate_user_id = u2.id
+  ORDER BY bookings.id DESC
+`);
 
     res.render("bookings", {
       bookings: bookingsResult.rows,

@@ -1,52 +1,71 @@
 <%- include("partials/header") %>
 
 <div class="page-wrap">
+  <div class="form-card">
+    <h2>Book PG</h2>
 
-<div class="form-card">
+    <div class="booking-pg-info">
+      <h3><%= pg.title %></h3>
+      <p><%= pg.location %></p>
+      <p class="pg-price">₹ <%= pg.price %></p>
+    </div>
 
-<h2>Book PG</h2>
+    <form action="/book/<%= pg.id %>" method="POST" class="simple-form">
 
-<div class="booking-pg-info">
-<h3><%= pg.title %></h3>
-<p><%= pg.location %></p>
-<p class="pg-price">₹ <%= pg.price %></p>
-</div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="full_name" required>
+      </div>
 
-<form action="/book/<%= pg.id %>" method="POST" class="simple-form">
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" name="phone" required>
+      </div>
 
-<div class="form-group">
-<label>Full Name</label>
-<input type="text" name="full_name" required>
-</div>
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" name="age" required>
+      </div>
 
-<div class="form-group">
-<label>Phone Number</label>
-<input type="text" name="phone" required>
-</div>
+      <div class="form-group">
+        <label>Date of Entry</label>
+        <input type="date" name="entry_date" required>
+      </div>
 
-<div class="form-group">
-<label>Age</label>
-<input type="number" name="age" required>
-</div>
+      <div class="form-group">
+        <label>Additional Notes</label>
+        <textarea name="notes" placeholder="Any message for admin"></textarea>
+      </div>
 
-<div class="form-group">
-<label>Date of Entry</label>
-<input type="date" name="entry_date" required>
-</div>
+      <div class="form-group">
+        <label>Booking Type</label>
+        <select name="booking_type" required>
+          <option value="solo">Solo Booking</option>
+          <option value="roommate">Book With Roommate</option>
+        </select>
+      </div>
 
-<div class="form-group">
-<label>Additional Notes</label>
-<textarea name="notes" placeholder="Any message for admin"></textarea>
-</div>
+      <div class="form-group">
+        <label>Select Roommate</label>
 
-<div class="form-actions">
-<button type="submit" class="submit-btn">Confirm Booking</button>
-</div>
+        <% if(roommates && roommates.length > 0){ %>
+          <select name="roommate_user_id">
+            <option value="">Select Accepted Roommate</option>
+            <% roommates.forEach(function(r){ %>
+              <option value="<%= r.id %>"><%= r.name %> - <%= r.email %></option>
+            <% }) %>
+          </select>
+        <% } else { %>
+          <p>No accepted roommate available yet.</p>
+        <% } %>
+      </div>
 
-</form>
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">Confirm Booking</button>
+      </div>
 
-</div>
-
+    </form>
+  </div>
 </div>
 
 <%- include("partials/footer") %>

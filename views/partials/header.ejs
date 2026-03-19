@@ -5,37 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RentSpot</title>
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="site-shell">
   <div class="top-nav">
     <div class="brand">RentSpot</div>
-<div class="nav-center">
-  <a href="/">Properties</a>
-  <a href="/about">About</a>
 
-  <% if(user){ %>
-  <a href="/my-bookings">My Bookings</a>
-  <a href="/my-negotiations">My Negotiations</a>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-  <a href="/roommate-profile">Roommate Profile</a>
-  <a href="/roommate-matches">Roommate Match</a>
-<% } %>
+    <div class="nav-wrap" id="navWrap">
+      <div class="nav-center">
+        <a href="/">Properties</a>
+        <a href="/about">About</a>
 
-  <% if(user && user.role==="admin"){ %>
-    <a href="/admin">Admin</a>
-    <a href="/admin-negotiations">Negotiations</a>
-  <% } %>
-</div>
+        <% if(user){ %>
+          <a href="/my-bookings">Bookings</a>
+          <a href="/my-negotiations">Deals</a>
+          <a href="/roommate-profile">Profile</a>
+          <a href="/roommate-matches">Match</a>
+          <a href="/roommate-requests">Requests</a>
+        <% } %>
 
-    <div class="nav-actions">
-      <% if(user){ %>
-        <a href="/logout" class="btn-outline">Logout</a>
-      <% } else { %>
-        <a href="/register" class="btn-outline">Sign up</a>
-        <a href="/login" class="btn-fill">Log in</a>
-      <% } %>
+        <% if(user && user.role==="admin"){ %>
+          <a href="/admin">Admin</a>
+          <a href="/admin-negotiations">Admin Deals</a>
+        <% } %>
+      </div>
+
+      <div class="nav-actions">
+        <% if(user){ %>
+          <a href="/logout" class="btn-outline">Logout</a>
+        <% } else { %>
+          <a href="/register" class="btn-outline">Sign up</a>
+          <a href="/login" class="btn-fill">Log in</a>
+        <% } %>
+      </div>
     </div>
   </div>
+</div>
+
+<script>
+  function toggleMenu() {
+    const nav = document.getElementById("navWrap");
+    nav.classList.toggle("show");
+  }
+</script>

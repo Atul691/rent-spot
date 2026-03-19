@@ -60,6 +60,13 @@ async function initDb() {
       status TEXT DEFAULT 'pending'
     )
   `);
+  await pool.query(`
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS roommate_user_id INTEGER
+`);
+
+await pool.query(`
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_type TEXT DEFAULT 'solo'
+`);
 
   /* ---------------- RATINGS ---------------- */
   await pool.query(`
