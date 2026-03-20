@@ -6076,3 +6076,179 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* ===== FINAL HOME CARD WIDTH + ROOM TEXT FIX ===== */
+
+/* page width tighter */
+.page-wrap,
+.home-page-wrap {
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  padding: 0 10px !important;
+}
+
+/* card full width */
+.pg-list {
+  width: 100% !important;
+}
+
+.zolo-card,
+.pg-item {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 18px 0 !important;
+  padding: 14px !important;
+}
+
+/* image + content ratio better */
+.zolo-main {
+  display: grid !important;
+  grid-template-columns: 255px 1fr !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+.zolo-image-wrap {
+  width: 100% !important;
+  overflow: hidden !important;
+  border-radius: 14px !important;
+}
+
+.zolo-image {
+  width: 100% !important;
+  height: 205px !important;
+  object-fit: cover !important;
+  border-radius: 14px !important;
+}
+
+.zolo-content {
+  min-width: 0 !important;
+}
+
+/* top text compact */
+.zolo-price {
+  font-size: 24px !important;
+  line-height: 1.1 !important;
+}
+
+.zolo-onwards,
+.zolo-type,
+.zolo-location,
+.tenant-badge,
+.facility-line,
+.zolo-desc,
+.highlight-line {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+/* room row compact */
+.sharing-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+
+.share-box {
+  padding: 7px 8px !important;
+  border-radius: 8px !important;
+  min-width: 0 !important;
+}
+
+.share-title {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  margin-bottom: 2px !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+}
+
+.share-price {
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  color: #1e3a8a !important;
+}
+
+.share-price.not-available {
+  color: #64748b !important;
+}
+
+.share-left {
+  font-size: 9px !important;
+  margin-top: 2px !important;
+  color: #94a3b8 !important;
+}
+
+/* status badge */
+.room-status {
+  padding: 2px 6px !important;
+  border-radius: 999px !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+}
+
+.room-status.available {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.room-status.full {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+/* desc and buttons alignment */
+.zolo-desc,
+.highlight-line,
+.bottom-map-row {
+  margin-top: 6px !important;
+}
+
+.action-row {
+  display: flex !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+
+.owner-btn,
+.phone-btn {
+  padding: 11px 14px !important;
+  font-size: 14px !important;
+  border-radius: 12px !important;
+}
+
+/* mobile */
+@media (max-width: 900px) {
+  .page-wrap,
+  .home-page-wrap {
+    max-width: 100% !important;
+  }
+
+  .zolo-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sharing-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .zolo-card {
+    padding: 12px !important;
+  }
+
+  .zolo-image {
+    height: 190px !important;
+  }
+
+  .action-row {
+    flex-direction: column !important;
+  }
+
+  .owner-btn,
+  .phone-btn {
+    width: 100% !important;
+  }
+}
