@@ -54,15 +54,29 @@
             </div>
 
             <div class="roommate-action-row">
-              <form action="/send-roommate-request/<%= m.id %>" method="POST" class="roommate-form-btn">
-                <button type="submit" class="submit-btn roommate-btn">Send Request</button>
-              </form>
+              <% if(m.request_status === "pending"){ %>
+                <button type="button" class="roommate-btn pending-btn" disabled>
+                  Request Sent
+                </button>
+
+              <% } else if(m.request_status === "accepted"){ %>
+                <button type="button" class="roommate-btn accepted-btn" disabled>
+                  Matched ✓
+                </button>
+
+              <% } else { %>
+                <form action="/send-roommate-request/<%= m.id %>" method="POST" class="roommate-form-btn">
+                  <button type="submit" class="submit-btn roommate-btn send-btn">
+                    Send Request
+                  </button>
+                </form>
+              <% } %>
 
               <% if(m.phone && m.phone.trim() !== ""){ %>
                 <a
                   href="https://wa.me/<%= m.phone %>?text=Hello%20I%20found%20your%20profile%20on%20RentSpot%20for%20roommate%20matching."
                   target="_blank"
-                  class="book-main-btn roommate-btn"
+                  class="book-main-btn roommate-btn whatsapp-btn"
                 >
                   Chat on WhatsApp
                 </a>

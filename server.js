@@ -910,9 +910,12 @@ app.get("/roommate-matches", auth, async (req, res) => {
     }
 
     const usersResult = await pool.query(
-      `SELECT u.id, u.name, u.email, u.phone, p.*
+      `SELECT u.id, u.name, u.email, u.phone, p.*,
+         rr.status AS request_status
        FROM users u
        JOIN user_preferences p ON p.user_id = u.id
+       LEFT JOIN roommate_requests rr
+         ON rr.receiver_id = u.id AND rr.sender_id = $1
        WHERE u.id != $1 AND u.approved = 1
        ORDER BY u.id DESC`,
       [req.session.user.id]
