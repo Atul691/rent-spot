@@ -740,6 +740,8 @@ app.post("/counter-negotiation/:id", async (req, res) => {
 
 app.get("/roommate-profile", auth, async (req, res) => {
   try {
+    console.log("CURRENT LOGIN USER:", req.session.user);
+
     const result = await pool.query(
       "SELECT * FROM user_preferences WHERE user_id=$1",
       [req.session.user.id]
@@ -757,6 +759,8 @@ app.get("/roommate-profile", auth, async (req, res) => {
 
 app.post("/roommate-profile", auth, async (req, res) => {
   try {
+    console.log("CURRENT LOGIN USER:", req.session.user);
+
     const { budget, smoking, sleep_time, occupation } = req.body;
 
     await pool.query(
@@ -795,6 +799,7 @@ app.get("/roommate-requests", auth, async (req, res) => {
       [req.session.user.id]
     );
 
+    console.log("CURRENT LOGIN USER:", req.session.user);
     console.log("LOGGED USER ID:", req.session.user.id);
     console.log("REQUESTS:", result.rows);
 
@@ -810,10 +815,14 @@ app.get("/roommate-requests", auth, async (req, res) => {
 
 app.get("/accept-roommate/:id", auth, async (req, res) => {
   try {
+    console.log("CURRENT LOGIN USER:", req.session.user);
+    console.log("ACCEPT REQUEST ID:", req.params.id);
+
     await pool.query(
       "UPDATE roommate_requests SET status='accepted' WHERE id=$1",
       [req.params.id]
     );
+
     res.redirect("/roommate-requests");
   } catch (error) {
     console.log("ACCEPT ROOMMATE ERROR:", error);
@@ -823,20 +832,30 @@ app.get("/accept-roommate/:id", auth, async (req, res) => {
 
 app.get("/reject-roommate/:id", auth, async (req, res) => {
   try {
+    console.log("CURRENT LOGIN USER:", req.session.user);
+    console.log("REJECT REQUEST ID:", req.params.id);
+
     await pool.query(
       "UPDATE roommate_requests SET status='rejected' WHERE id=$1",
       [req.params.id]
     );
+
     res.redirect("/roommate-requests");
   } catch (error) {
     console.log("REJECT ROOMMATE ERROR:", error);
     res.send("Error rejecting roommate request");
   }
 });
+
 app.post("/send-roommate-request/:receiverId", auth, async (req, res) => {
   try {
     const senderId = req.session.user.id;
     const receiverId = parseInt(req.params.receiverId, 10);
+
+    console.log("CURRENT LOGIN USER:", req.session.user);
+    console.log("SENDER ID:", senderId);
+    console.log("RECEIVER ID PARAM:", req.params.receiverId);
+    console.log("RECEIVER ID PARSED:", receiverId);
 
     if (!receiverId || senderId === receiverId) {
       return res.send("Invalid roommate request");
@@ -848,6 +867,8 @@ app.post("/send-roommate-request/:receiverId", auth, async (req, res) => {
       [senderId, receiverId]
     );
 
+    console.log("EXISTING REQUEST:", existingResult.rows);
+
     if (existingResult.rows.length > 0) {
       return res.redirect("/roommate-matches");
     }
@@ -858,20 +879,31 @@ app.post("/send-roommate-request/:receiverId", auth, async (req, res) => {
       [senderId, receiverId, "pending"]
     );
 
+    console.log("ROOMMATE REQUEST INSERTED:", {
+      senderId,
+      receiverId,
+      status: "pending"
+    });
+
     res.redirect("/roommate-matches");
   } catch (error) {
     console.log("SEND ROOMMATE REQUEST ERROR:", error);
     res.send("Error sending roommate request");
   }
 });
+
 app.get("/roommate-matches", auth, async (req, res) => {
   try {
+    console.log("CURRENT LOGIN USER:", req.session.user);
+
     const myPrefResult = await pool.query(
       "SELECT * FROM user_preferences WHERE user_id=$1",
       [req.session.user.id]
     );
 
     const myPref = myPrefResult.rows[0];
+
+    console.log("MY PREFERENCE:", myPref);
 
     if (!myPref) {
       return res.redirect("/roommate-profile");
@@ -885,6 +917,8 @@ app.get("/roommate-matches", auth, async (req, res) => {
        ORDER BY u.id DESC`,
       [req.session.user.id]
     );
+
+    console.log("MATCH USERS RAW:", usersResult.rows);
 
     const matches = usersResult.rows
       .map(item => {
@@ -901,6 +935,8 @@ app.get("/roommate-matches", auth, async (req, res) => {
         };
       })
       .sort((a, b) => b.match_score - a.match_score);
+
+    console.log("MATCHES FINAL:", matches);
 
     res.render("roommate-matches", {
       user: req.session.user,
