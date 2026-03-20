@@ -5453,3 +5453,68 @@ textarea:focus {
     width: 100%;
   }
 }
+/* -------- ROOMMATE UI FIX (FINAL) -------- */
+
+.roommate-match-card {
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Name compact */
+.roommate-card-header h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* Match badge small */
+.match-badge {
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+/* Info grid text */
+.info-label {
+  font-size: 11px;
+  color: #777;
+}
+
+.info-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Email small + wrap */
+.info-chip:nth-child(2) .info-value {
+  font-size: 12px;
+  word-break: break-all;
+}
+
+/* Buttons small & slim */
+.roommate-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Send request button */
+.submit-btn.roommate-btn {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* WhatsApp button */
+.book-main-btn.roommate-btn {
+  background: #25D366;
+  color: #fff;
+}
+
+/* Button spacing */
+.roommate-action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
