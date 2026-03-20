@@ -10,11 +10,14 @@
           <h3><%= r.name %></h3>
           <p><%= r.email %></p>
 
+          <!-- STATUS BADGE -->
+          <p class="status-badge <%= r.status %>">
+            <%= r.status.toUpperCase() %>
+          </p>
+
           <% if(r.status === "pending"){ %>
             <a href="/accept-roommate/<%= r.id %>" class="book-main-btn">Accept</a>
             <a href="/reject-roommate/<%= r.id %>" class="reject-btn">Reject</a>
-          <% } else { %>
-            <p>Status: <%= r.status %></p>
           <% } %>
         </div>
       <% }) %>

@@ -791,14 +791,13 @@ app.post("/roommate-profile", auth, async (req, res) => {
 app.get("/roommate-requests", auth, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT rr.*, u.name, u.email
-       FROM roommate_requests rr
-       JOIN users u ON u.id = rr.sender_id
-       WHERE rr.receiver_id = $1
-       ORDER BY rr.id DESC`,
-      [req.session.user.id]
-    );
-
+  `SELECT rr.*, u.name, u.email
+   FROM roommate_requests rr
+   JOIN users u ON u.id = rr.receiver_id
+   WHERE rr.sender_id = $1
+   ORDER BY rr.id DESC`,
+  [req.session.user.id]
+);
     console.log("CURRENT LOGIN USER:", req.session.user);
     console.log("LOGGED USER ID:", req.session.user.id);
     console.log("REQUESTS:", result.rows);

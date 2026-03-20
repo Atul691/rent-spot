@@ -6916,3 +6916,31 @@ body {
     text-align: center;
   }
 }
+/* ===== STATUS BADGE ===== */
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+/* pending */
+.status-badge.pending {
+  background: #fff3cd;
+  color: #ff9800;
+}
+
+/* accepted */
+.status-badge.accepted {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* rejected */
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
