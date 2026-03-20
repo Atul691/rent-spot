@@ -286,17 +286,53 @@ app.get("/addpg", admin, (req, res) => {
 
 app.post("/addpg", admin, upload.array("images", 10), async (req, res) => {
   try {
-    const { title, price, location, description, whatsapp, map } = req.body;
+    const {
+      title,
+      price,
+      location,
+      description,
+      whatsapp,
+      map,
+      single_rooms,
+      twin_rooms,
+      triple_rooms,
+      twin_price,
+      triple_price
+    } = req.body;
 
     if (!title || !price || !location || !description) {
       return res.send("Please fill all required PG details");
     }
 
     const result = await pool.query(
-      `INSERT INTO pg(title,price,location,description,whatsapp,map)
-       VALUES($1,$2,$3,$4,$5,$6)
-       RETURNING id`,
-      [title, price, location, description, whatsapp || "", map || ""]
+      `INSERT INTO pg(
+        title,
+        price,
+        location,
+        description,
+        whatsapp,
+        map,
+        single_rooms,
+        twin_rooms,
+        triple_rooms,
+        twin_price,
+        triple_price
+      )
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+      RETURNING id`,
+      [
+        title,
+        price,
+        location,
+        description,
+        whatsapp || "",
+        map || "",
+        Number(single_rooms) || 0,
+        Number(twin_rooms) || 0,
+        Number(triple_rooms) || 0,
+        Number(twin_price) || 0,
+        Number(triple_price) || 0
+      ]
     );
 
     const pgId = result.rows[0].id;

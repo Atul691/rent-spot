@@ -1,60 +1,86 @@
 <%- include("partials/header") %>
 
 <div class="page-wrap">
-  <div class="form-card addpg-card">
-    <div class="addpg-head">
-      <div>
-        <p class="admin-small">Property Management</p>
-        <h2>Add New PG</h2>
-        <p class="addpg-subtext">Fill details and select multiple images together.</p>
+  <div class="form-card">
+    <h2>Add New PG</h2>
+    <p>Add a new PG/Hostel listing with room counts and sharing prices.</p>
+
+    <form action="/addpg" method="POST" enctype="multipart/form-data" class="simple-form">
+
+      <div class="form-group">
+        <label>PG Title</label>
+        <input type="text" name="title" placeholder="Enter PG title" required>
       </div>
 
-      <a href="/admin" class="admin-secondary-btn">Back to Dashboard</a>
-    </div>
-
-    <form action="/addpg" method="POST" enctype="multipart/form-data" class="addpg-form">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>PG Name</label>
-          <input type="text" name="title" placeholder="Enter PG name" required>
-        </div>
-
-        <div class="form-group">
-          <label>Price</label>
-          <input type="text" name="price" placeholder="Enter price" required>
-        </div>
-
-        <div class="form-group">
-          <label>Location</label>
-          <input type="text" name="location" placeholder="Enter location" required>
-        </div>
-
-        <div class="form-group">
-          <label>WhatsApp Number</label>
-          <input type="text" name="whatsapp" placeholder="Enter WhatsApp number">
-        </div>
+      <div class="form-group">
+        <label>Base Price</label>
+        <input type="number" name="price" placeholder="Enter base price" required>
       </div>
 
-      <div class="form-group full-width">
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" name="location" placeholder="Enter location" required>
+      </div>
+
+      <div class="form-group">
         <label>Description</label>
         <textarea name="description" placeholder="Write PG description" required></textarea>
       </div>
 
-      <div class="form-group full-width">
-        <label>Google Map Link</label>
-        <input type="text" name="map" placeholder="Paste normal Google Maps link">
+      <div class="form-group">
+        <label>WhatsApp Number</label>
+        <input type="text" name="whatsapp" placeholder="Enter WhatsApp number">
       </div>
 
-      <div class="form-group full-width">
-        <label>Upload Multiple PG Images</label>
+      <div class="form-group">
+        <label>Google Map Link</label>
+        <input type="text" name="map" placeholder="Paste Google Map link">
+      </div>
+
+      <hr style="margin:20px 0;">
+
+      <h3>Room Availability</h3>
+
+      <div class="form-group">
+        <label>Single Rooms</label>
+        <input type="number" name="single_rooms" min="0" value="0">
+      </div>
+
+      <div class="form-group">
+        <label>Twin Rooms</label>
+        <input type="number" name="twin_rooms" min="0" value="0">
+      </div>
+
+      <div class="form-group">
+        <label>Triple Rooms</label>
+        <input type="number" name="triple_rooms" min="0" value="0">
+      </div>
+
+      <hr style="margin:20px 0;">
+
+      <h3>Sharing Prices</h3>
+
+      <div class="form-group">
+        <label>Twin Sharing Price</label>
+        <input type="number" name="twin_price" min="0" value="0" placeholder="Enter twin sharing price">
+      </div>
+
+      <div class="form-group">
+        <label>Triple Sharing Price</label>
+        <input type="number" name="triple_price" min="0" value="0" placeholder="Enter triple sharing price">
+      </div>
+
+      <hr style="margin:20px 0;">
+
+      <div class="form-group">
+        <label>Upload Images</label>
         <input type="file" name="images" multiple accept="image/*">
-        <small class="upload-help">Ctrl daba ke multiple photos select karo.</small>
       </div>
 
       <div class="form-actions">
         <button type="submit" class="submit-btn">Add PG</button>
-        <a href="/admin" class="admin-secondary-btn">Cancel</a>
       </div>
+
     </form>
   </div>
 </div>

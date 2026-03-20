@@ -36,7 +36,17 @@ async function initDb() {
       map TEXT
     )
   `);
+await pool.query(`
+  ALTER TABLE pg ADD COLUMN IF NOT EXISTS single_rooms INTEGER DEFAULT 0
+`);
 
+await pool.query(`
+  ALTER TABLE pg ADD COLUMN IF NOT EXISTS twin_rooms INTEGER DEFAULT 0
+`);
+
+await pool.query(`
+  ALTER TABLE pg ADD COLUMN IF NOT EXISTS triple_rooms INTEGER DEFAULT 0
+`);
   /* ---------------- IMAGES ---------------- */
   await pool.query(`
     CREATE TABLE IF NOT EXISTS images(
