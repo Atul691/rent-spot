@@ -5518,3 +5518,471 @@ textarea:focus {
   margin-top: 10px;
   flex-wrap: wrap;
 }
+/* -------- HOME PG LISTING PREMIUM UI -------- */
+
+.home-head {
+  margin-bottom: 22px;
+}
+
+.home-head h1 {
+  font-size: 36px;
+  line-height: 1.1;
+  margin: 0 0 8px;
+  color: #182b57;
+  font-weight: 800;
+}
+
+.home-head p {
+  margin: 0;
+  color: #667085;
+  font-size: 16px;
+}
+
+.notification-list {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 20px;
+}
+
+.notification-box {
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
+  border: 1px solid #dbe7ff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.06);
+  color: #334155;
+}
+
+.filter-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  scrollbar-width: thin;
+}
+
+.filter-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.filter-pill {
+  white-space: nowrap;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d7deea;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+.filter-pill:hover {
+  transform: translateY(-1px);
+}
+
+.filter-pill.active {
+  background: linear-gradient(135deg, #4f7cff, #2563eb);
+  color: #fff;
+  border-color: transparent;
+}
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+  align-items: end;
+  background: #ffffff;
+  border: 1px solid #e4ebf5;
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  margin-bottom: 22px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.filter-group input {
+  height: 50px;
+  border-radius: 14px;
+  border: 1px solid #d7deea;
+  padding: 0 14px;
+  font-size: 15px;
+  color: #111827;
+  background: #fff;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 4px rgba(79, 124, 255, 0.10);
+}
+
+.filter-btn-group {
+  flex-direction: row;
+  gap: 10px;
+}
+
+.filter-btn,
+.reset-btn {
+  min-width: 120px;
+  height: 50px;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filter-btn {
+  background: linear-gradient(135deg, #4f7cff, #2563eb);
+  color: #fff;
+}
+
+.reset-btn {
+  background: #eef2ff;
+  color: #1e3a8a;
+}
+
+.filter-btn:hover,
+.reset-btn:hover {
+  transform: translateY(-1px);
+}
+
+.pg-list {
+  display: grid;
+  gap: 22px;
+}
+
+.empty-box {
+  background: #fff;
+  border: 1px solid #e4ebf5;
+  border-radius: 22px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.zolo-card {
+  background: #ffffff;
+  border: 1px solid #e7ecf4;
+  border-radius: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  padding: 18px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.zolo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.12);
+}
+
+.zolo-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.verified-tag,
+.code-tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.verified-tag {
+  background: #f7ead8;
+  color: #7a4b09;
+}
+
+.code-tag {
+  background: #f5ebcf;
+  color: #7a5a00;
+}
+
+.zolo-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.zolo-image-wrap {
+  position: relative;
+}
+
+.zolo-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.photo-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(17, 24, 39, 0.78);
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.zolo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zolo-price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.zolo-price {
+  font-size: 34px;
+  font-weight: 900;
+  color: #e11d48;
+  letter-spacing: -0.6px;
+  line-height: 1;
+}
+
+.zolo-onwards {
+  font-size: 16px;
+  color: #475569;
+  font-weight: 700;
+}
+
+.zolo-rating {
+  background: #f8e7a3;
+  color: #7a5a00;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.zolo-type {
+  font-size: 16px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.zolo-location {
+  font-size: 16px;
+  color: #475569;
+}
+
+.bed-badge {
+  display: inline-flex;
+  width: max-content;
+  background: #e6faf3;
+  color: #0f766e;
+  border: 1px solid #bde9dc;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.tenant-badge {
+  color: #475569;
+  font-size: 15px;
+}
+
+.tenant-badge strong {
+  color: #1d4ed8;
+}
+
+.facility-line {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: #475569;
+  font-size: 15px;
+}
+
+.sharing-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.share-box {
+  background: #f8fbff;
+  border: 1px solid #e4ebf5;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.share-title {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.share-price {
+  font-size: 22px;
+  color: #1e3a8a;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.share-left {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.zolo-desc {
+  color: #475569;
+  line-height: 1.55;
+  font-size: 15px;
+}
+
+.more-link {
+  color: #1d4ed8;
+  font-weight: 800;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.highlight-line {
+  font-size: 14px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.action-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.owner-btn,
+.phone-btn {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.owner-btn {
+  background: #f8e7ea;
+  color: #c2410c;
+}
+
+.phone-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+}
+
+.owner-btn:hover,
+.phone-btn:hover {
+  transform: translateY(-1px);
+}
+
+.bottom-map-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.distance-text {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.map-view-link {
+  color: #b91c1c;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-btn-group {
+    justify-content: stretch;
+  }
+
+  .filter-btn,
+  .reset-btn {
+    width: 100%;
+  }
+
+  .zolo-main {
+    grid-template-columns: 1fr;
+  }
+
+  .zolo-image {
+    height: 220px;
+  }
+
+  .sharing-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-head h1 {
+    font-size: 28px;
+  }
+
+  .zolo-card {
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .zolo-price {
+    font-size: 28px;
+  }
+
+  .action-row {
+    flex-direction: column;
+  }
+
+  .owner-btn,
+  .phone-btn {
+    width: 100%;
+  }
+
+  .bottom-map-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

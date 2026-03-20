@@ -61,18 +61,20 @@
     <% pg.forEach(function(p){ %>
       <%
         const basePrice = Number(p.price) || 0;
-        const twinPrice = p.twin_price ? Number(p.twin_price) : (basePrice ? basePrice + 1000 : 0);
-        const triplePrice = p.triple_price ? Number(p.triple_price) : (basePrice ? basePrice + 2000 : 0);
+        const singlePrice = basePrice;
+        const twinPrice = Number(p.twin_price) || 0;
+        const triplePrice = Number(p.triple_price) || 0;
+
+        const singleRooms = Number(p.single_rooms) || 0;
+        const twinRooms = Number(p.twin_rooms) || 0;
+        const tripleRooms = Number(p.triple_rooms) || 0;
 
         const occupancyType = p.id % 2 === 0 ? 'double' : 'single';
         const genderType = p.id % 3 === 0 ? 'girls' : (p.id % 2 === 0 ? 'boys' : 'coed');
         const tenantType = p.id % 2 === 0 ? 'working' : 'student';
 
+        const genderLabel = p.id % 3 === 0 ? 'Girls' : (p.id % 2 === 0 ? 'Boys' : 'Coed');
         const tenantLabel = p.id % 2 === 0 ? 'Working Professionals' : 'Students';
-        const codeTagLabel = p.id % 3 === 0 ? 'Girls' : (p.id % 2 === 0 ? 'Boys' : 'Coed');
-
-        const firstShareTitle = p.id % 2 === 0 ? 'Twin Sharing' : 'Single Room';
-        const secondShareTitle = p.id % 2 === 0 ? 'Triple Sharing' : 'Twin Sharing';
       %>
 
       <div class="zolo-card pg-item"
@@ -84,7 +86,7 @@
 
         <div class="zolo-top">
           <div class="verified-tag">✓ Verified Stay</div>
-          <div class="code-tag"><%= codeTagLabel %></div>
+          <div class="code-tag"><%= genderLabel %></div>
         </div>
 
         <div class="zolo-main">
@@ -94,100 +96,92 @@
             <% } else { %>
               <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="zolo-image" alt="PG Image">
             <% } %>
-            <div class="photo-badge">+ More Photos</div>
+            <div class="photo-badge">Photos</div>
           </div>
 
           <div class="zolo-content">
             <div class="zolo-price-row">
-              <div class="zolo-price">₹ <%= basePrice ? basePrice : "Not Available" %></div>
+              <div class="zolo-price">
+                <%= basePrice ? "₹ " + basePrice : "Price on request" %>
+              </div>
               <div class="zolo-onwards">/month</div>
-              <div class="zolo-rating">4.5⭐</div>
+              <div class="zolo-rating">4.5★</div>
             </div>
 
             <div class="zolo-type">PG / Co-Living Space</div>
             <div class="zolo-location">📍 <%= p.location %></div>
 
-            <div class="bed-badge">✓ BEDS AVAILABLE</div>
+            <div class="bed-badge">Beds Available</div>
 
             <div class="tenant-badge">
-              Best for:
-              <strong><%= tenantLabel %></strong>
+              Best for: <strong><%= tenantLabel %></strong>
             </div>
 
             <div class="facility-line">
-              <span>• Wifi</span>
-              <span>• AC</span>
-              <span><%= p.id % 2 === 0 ? '• Food' : '• Laundry' %></span>
-              <span>+13 More</span>
+              <span>Wifi</span>
+              <span>AC</span>
+              <span><%= p.id % 2 === 0 ? 'Food' : 'Laundry' %></span>
+              <span>More</span>
             </div>
 
             <div class="sharing-row">
               <div class="share-box">
-                <div class="share-title"><%= firstShareTitle %></div>
+                <div class="share-title">Single Room</div>
                 <div class="share-price">
-                  <%= basePrice ? "₹ " + basePrice : "Not Available" %>
+                  <%= singlePrice ? "₹ " + singlePrice : "Not Available" %>
                 </div>
+                <div class="share-left"><%= singleRooms %> left</div>
               </div>
 
               <div class="share-box">
-                <div class="share-title"><%= secondShareTitle %></div>
+                <div class="share-title">Twin Sharing</div>
                 <div class="share-price">
-                  <%= secondShareTitle === 'Twin Sharing'
-                    ? (twinPrice ? "₹ " + twinPrice : "Not Available")
-                    : (triplePrice ? "₹ " + triplePrice : "Not Available")
-                  %>
+                  <%= twinPrice ? "₹ " + twinPrice : "Not Available" %>
                 </div>
+                <div class="share-left"><%= twinRooms %> left</div>
+              </div>
+
+              <div class="share-box">
+                <div class="share-title">Triple Sharing</div>
+                <div class="share-price">
+                  <%= triplePrice ? "₹ " + triplePrice : "Not Available" %>
+                </div>
+                <div class="share-left"><%= tripleRooms %> left</div>
               </div>
             </div>
 
-            <% if(p.id % 2 === 0){ %>
-              <div class="sharing-row" style="margin-top:10px;">
-                <div class="share-box">
-                  <div class="share-title">Single Room</div>
-                  <div class="share-price">
-                    <%= basePrice ? "₹ " + basePrice : "Not Available" %>
-                  </div>
-                </div>
-
-                <div class="share-box">
-                  <div class="share-title">Twin Sharing</div>
-                  <div class="share-price">
-                    <%= twinPrice ? "₹ " + twinPrice : "Not Available" %>
-                  </div>
-                </div>
-              </div>
-            <% } %>
-
             <div class="zolo-desc">
-              <%= p.description ? p.description.substring(0, 85) : "Comfortable PG with student and working professional friendly facilities." %>
-              <% if(p.description && p.description.length > 85){ %>...<% } %>
+              <%= p.description ? p.description.substring(0, 95) : "Comfortable stay with essential amenities and easy access to nearby areas." %>
+              <% if(p.description && p.description.length > 95){ %>...<% } %>
               <a href="/pg/<%= p.id %>" class="more-link">More</a>
             </div>
 
             <div class="highlight-line">
-              ✅ Comfortable stay with essential amenities nearby.
+              ✅ Comfortable stay with essential amenities nearby
             </div>
 
             <div class="action-row">
               <% if(p.whatsapp){ %>
-                <a href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20more%20details%20about%20<%= encodeURIComponent(p.title) %>" target="_blank" class="owner-btn">
+                <a
+                  href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20details%20about%20<%= encodeURIComponent(p.title) %>"
+                  target="_blank"
+                  class="owner-btn"
+                >
                   Contact Owner
                 </a>
               <% } else { %>
-                <a href="/pg/<%= p.id %>" class="owner-btn">
-                  Contact Owner
-                </a>
+                <a href="/pg/<%= p.id %>" class="owner-btn">Contact Owner</a>
               <% } %>
 
               <a href="/pg/<%= p.id %>" class="phone-btn">View Details</a>
             </div>
 
             <div class="bottom-map-row">
-              <div class="distance-text">📍 Near key local area</div>
+              <div class="distance-text">Near key local area</div>
               <% if(p.map){ %>
-                <a href="<%= p.map %>" target="_blank" class="map-view-link">View on map</a>
+                <a href="<%= p.map %>" target="_blank" class="map-view-link">Open Map</a>
               <% } else { %>
-                <a href="/pg/<%= p.id %>" class="map-view-link">View on map</a>
+                <a href="/pg/<%= p.id %>" class="map-view-link">Open Map</a>
               <% } %>
             </div>
           </div>
