@@ -1,54 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RentSpot</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-
-<div class="site-shell">
-  <div class="top-nav home-page-wrap">
-    <div class="brand">RentSpot</div>
-
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-
-    <div class="nav-wrap" id="navWrap">
-      <div class="nav-center">
-        <a href="/">Properties</a>
-        <a href="/about">About</a>
-
-        <% if(user){ %>
-          <a href="/my-bookings">Bookings</a>
-          <a href="/my-negotiations">Deals</a>
-          <a href="/roommate-profile">Profile</a>
-          <a href="/roommate-matches">Match</a>
-          <a href="/roommate-requests">My Requests</a>
-          <a href="/received-roommate-requests">Received Requests</a>
-        <% } %>
-
-        <% if(user && user.role==="admin"){ %>
-          <a href="/admin">Admin</a>
-          <a href="/admin-negotiations">Admin Deals</a>
-        <% } %>
-      </div>
-
-      <div class="nav-actions">
-        <% if(user){ %>
-          <a href="/logout" class="btn-outline">Logout</a>
-        <% } else { %>
-          <a href="/register" class="btn-outline">Sign up</a>
-          <a href="/login" class="btn-fill">Log in</a>
-        <% } %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  function toggleMenu() {
-    const nav = document.getElementById("navWrap");
-    nav.classList.toggle("show");
-  }
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>campus-RentSpot</title>  
+  <link rel="stylesheet" href="/css/style.css">  
+</head>  
+<body>  
+  
+<div class="site-shell">  
+  <div class="top-nav home-page-wrap">  
+    <a href="/" class="logo">🏡 Campus-RentSpot</a>  
+  
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>  
+  
+    <div class="nav-wrap" id="navWrap">  
+      <div class="nav-center">  
+        <a href="/">Properties</a>  
+        <a href="/about">About</a>  
+  
+        <% if(user){ %>  
+          <a href="/my-bookings">Bookings</a>  
+          <a href="/my-negotiations">Deals</a>  
+          <a href="/roommate-profile">Profile</a>  
+          <a href="/roommate-matches">Match</a>  
+          <a href="/roommate-requests">My Requests</a>  
+          <a href="/received-roommate-requests">Received Requests</a>  
+        <% } %>  
+  
+        <% if(user && user.role==="admin"){ %>  
+          <a href="/admin">Admin</a>  
+          <a href="/admin-negotiations">Admin Deals</a>  
+        <% } %>  
+      </div>  
+  
+      <div class="nav-actions">  
+        <% if(user){ %>  
+          <a href="/logout" class="btn-outline">Logout</a>  
+        <% } else { %>  
+          <a href="/register" class="btn-outline">Sign up</a>  
+          <a href="/login" class="btn-fill">Log in</a>  
+        <% } %>  
+      </div>  
+    </div>  
+  </div>  
+</div>  
+  
+<script>  
+  function toggleMenu() {  
+    const nav = document.getElementById("navWrap");  
+    nav.classList.toggle("show");  
+  }  
 </script>
