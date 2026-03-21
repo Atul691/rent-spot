@@ -12,7 +12,7 @@
   <div class="top-nav home-page-wrap">
     <a href="/" class="logo">🏡 Campus-RentSpot</a>
 
-    <button class="menu-toggle" type="button" onclick="toggleMenu()">☰</button>
+    <button class="menu-toggle" type="button" aria-label="Toggle menu">☰</button>
 
     <div class="nav-wrap" id="navWrap">
       <div class="nav-center">
@@ -47,21 +47,21 @@
 </div>
 
 <script>
-  function toggleMenu() {
-    const nav = document.getElementById("navWrap");
-    if (nav) {
-      nav.classList.toggle("show");
-    }
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const navWrap = document.getElementById("navWrap");
 
-  document.addEventListener("click", function (e) {
-    const nav = document.getElementById("navWrap");
-    const toggle = document.querySelector(".menu-toggle");
+    if (!toggleBtn || !navWrap) return;
 
-    if (!nav || !toggle) return;
+    toggleBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      navWrap.classList.toggle("show");
+    });
 
-    if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-      nav.classList.remove("show");
-    }
+    document.addEventListener("click", function (e) {
+      if (!navWrap.contains(e.target) && !toggleBtn.contains(e.target)) {
+        navWrap.classList.remove("show");
+      }
+    });
   });
 </script>
