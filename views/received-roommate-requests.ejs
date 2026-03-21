@@ -11,14 +11,29 @@
           <p><%= r.email %></p>
 
           <p class="status-badge <%= r.status %>">
-            <%= r.status.toUpperCase() %>
+            <%= r.status ? r.status.toUpperCase() : "PENDING" %>
           </p>
 
           <% if(r.status === "pending"){ %>
             <a href="/accept-roommate/<%= r.id %>" class="book-main-btn">Accept</a>
             <a href="/reject-roommate/<%= r.id %>" class="reject-btn">Reject</a>
 
-          <% } else if(r.status === "accepted" && r.phone && r.phone.trim() !== ""){ %>
+          <% } else if(r.status === "accepted" && r.phone && String(r.phone).trim() !== ""){ %>
             <a
-              href="https://wa.me/<%= r.phone %>?text=Hello%20we%20matched%20on%20RentSpot%20for%20roommate."
-              target
+              href="https://wa.me/<%= r.phone %>?text=Hello%20we%20matched%20on%20RentSpot"
+              target="_blank"
+              class="book-main-btn"
+            >
+              Chat on WhatsApp
+            </a>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No requests yet</p>
+    <% } %>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

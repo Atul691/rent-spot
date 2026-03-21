@@ -805,7 +805,7 @@ app.get("/roommate-requests", auth, async (req, res) => {
     );
 
     res.render("roommate-requests", {
-      requests: result.rows,
+      requests: result.rows || [],
       user: req.session.user
     });
   } catch (error) {
@@ -835,172 +835,12 @@ app.get("/received-roommate-requests", auth, async (req, res) => {
     );
 
     res.render("received-roommate-requests", {
-      requests: result.rows,
+      requests: result.rows || [],
       user: req.session.user
     });
   } catch (error) {
     console.log("RECEIVED ROOMMATE REQUEST ERROR:", error);
-    res.send("Error loading received roommate requests");
-  }
-});
-
-app.get("/accept-roommate/:id", auth, async (req, res) => {
-  try {
-    const requestResult = await pool.query(
-      "SELECT * FROM roommate_requests WHERE id = $1",
-      [req.params.id]
-    );
-
-    const requestRow = requestResult.rows[0];
-
-    if (!requestRow) {
-      return res.send("Request not found");
-    }
-
-    if (requestRow.receiver_id !== req.session.user.id) {
-      return res.send("Unauthorized action");
-    }
-
-    await pool.query(
-      "UPDATE roommate_requests SET status = 'accepted' WHERE id = $1",
-      [req.params.id]
-    );
-
-    res.redirect("/received-roommate-requests");
-  } catch (error) {
-    console.log("ACCEPT ROOMMATE ERROR:", error);
-    res.send("Error accepting roommate request");
-  }
-});
-
-app.get("/reject-roommate/:id", auth, async (req, res) => {
-  try {
-    const requestResult = await pool.query(
-      "SELECT * FROM roommate_requests WHERE id = $1",
-      [req.params.id]
-    );
-
-    const requestRow = requestResult.rows[0];
-
-    if (!requestRow) {
-      return res.send("Request not found");
-    }
-
-    if (requestRow.receiver_id !== req.session.user.id) {
-      return res.send("Unauthorized action");
-    }
-
-    await pool.query(
-      "UPDATE roommate_requests SET status = 'rejected' WHERE id = $1",
-      [req.params.id]
-    );
-
-    res.redirect("/received-roommate-requests");
-  } catch (error) {
-    console.log("REJECT ROOMMATE ERROR:", error);
-    res.send("Error rejecting roommate request");
-  }
-});
-
-app.post("/send-roommate-request/:receiverId", auth, async (req, res) => {
-  try {
-    const senderId = Number(req.session.user.id);
-    const receiverId = Number(req.params.receiverId);
-
-    if (!receiverId || !senderId || senderId === receiverId) {
-      return res.send("Invalid roommate request");
-    }
-
-    const receiverResult = await pool.query(
-      "SELECT id, name, email FROM users WHERE id = $1 AND approved = 1",
-      [receiverId]
-    );
-
-    if (receiverResult.rows.length === 0) {
-      return res.send("Receiver not found");
-    }
-
-    const existingResult = await pool.query(
-      `SELECT * FROM roommate_requests
-       WHERE sender_id = $1 AND receiver_id = $2`,
-      [senderId, receiverId]
-    );
-
-    if (existingResult.rows.length > 0) {
-      return res.redirect("/roommate-requests");
-    }
-
-    await pool.query(
-      `INSERT INTO roommate_requests (sender_id, receiver_id, status)
-       VALUES ($1, $2, $3)`,
-      [senderId, receiverId, "pending"]
-    );
-
-    res.redirect("/roommate-requests");
-  } catch (error) {
-    console.log("SEND ROOMMATE REQUEST ERROR:", error);
-    res.send("Error sending roommate request");
-  }
-});
-
-app.get("/roommate-matches", auth, async (req, res) => {
-  try {
-    const myPrefResult = await pool.query(
-      "SELECT * FROM user_preferences WHERE user_id = $1",
-      [req.session.user.id]
-    );
-
-    const myPref = myPrefResult.rows[0];
-
-    if (!myPref) {
-      return res.redirect("/roommate-profile");
-    }
-
-    const usersResult = await pool.query(
-      `SELECT
-          u.id AS user_id,
-          u.name,
-          u.email,
-          u.phone,
-          p.budget,
-          p.smoking,
-          p.sleep_time,
-          p.occupation,
-          rr.status AS request_status
-       FROM users u
-       JOIN user_preferences p ON p.user_id = u.id
-       LEFT JOIN roommate_requests rr
-         ON rr.receiver_id = u.id AND rr.sender_id = $1
-       WHERE u.id != $1
-         AND u.approved = 1
-       ORDER BY u.id DESC`,
-      [req.session.user.id]
-    );
-
-    const matches = usersResult.rows
-      .map(item => {
-        let score = 0;
-
-        if (myPref.budget && item.budget && myPref.budget === item.budget) score += 30;
-        if (myPref.smoking && item.smoking && myPref.smoking === item.smoking) score += 25;
-        if (myPref.sleep_time && item.sleep_time && myPref.sleep_time === item.sleep_time) score += 25;
-        if (myPref.occupation && item.occupation && myPref.occupation === item.occupation) score += 20;
-
-        return {
-          ...item,
-          match_score: score
-        };
-      })
-      .sort((a, b) => b.match_score - a.match_score);
-
-    res.render("roommate-matches", {
-      user: req.session.user,
-      myPref,
-      matches
-    });
-  } catch (error) {
-    console.log("ROOMMATE MATCH ERROR:", error);
-    res.send("Error loading roommate matches");
+    res.send("Error loading received requests");
   }
 });
 /* -------------------- PAYMENT -------------------- */

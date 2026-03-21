@@ -11,10 +11,10 @@
           <p><%= r.email %></p>
 
           <p class="status-badge <%= r.status %>">
-            <%= r.status.toUpperCase() %>
+            <%= r.status ? r.status.toUpperCase() : "PENDING" %>
           </p>
 
-          <% if(r.status === "accepted" && r.phone && r.phone.trim() !== ""){ %>
+          <% if(r.status === "accepted" && r.phone && String(r.phone).trim() !== ""){ %>
             <a
               href="https://wa.me/<%= r.phone %>?text=Hello%20we%20matched%20on%20RentSpot%20for%20roommate."
               target="_blank"
