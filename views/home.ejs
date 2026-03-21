@@ -2,15 +2,6 @@
 
 <div class="page-wrap home-page-wrap clean-home-page">
 
-  <section class="clean-hero">
-    <div class="clean-hero-box">
-      <div class="clean-hero-left">
-        <h1>Available PG / Rooms</h1>
-        <p>Select a PG.</p>
-      </div>
-    </div>
-  </section>
-
   <% if(notes && notes.length > 0){ %>
     <section class="clean-notice-section">
       <% notes.slice(0,3).forEach(function(n){ %>
@@ -37,12 +28,12 @@
 
       <div class="clean-search-grid">
         <div class="clean-search-group">
-          <label for="searchName">Search by PG Name</label>
+          <label>Search by PG Name</label>
           <input type="text" id="searchName" placeholder="Enter PG name">
         </div>
 
         <div class="clean-search-group">
-          <label for="searchPrice">Filter by Max Price</label>
+          <label>Filter by Max Price</label>
           <input type="number" id="searchPrice" placeholder="Enter max price">
         </div>
 
@@ -54,153 +45,66 @@
     </div>
   </section>
 
-  <input type="hidden" id="occupancyFilter" value="">
-  <input type="hidden" id="genderFilter" value="">
-  <input type="hidden" id="tenantFilter" value="">
+  <input type="hidden" id="occupancyFilter">
+  <input type="hidden" id="genderFilter">
+  <input type="hidden" id="tenantFilter">
 
   <section class="clean-pg-list" id="pgList">
 
     <% if(pg.length === 0){ %>
       <div class="clean-empty-box">
         <h3>No PG available</h3>
-        <p>Admin can add PG from dashboard.</p>
       </div>
     <% } %>
 
     <% pg.forEach(function(p){ %>
-      <%
-        const basePrice = Number(p.price) || 0;
-        const singlePrice = basePrice;
-        const twinPrice = Number(p.twin_price) || 0;
-        const triplePrice = Number(p.triple_price) || 0;
-
-        const singleRooms = Number(p.single_rooms) || 0;
-        const twinRooms = Number(p.twin_rooms) || 0;
-        const tripleRooms = Number(p.triple_rooms) || 0;
-
-        const genderType = p.id % 3 === 0 ? 'Girls' : (p.id % 2 === 0 ? 'Boys' : 'Coed');
-        const tenantTypeValue = p.id % 2 === 0 ? 'working' : 'student';
-        const tenantLabel = p.id % 2 === 0 ? 'Working Professionals' : 'Students';
-        const occupancyValue = p.id % 2 === 0 ? 'double' : 'single';
-        const genderValue = p.id % 3 === 0 ? 'girls' : (p.id % 2 === 0 ? 'boys' : 'coed');
-      %>
 
       <article
         class="clean-pg-card pg-item"
         data-name="<%= p.title.toLowerCase() %>"
-        data-price="<%= basePrice %>"
-        data-occupancy="<%= occupancyValue %>"
-        data-gender="<%= genderValue %>"
-        data-tenant="<%= tenantTypeValue %>">
-
-        <div class="clean-card-top">
-          <div class="clean-tag">✓ Verified Stay</div>
-          <div class="clean-tag clean-tag-light"><%= genderType %></div>
-        </div>
+        data-price="<%= p.price || 0 %>">
 
         <div class="clean-card-main">
-          <div class="clean-image-col">
-            <div class="clean-image-box">
-              <% if(p.firstImage){ %>
-                <img src="<%= p.firstImage %>" class="clean-pg-image" alt="PG Image">
-              <% } else { %>
-                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="clean-pg-image" alt="PG Image">
-              <% } %>
-            </div>
+
+          <!-- IMAGE -->
+          <div class="clean-image-box">
+            <img src="<%= p.firstImage || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e' %>" class="clean-pg-image">
           </div>
 
+          <!-- CONTENT -->
           <div class="clean-content-col">
-            <div class="clean-head-row">
-              <div>
-                <h3 class="clean-pg-title"><%= p.title %></h3>
-                <div class="clean-pg-type">PG / Co-Living Space</div>
-                <div class="clean-pg-location">📍 <%= p.location %></div>
-              </div>
 
-              <div class="clean-rating-price">
-                <div class="clean-rating">4.5★</div>
-                <div class="clean-price"><%= basePrice ? "₹ " + basePrice : "Price on request" %></div>
-                <div class="clean-price-unit">/month</div>
-              </div>
+            <h3><%= p.title %></h3>
+            <p>📍 <%= p.location %></p>
+
+            <div class="clean-price">
+              <%= p.price ? "₹ " + p.price : "Price on request" %> /month
             </div>
 
-            <div class="clean-meta-row">
-              <span class="clean-availability">Beds Available</span>
-              <span class="clean-bestfor">Best for: <strong><%= tenantLabel %></strong></span>
+            <!-- BUTTONS -->
+            <div class="clean-action-row">
+
+              <% if(p.whatsapp){ %>
+                <a href="https://wa.me/<%= p.whatsapp %>" target="_blank" class="clean-btn clean-owner-btn">
+                  Contact
+                </a>
+              <% } %>
+
+              <a href="/pg/<%= p.id %>" class="clean-btn clean-details-btn">
+                View
+              </a>
+
+              <a href="<%= p.map || '#' %>" target="_blank" class="clean-btn clean-map-btn">
+                Map
+              </a>
+
             </div>
 
-            <div class="clean-feature-row">
-              <span>Wifi</span>
-              <span>AC</span>
-              <span><%= p.id % 2 === 0 ? 'Food' : 'Laundry' %></span>
-              <span>More</span>
-            </div>
-
-            <div class="clean-room-grid">
-              <div class="clean-room-box">
-                <div class="clean-room-title">Single Room</div>
-                <div class="clean-room-price <%= singlePrice ? '' : 'na-price' %>">
-                  <%= singlePrice ? "₹ " + singlePrice : "Not Available" %>
-                </div>
-                <div class="clean-room-left"><%= singleRooms > 0 ? singleRooms + " left" : "0 left" %></div>
-              </div>
-
-              <div class="clean-room-box">
-                <div class="clean-room-title">Twin Sharing</div>
-                <div class="clean-room-price <%= twinPrice ? '' : 'na-price' %>">
-                  <%= twinPrice ? "₹ " + twinPrice : "Not Available" %>
-                </div>
-                <div class="clean-room-left"><%= twinRooms > 0 ? twinRooms + " left" : "0 left" %></div>
-              </div>
-
-              <div class="clean-room-box">
-                <div class="clean-room-title">Triple Sharing</div>
-                <div class="clean-room-price <%= triplePrice ? '' : 'na-price' %>">
-                  <%= triplePrice ? "₹ " + triplePrice : "Not Available" %>
-                </div>
-                <div class="clean-room-left"><%= tripleRooms > 0 ? tripleRooms + " left" : "0 left" %></div>
-              </div>
-            </div>
-
-            <div class="clean-desc">
-              <%= p.description ? p.description.substring(0, 100) : "Comfortable stay with essential amenities and easy access to nearby areas." %>
-              <% if(p.description && p.description.length > 100){ %>...<% } %>
-              <a href="/pg/<%= p.id %>" class="clean-more-link">More</a>
-            </div>
-
-            <div class="clean-highlight">
-              ✅ Comfortable stay with essential amenities nearby
-            </div>
-
-            <div class="clean-footer-row">
-              <div class="clean-map-text">Near key local area</div>
-
-              <div class="clean-action-row">
-                <% if(p.whatsapp){ %>
-                  <a
-                    href="https://wa.me/<%= p.whatsapp %>?text=Hello%20I%20want%20details%20about%20<%= encodeURIComponent(p.title) %>"
-                    target="_blank"
-                    class="clean-btn clean-owner-btn">
-                    Contact Owner
-                  </a>
-                <% } else { %>
-                  <a href="/pg/<%= p.id %>" class="clean-btn clean-owner-btn">
-                    Contact Owner
-                  </a>
-                <% } %>
-
-                <a href="/pg/<%= p.id %>" class="clean-btn clean-details-btn">View Details</a>
-
-                <% if(p.map){ %>
-                  <a href="<%= p.map %>" target="_blank" class="clean-btn clean-map-btn">Open Map</a>
-                <% } else { %>
-                  <a href="/pg/<%= p.id %>" class="clean-btn clean-map-btn">Open Map</a>
-                <% } %>
-              </div>
-            </div>
           </div>
+
         </div>
       </article>
+
     <% }) %>
 
   </section>
@@ -209,82 +113,24 @@
 
 <script>
 function filterPGs() {
-  const nameValue = document.getElementById("searchName").value.toLowerCase().trim();
-  const priceValue = document.getElementById("searchPrice").value.trim();
-  const occupancyValue = document.getElementById("occupancyFilter").value.trim();
-  const genderValue = document.getElementById("genderFilter").value.trim();
-  const tenantValue = document.getElementById("tenantFilter").value.trim();
+  const name = document.getElementById("searchName").value.toLowerCase();
+  const price = document.getElementById("searchPrice").value;
 
-  const cards = document.querySelectorAll(".pg-item");
+  document.querySelectorAll(".pg-item").forEach(card => {
+    const matchName = card.dataset.name.includes(name);
+    const matchPrice = !price || card.dataset.price <= price;
 
-  cards.forEach(card => {
-    const pgName = card.getAttribute("data-name") || "";
-    const pgPrice = parseInt(card.getAttribute("data-price")) || 0;
-    const pgOccupancy = card.getAttribute("data-occupancy") || "";
-    const pgGender = card.getAttribute("data-gender") || "";
-    const pgTenant = card.getAttribute("data-tenant") || "";
-
-    const nameMatch = !nameValue || pgName.includes(nameValue);
-    const priceMatch = !priceValue || pgPrice <= parseInt(priceValue);
-    const occupancyMatch = !occupancyValue || pgOccupancy === occupancyValue;
-    const genderMatch = !genderValue || pgGender === genderValue;
-    const tenantMatch = !tenantValue || pgTenant === tenantValue;
-
-    if (nameMatch && priceMatch && occupancyMatch && genderMatch && tenantMatch) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    card.style.display = (matchName && matchPrice) ? "block" : "none";
   });
-}
-
-function setOccupancyFilter(value, el) {
-  document.getElementById("occupancyFilter").value = value;
-  setActivePill(el);
-  filterPGs();
-}
-
-function setGenderFilter(value, el) {
-  document.getElementById("genderFilter").value = value;
-  setActivePill(el);
-  filterPGs();
-}
-
-function setTenantFilter(value, el) {
-  document.getElementById("tenantFilter").value = value;
-  setActivePill(el);
-  filterPGs();
-}
-
-function clearExtraFilters(el) {
-  document.getElementById("occupancyFilter").value = "";
-  document.getElementById("genderFilter").value = "";
-  document.getElementById("tenantFilter").value = "";
-  setActivePill(el);
-  filterPGs();
-}
-
-function setActivePill(activeEl) {
-  const pills = document.querySelectorAll(".filter-pill");
-  pills.forEach(pill => pill.classList.remove("active"));
-  activeEl.classList.add("active");
 }
 
 function resetPGs() {
   document.getElementById("searchName").value = "";
   document.getElementById("searchPrice").value = "";
-  document.getElementById("occupancyFilter").value = "";
-  document.getElementById("genderFilter").value = "";
-  document.getElementById("tenantFilter").value = "";
 
-  const cards = document.querySelectorAll(".pg-item");
-  cards.forEach(card => {
+  document.querySelectorAll(".pg-item").forEach(card => {
     card.style.display = "block";
   });
-
-  const pills = document.querySelectorAll(".filter-pill");
-  pills.forEach(pill => pill.classList.remove("active"));
-  document.querySelector(".filter-pill").classList.add("active");
 }
 </script>
 
