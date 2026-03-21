@@ -7222,231 +7222,208 @@ body {
     text-align: center;
   }
 }
-/* =========================================================
-   FINAL HOME PAGE CONFLICT FIX
-   Paste this at the VERY END of style.css
-   ========================================================= */
+/* ===== CLEAN HOME UI FINAL ===== */
 
-/* only home page wrapper */
-.premium-home-page.page-wrap,
-.page-wrap.home-page-wrap.premium-home-page {
-  max-width: 1260px !important;
-  margin: 0 auto !important;
-  padding: 20px 16px 40px !important;
-  width: 100% !important;
+.clean-home-page {
+  padding: 20px;
+  background: #f6f8fc;
 }
 
-/* old generic wrappers should not break premium home */
-.premium-home-page .pg-list,
-.premium-home-page #pgList {
-  width: 100% !important;
-  max-width: 100% !important;
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 24px !important;
-  margin: 0 !important;
-  padding: 0 !important;
+/* HERO */
+.clean-hero-box {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 20px;
 }
 
-/* kill old card layout */
-.premium-home-page .pg-item,
-.premium-home-page .zolo-card,
-.premium-home-page .modern-pg-card,
-.premium-home-page .premium-pg-card {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  float: none !important;
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  top: auto !important;
-  bottom: auto !important;
+.clean-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
 }
 
-/* kill old split layout */
-.premium-home-page .zolo-main,
-.premium-home-page .premium-pg-card .zolo-main,
-.premium-home-page .premium-pg-card .modern-main {
-  display: block !important;
-  grid-template-columns: none !important;
-  gap: 0 !important;
-  align-items: initial !important;
+/* NOTICE */
+.clean-notice-card {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border-left: 4px solid #3b82f6;
 }
 
-/* prevent old image wrappers from shrinking */
-.premium-home-page .zolo-image-wrap,
-.premium-home-page .premium-pg-image-wrap {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  overflow: hidden !important;
-  margin: 0 !important;
+/* FILTER */
+.clean-filter-box {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
 }
 
-/* image always proper */
-.premium-home-page .zolo-image,
-.premium-home-page .premium-pg-image {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  max-width: 100% !important;
+.clean-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-/* old content column reset */
-.premium-home-page .zolo-content,
-.premium-home-page .premium-pg-content {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  flex: none !important;
-  margin: 0 !important;
-  padding: 22px !important;
-  box-sizing: border-box !important;
+.filter-pill {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
 }
 
-/* old share grid reset */
-.premium-home-page .sharing-row,
-.premium-home-page .premium-room-type-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 12px !important;
-  margin: 0 0 16px 0 !important;
-  width: 100% !important;
+.filter-pill.active {
+  background: #3b82f6;
+  color: white;
 }
 
-/* old share boxes reset */
-.premium-home-page .share-box,
-.premium-home-page .premium-room-box {
-  width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
+.clean-search-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
 }
 
-/* old action row reset */
-.premium-home-page .action-row,
-.premium-home-page .premium-action-row {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px !important;
-  width: 100% !important;
-  margin: 0 !important;
+.clean-search-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-/* old buttons reset */
-.premium-home-page .owner-btn,
-.premium-home-page .phone-btn,
-.premium-home-page .modern-owner-btn,
-.premium-home-page .modern-details-btn,
-.premium-home-page .modern-map-btn,
-.premium-home-page .premium-owner-btn,
-.premium-home-page .premium-details-btn,
-.premium-home-page .premium-map-btn {
-  float: none !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  min-width: 140px !important;
-  width: auto !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  text-decoration: none !important;
-  box-sizing: border-box !important;
+.filter-btn {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
 }
 
-/* old map row reset */
-.premium-home-page .bottom-map-row,
-.premium-home-page .premium-card-footer {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 !important;
+.reset-btn {
+  background: #ef4444;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
 }
 
-/* old weird spacing removal */
-.premium-home-page .home-head,
-.premium-home-page .notification-list,
-.premium-home-page .filter-scroll,
-.premium-home-page .filter-bar {
-  max-width: 100% !important;
+/* PG CARD */
+.clean-pg-card {
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* force new notice cards */
-.premium-home-page .notification-list {
-  display: block !important;
-}
-.premium-home-page .notification-box {
-  display: none !important;
-}
-
-/* inputs should not stretch weirdly */
-.premium-home-page input,
-.premium-home-page button,
-.premium-home-page a {
-  box-sizing: border-box !important;
+/* IMAGE FIX */
+.clean-image-box {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-/* prevent giant left empty space from old width rules */
-.premium-home-page,
-.premium-home-page * {
-  max-width: 100%;
+.clean-pg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* make cards full width in grid */
-.premium-home-page .premium-pg-grid > .premium-pg-card,
-.premium-home-page #pgList > .premium-pg-card,
-.premium-home-page #pgList > .pg-item {
-  align-self: stretch !important;
+/* LAYOUT */
+.clean-card-main {
+  display: flex;
+  gap: 15px;
 }
 
-/* tablet */
-@media (max-width: 1150px) {
-  .premium-home-page .pg-list,
-  .premium-home-page #pgList {
-    grid-template-columns: 1fr !important;
-  }
+.clean-content-col {
+  flex: 1;
 }
 
-/* mobile hard reset */
-@media (max-width: 700px) {
-  .premium-home-page.page-wrap,
-  .page-wrap.home-page-wrap.premium-home-page {
-    padding: 14px 10px 28px !important;
+/* HEAD */
+.clean-head-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.clean-price {
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+/* FEATURES */
+.clean-feature-row span {
+  margin-right: 10px;
+  font-size: 13px;
+}
+
+/* ROOMS */
+.clean-room-grid {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.clean-room-box {
+  flex: 1;
+  background: #f3f4f6;
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.na-price {
+  color: #9ca3af;
+}
+
+/* BUTTONS */
+.clean-action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.clean-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-size: 13px;
+}
+
+.clean-owner-btn {
+  background: #10b981;
+}
+
+.clean-details-btn {
+  background: #3b82f6;
+}
+
+.clean-map-btn {
+  background: #6366f1;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+
+  .clean-card-main {
+    flex-direction: column;
   }
 
-  .premium-home-page .pg-list,
-  .premium-home-page #pgList {
-    grid-template-columns: 1fr !important;
-    gap: 18px !important;
+  .clean-image-box {
+    width: 100%;
+    height: 200px;
   }
 
-  .premium-home-page .zolo-content,
-  .premium-home-page .premium-pg-content {
-    padding: 18px 16px !important;
+  .clean-search-grid {
+    grid-template-columns: 1fr;
   }
 
-  .premium-home-page .sharing-row,
-  .premium-home-page .premium-room-type-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .premium-home-page .action-row,
-  .premium-home-page .premium-action-row {
-    flex-direction: column !important;
-  }
-
-  .premium-home-page .owner-btn,
-  .premium-home-page .phone-btn,
-  .premium-home-page .modern-owner-btn,
-  .premium-home-page .modern-details-btn,
-  .premium-home-page .modern-map-btn,
-  .premium-home-page .premium-owner-btn,
-  .premium-home-page .premium-details-btn,
-  .premium-home-page .premium-map-btn {
-    width: 100% !important;
+  .clean-action-row {
+    flex-direction: column;
   }
 }
