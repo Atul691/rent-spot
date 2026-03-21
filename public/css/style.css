@@ -7427,9 +7427,8 @@ body {
     flex-direction: column;
   }
 }
-/* ===== FINAL BACKGROUND + GLASS UI ===== */
+/* ===== BACKGROUND IMAGE + GLASS EFFECT FINAL ===== */
 
-/* full page background */
 body {
   background:
     linear-gradient(rgba(15, 23, 42, 0.38), rgba(15, 23, 42, 0.38)),
@@ -7437,7 +7436,6 @@ body {
   background-size: cover;
 }
 
-/* main page wrapper */
 .clean-home-page {
   max-width: 1200px;
   margin: 20px auto;
@@ -7445,7 +7443,6 @@ body {
   border-radius: 24px;
 }
 
-/* glass cards common */
 .clean-hero-box,
 .clean-filter-box,
 .clean-pg-card,
@@ -7458,39 +7455,11 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* hero */
 .clean-hero-box {
   padding: 24px;
-  border-radius: 20px;
   margin-bottom: 20px;
 }
 
-.clean-badge {
-  display: inline-block;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(37, 99, 235, 0.12);
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.clean-hero-box h1 {
-  margin: 0 0 8px;
-  font-size: 42px;
-  line-height: 1.1;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.clean-hero-box p {
-  margin: 0;
-  color: #334155;
-  line-height: 1.7;
-}
-
-/* notices */
 .clean-notice-section {
   display: grid;
   gap: 12px;
@@ -7503,7 +7472,6 @@ body {
   color: #1e293b;
 }
 
-/* filter area */
 .clean-filter-box {
   padding: 18px;
   border-radius: 20px;
@@ -7581,7 +7549,6 @@ body {
   color: #111827;
 }
 
-/* cards */
 .clean-pg-list {
   display: grid;
   gap: 20px;
@@ -7808,12 +7775,10 @@ body {
   color: #111827;
 }
 
-/* navbar glass */
 .top-nav {
   border-radius: 20px;
 }
 
-/* mobile */
 @media (max-width: 900px) {
   .clean-search-grid {
     grid-template-columns: 1fr;
