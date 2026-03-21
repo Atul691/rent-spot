@@ -11,9 +11,7 @@
 
 <div class="site-shell">
   <div class="top-nav home-page-wrap">
-    <a href="/" class="logo">🌆 Campus-RentSpot</a>
-
-    <button class="menu-toggle" type="button" aria-label="Toggle menu">☰</button>
+    <a href="/" class="logo">🏡 Campus-RentSpot</a>
 
     <div class="nav-wrap" id="navWrap">
       <div class="nav-center">
@@ -33,36 +31,14 @@
           <a href="/admin">Admin</a>
           <a href="/admin-negotiations">Admin Deals</a>
         <% } %>
-      </div>
 
-      <div class="nav-actions">
         <% if(user){ %>
-          <a href="/logout" class="btn-outline">Logout</a>
+          <a href="/logout" class="btn-outline nav-auth-btn">Logout</a>
         <% } else { %>
-          <a href="/register" class="btn-outline">Sign up</a>
-          <a href="/login" class="btn-fill">Log in</a>
+          <a href="/register" class="btn-outline nav-auth-btn">Sign up</a>
+          <a href="/login" class="btn-fill nav-auth-btn">Log in</a>
         <% } %>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.querySelector(".menu-toggle");
-    const navWrap = document.getElementById("navWrap");
-
-    if (!toggleBtn || !navWrap) return;
-
-    toggleBtn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      navWrap.classList.toggle("show");
-    });
-
-    document.addEventListener("click", function (e) {
-      if (!navWrap.contains(e.target) && !toggleBtn.contains(e.target)) {
-        navWrap.classList.remove("show");
-      }
-    });
-  });
-</script>
