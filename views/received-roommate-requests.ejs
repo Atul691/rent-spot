@@ -2,7 +2,7 @@
 
 <div class="page-wrap">
   <div class="payment-card">
-    <h2>My Requests</h2>
+    <h2>Received Requests</h2>
 
     <% if(requests && requests.length > 0){ %>
       <% requests.forEach(function(r){ %>
@@ -14,22 +14,11 @@
             <%= r.status.toUpperCase() %>
           </p>
 
-          <% if(r.status === "accepted" && r.phone && r.phone.trim() !== ""){ %>
+          <% if(r.status === "pending"){ %>
+            <a href="/accept-roommate/<%= r.id %>" class="book-main-btn">Accept</a>
+            <a href="/reject-roommate/<%= r.id %>" class="reject-btn">Reject</a>
+
+          <% } else if(r.status === "accepted" && r.phone && r.phone.trim() !== ""){ %>
             <a
               href="https://wa.me/<%= r.phone %>?text=Hello%20we%20matched%20on%20RentSpot%20for%20roommate."
-              target="_blank"
-              class="book-main-btn"
-            >
-              Chat on WhatsApp
-            </a>
-          <% } %>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <p>No requests yet</p>
-    <% } %>
-
-  </div>
-</div>
-
-<%- include("partials/footer") %>
+              target

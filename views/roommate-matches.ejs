@@ -2,6 +2,7 @@
 
 <div class="page-wrap">
   <div class="payment-card roommate-page-card">
+
     <div class="roommate-top-bar">
       <h2>Roommate Matches</h2>
 
@@ -16,15 +17,18 @@
         <% matches.forEach(function(m){ %>
           <div class="roommate-match-card">
 
+            <!-- HEADER -->
             <div class="roommate-card-header">
               <h3><%= m.name %></h3>
               <span class="match-badge"><%= m.match_score %>% Match</span>
             </div>
 
+            <!-- INFO GRID -->
             <div class="roommate-info-grid">
+
               <div class="info-chip">
                 <span class="info-label">User ID</span>
-                <span class="info-value"><%= m.id %></span>
+                <span class="info-value"><%= m.user_id %></span>
               </div>
 
               <div class="info-chip">
@@ -51,27 +55,41 @@
                 <span class="info-label">Occupation</span>
                 <span class="info-value"><%= m.occupation %></span>
               </div>
+
             </div>
 
+            <!-- ACTION BUTTONS -->
             <div class="roommate-action-row">
+
               <% if(m.request_status === "pending"){ %>
+
                 <button type="button" class="roommate-btn pending-btn" disabled>
                   Request Sent
                 </button>
 
               <% } else if(m.request_status === "accepted"){ %>
+
                 <button type="button" class="roommate-btn accepted-btn" disabled>
                   Matched ✓
                 </button>
 
+              <% } else if(m.request_status === "rejected"){ %>
+
+                <button type="button" class="roommate-btn rejected-btn" disabled>
+                  Rejected
+                </button>
+
               <% } else { %>
-                <form action="/send-roommate-request/<%= m.id %>" method="POST" class="roommate-form-btn">
+
+                <form action="/send-roommate-request/<%= m.user_id %>" method="POST" class="roommate-form-btn">
                   <button type="submit" class="submit-btn roommate-btn send-btn">
                     Send Request
                   </button>
                 </form>
+
               <% } %>
 
+              <!-- WHATSAPP -->
               <% if(m.phone && m.phone.trim() !== ""){ %>
                 <a
                   href="https://wa.me/<%= m.phone %>?text=Hello%20I%20found%20your%20profile%20on%20RentSpot%20for%20roommate%20matching."
@@ -83,15 +101,18 @@
               <% } else { %>
                 <span class="no-whatsapp-text">WhatsApp not available</span>
               <% } %>
+
             </div>
 
           </div>
         <% }) %>
 
       </div>
+
     <% } else { %>
       <p>No roommate matches found yet.</p>
     <% } %>
+
   </div>
 </div>
 
