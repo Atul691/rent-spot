@@ -7222,3 +7222,231 @@ body {
     text-align: center;
   }
 }
+/* =========================================================
+   FINAL HOME PAGE CONFLICT FIX
+   Paste this at the VERY END of style.css
+   ========================================================= */
+
+/* only home page wrapper */
+.premium-home-page.page-wrap,
+.page-wrap.home-page-wrap.premium-home-page {
+  max-width: 1260px !important;
+  margin: 0 auto !important;
+  padding: 20px 16px 40px !important;
+  width: 100% !important;
+}
+
+/* old generic wrappers should not break premium home */
+.premium-home-page .pg-list,
+.premium-home-page #pgList {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* kill old card layout */
+.premium-home-page .pg-item,
+.premium-home-page .zolo-card,
+.premium-home-page .modern-pg-card,
+.premium-home-page .premium-pg-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  float: none !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+}
+
+/* kill old split layout */
+.premium-home-page .zolo-main,
+.premium-home-page .premium-pg-card .zolo-main,
+.premium-home-page .premium-pg-card .modern-main {
+  display: block !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+  align-items: initial !important;
+}
+
+/* prevent old image wrappers from shrinking */
+.premium-home-page .zolo-image-wrap,
+.premium-home-page .premium-pg-image-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+
+/* image always proper */
+.premium-home-page .zolo-image,
+.premium-home-page .premium-pg-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  max-width: 100% !important;
+}
+
+/* old content column reset */
+.premium-home-page .zolo-content,
+.premium-home-page .premium-pg-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: none !important;
+  margin: 0 !important;
+  padding: 22px !important;
+  box-sizing: border-box !important;
+}
+
+/* old share grid reset */
+.premium-home-page .sharing-row,
+.premium-home-page .premium-room-type-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 0 16px 0 !important;
+  width: 100% !important;
+}
+
+/* old share boxes reset */
+.premium-home-page .share-box,
+.premium-home-page .premium-room-box {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* old action row reset */
+.premium-home-page .action-row,
+.premium-home-page .premium-action-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* old buttons reset */
+.premium-home-page .owner-btn,
+.premium-home-page .phone-btn,
+.premium-home-page .modern-owner-btn,
+.premium-home-page .modern-details-btn,
+.premium-home-page .modern-map-btn,
+.premium-home-page .premium-owner-btn,
+.premium-home-page .premium-details-btn,
+.premium-home-page .premium-map-btn {
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  min-width: 140px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+}
+
+/* old map row reset */
+.premium-home-page .bottom-map-row,
+.premium-home-page .premium-card-footer {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* old weird spacing removal */
+.premium-home-page .home-head,
+.premium-home-page .notification-list,
+.premium-home-page .filter-scroll,
+.premium-home-page .filter-bar {
+  max-width: 100% !important;
+}
+
+/* force new notice cards */
+.premium-home-page .notification-list {
+  display: block !important;
+}
+.premium-home-page .notification-box {
+  display: none !important;
+}
+
+/* inputs should not stretch weirdly */
+.premium-home-page input,
+.premium-home-page button,
+.premium-home-page a {
+  box-sizing: border-box !important;
+}
+
+/* prevent giant left empty space from old width rules */
+.premium-home-page,
+.premium-home-page * {
+  max-width: 100%;
+}
+
+/* make cards full width in grid */
+.premium-home-page .premium-pg-grid > .premium-pg-card,
+.premium-home-page #pgList > .premium-pg-card,
+.premium-home-page #pgList > .pg-item {
+  align-self: stretch !important;
+}
+
+/* tablet */
+@media (max-width: 1150px) {
+  .premium-home-page .pg-list,
+  .premium-home-page #pgList {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* mobile hard reset */
+@media (max-width: 700px) {
+  .premium-home-page.page-wrap,
+  .page-wrap.home-page-wrap.premium-home-page {
+    padding: 14px 10px 28px !important;
+  }
+
+  .premium-home-page .pg-list,
+  .premium-home-page #pgList {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .premium-home-page .zolo-content,
+  .premium-home-page .premium-pg-content {
+    padding: 18px 16px !important;
+  }
+
+  .premium-home-page .sharing-row,
+  .premium-home-page .premium-room-type-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .premium-home-page .action-row,
+  .premium-home-page .premium-action-row {
+    flex-direction: column !important;
+  }
+
+  .premium-home-page .owner-btn,
+  .premium-home-page .phone-btn,
+  .premium-home-page .modern-owner-btn,
+  .premium-home-page .modern-details-btn,
+  .premium-home-page .modern-map-btn,
+  .premium-home-page .premium-owner-btn,
+  .premium-home-page .premium-details-btn,
+  .premium-home-page .premium-map-btn {
+    width: 100% !important;
+  }
+}
