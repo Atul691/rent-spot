@@ -49,12 +49,15 @@
 <script>
   function toggleMenu() {
     const nav = document.getElementById("navWrap");
-    nav.classList.toggle("show");
+    if (nav) {
+      nav.classList.toggle("show");
+    }
   }
 
   document.addEventListener("click", function (e) {
     const nav = document.getElementById("navWrap");
     const toggle = document.querySelector(".menu-toggle");
+
     if (!nav || !toggle) return;
 
     if (!nav.contains(e.target) && !toggle.contains(e.target)) {
