@@ -7579,3 +7579,17 @@ body {
     gap: 6px;
   }
 }
+.payment-qr {
+  display: block;
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  margin: 10px auto;
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px;
+}
+
+.qr-card {
+  text-align: center;
+}

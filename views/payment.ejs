@@ -1,6 +1,6 @@
 <%- include("partials/header") %>
 
-<div class="page-wrap">
+<div class="page-wrap payment-page">
   <div class="payment-card">
 
     <div class="payment-head">
@@ -36,9 +36,9 @@
       <div class="payment-box">
         <h3>Scan QR Code</h3>
 
-        <% if(setting && setting.qr_image){ %>
+        <% if(setting && setting.qr_image && String(setting.qr_image).trim() !== ""){ %>
           <div class="qr-card">
-           <img src="<%= settings.qr_image %>" alt="QR Code" width="200">
+            <img src="<%= setting.qr_image %>" alt="QR Code" class="payment-qr">
           </div>
         <% } else { %>
           <div class="no-qr-box">
