@@ -1008,12 +1008,12 @@ app.get("/roommate-matches", auth, async (req, res) => {
 app.get("/payment", auth, async (req, res) => {
   try {
     const settingResult = await pool.query(
-      "SELECT * FROM settings WHERE id=1"
+      "SELECT * FROM settings WHERE id = 1"
     );
 
     res.render("payment", {
       user: req.session.user,
-      setting: settingResult.rows[0]
+      setting: settingResult.rows[0] || null
     });
   } catch (error) {
     console.log("PAYMENT PAGE ERROR:", error);
@@ -1021,15 +1021,26 @@ app.get("/payment", auth, async (req, res) => {
   }
 });
 
+app.get("/payment-success", auth, (req, res) => {
+  try {
+    res.render("payment-success", {
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("PAYMENT SUCCESS PAGE ERROR:", error);
+    res.send("Error loading payment success page");
+  }
+});
+
 app.get("/payment-settings", admin, async (req, res) => {
   try {
     const settingResult = await pool.query(
-      "SELECT * FROM settings WHERE id=1"
+      "SELECT * FROM settings WHERE id = 1"
     );
 
     res.render("payment-settings", {
       user: req.session.user,
-      setting: settingResult.rows[0]
+      setting: settingResult.rows[0] || null
     });
   } catch (error) {
     console.log("PAYMENT SETTINGS PAGE ERROR:", error);
@@ -1040,7 +1051,7 @@ app.get("/payment-settings", admin, async (req, res) => {
 app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res) => {
   try {
     const currentResult = await pool.query(
-      "SELECT * FROM settings WHERE id=1"
+      "SELECT * FROM settings WHERE id = 1"
     );
 
     const current = currentResult.rows[0];
@@ -1052,8 +1063,8 @@ app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res)
 
     await pool.query(
       `UPDATE settings
-       SET upi=$1, qr_image=$2
-       WHERE id=1`,
+       SET upi = $1, qr_image = $2
+       WHERE id = 1`,
       [req.body.upi, qrImage]
     );
 
@@ -1063,7 +1074,6 @@ app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res)
     res.send("Error updating payment settings");
   }
 });
-
 /* -------------------- RATINGS -------------------- */
 
 app.post("/rate/:id", auth, async (req, res) => {

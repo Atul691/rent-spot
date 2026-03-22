@@ -532,3 +532,22 @@
     display: none !important;
   }
 }
+.payment-action-row {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.payment-success-btn {
+  display: inline-block;
+  background: #0b5ed7;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.payment-success-btn:hover {
+  background: #094bb5;
+}
