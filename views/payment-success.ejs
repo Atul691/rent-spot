@@ -8,8 +8,17 @@
     <h1>Payment Successful</h1>
 
     <p class="success-text">
-      Your payment has been received successfully.
+      Your payment has been submitted successfully.
     </p>
+
+    <% if(payment){ %>
+      <div class="payment-summary-box">
+        <p><strong>Room Price:</strong> ₹<%= payment.room_price %></p>
+        <p><strong>Move-In Combo:</strong> <%= payment.combo_name %></p>
+        <p><strong>Combo Price:</strong> ₹<%= payment.combo_price %></p>
+        <p class="final-total"><strong>Total Paid:</strong> ₹<%= payment.total_amount %></p>
+      </div>
+    <% } %>
 
     <p class="success-subtext">
       Please contact admin on WhatsApp and share your payment screenshot for quick confirmation.

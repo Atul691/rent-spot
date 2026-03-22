@@ -13,104 +13,136 @@
       <a href="/" class="admin-secondary-btn">Back to Home</a>
     </div>
 
-    <div class="payment-grid">
+    <form action="/payment-success" method="POST" id="paymentForm">
 
-      <div class="payment-box">
-        <h3>UPI Payment</h3>
+      <div class="payment-grid">
 
-        <div class="upi-box">
-          <span class="upi-label">UPI ID</span>
-          <div class="upi-value">
-            <%= setting && setting.upi ? setting.upi : "Not set" %>
+        <div class="payment-box">
+          <h3>UPI Payment</h3>
+
+          <div class="upi-box">
+            <span class="upi-label">UPI ID</span>
+            <div class="upi-value">
+              <%= setting && setting.upi ? setting.upi : "Not set" %>
+            </div>
+          </div>
+
+          <div class="payment-info">
+            <p>1. Open any UPI app like PhonePe, Google Pay, Paytm or BHIM.</p>
+            <p>2. Enter the UPI ID shown above.</p>
+            <p>3. Complete the payment for your booking.</p>
+            <p>4. Keep a screenshot for confirmation.</p>
           </div>
         </div>
 
-        <div class="payment-info">
-          <p>1. Open any UPI app like PhonePe, Google Pay, Paytm or BHIM.</p>
-          <p>2. Enter the UPI ID shown above.</p>
-          <p>3. Complete the payment for your booking.</p>
-          <p>4. Keep a screenshot for confirmation.</p>
+        <div class="payment-box">
+          <h3>Scan QR Code</h3>
+
+          <% if(setting && setting.qr_image && String(setting.qr_image).trim() !== ""){ %>
+            <div class="qr-card">
+              <img src="<%= setting.qr_image %>" alt="QR Code" class="payment-qr">
+            </div>
+          <% } else { %>
+            <div class="no-qr-box">
+              <p>QR code not uploaded yet.</p>
+            </div>
+          <% } %>
+        </div>
+
+      </div>
+
+      <div class="movein-box">
+        <h3>Move-In Combo</h3>
+        <p class="movein-subtext">Make your room ready from day one.</p>
+
+        <div class="movein-option-list">
+          <label class="movein-option">
+            <input
+              type="radio"
+              name="combo_price"
+              value="0"
+              data-name="No Combo"
+              checked
+              onclick="updateComboTotal()"
+            >
+            <div>
+              <strong>No Combo</strong>
+              <p>Book room only</p>
+            </div>
+            <span>₹0</span>
+          </label>
+
+          <label class="movein-option">
+            <input
+              type="radio"
+              name="combo_price"
+              value="499"
+              data-name="Basic Kit"
+              onclick="updateComboTotal()"
+            >
+            <div>
+              <strong>Basic Kit</strong>
+              <p>Mattress cover, bucket, mug, basic items</p>
+            </div>
+            <span>₹499</span>
+          </label>
+
+          <label class="movein-option">
+            <input
+              type="radio"
+              name="combo_price"
+              value="999"
+              data-name="Student Kit"
+              onclick="updateComboTotal()"
+            >
+            <div>
+              <strong>Student Kit</strong>
+              <p>Basic kit + pillow + laundry bag + study lamp</p>
+            </div>
+            <span>₹999</span>
+          </label>
+
+          <label class="movein-option">
+            <input
+              type="radio"
+              name="combo_price"
+              value="1499"
+              data-name="Premium Setup"
+              onclick="updateComboTotal()"
+            >
+            <div>
+              <strong>Premium Setup</strong>
+              <p>Student kit + bedsheet + room cleaning + welcome setup</p>
+            </div>
+            <span>₹1499</span>
+          </label>
+        </div>
+
+        <div class="movein-total-box">
+          <p><strong>Room Price:</strong> ₹<span id="roomPrice"><%= booking_price || 2500 %></span></p>
+          <p><strong>Combo Price:</strong> ₹<span id="comboPrice">0</span></p>
+          <p class="final-total"><strong>Total:</strong> ₹<span id="finalTotal"><%= booking_price || 2500 %></span></p>
         </div>
       </div>
 
-      <div class="payment-box">
-        <h3>Scan QR Code</h3>
+      <input type="hidden" name="combo_name" id="comboNameInput" value="No Combo">
+      <input type="hidden" name="room_price" id="roomPriceInput" value="<%= booking_price || 2500 %>">
+      <input type="hidden" name="total_amount" id="totalAmountInput" value="<%= booking_price || 2500 %>">
 
-        <% if(setting && setting.qr_image && String(setting.qr_image).trim() !== ""){ %>
-          <div class="qr-card">
-            <img src="<%= setting.qr_image %>" alt="QR Code" class="payment-qr">
-          </div>
-        <% } else { %>
-          <div class="no-qr-box">
-            <p>QR code not uploaded yet.</p>
-          </div>
-        <% } %>
+      <div class="payment-note-box">
+        <h3>Important Note</h3>
+        <p>
+          After payment, contact the admin through WhatsApp or message section and share your payment screenshot for faster confirmation.
+        </p>
       </div>
 
-    </div>
-
-    <!-- MOVE-IN COMBO -->
-    <div class="movein-box">
-      <h3>Move-In Combo</h3>
-      <p class="movein-subtext">Make your room ready from day one.</p>
-
-      <div class="movein-option-list">
-        <label class="movein-option">
-          <input type="radio" name="combo_price" value="0" checked onclick="updateComboTotal()">
-          <div>
-            <strong>No Combo</strong>
-            <p>Book room only</p>
-          </div>
-          <span>₹0</span>
-        </label>
-
-        <label class="movein-option">
-          <input type="radio" name="combo_price" value="499" onclick="updateComboTotal()">
-          <div>
-            <strong>Basic Kit</strong>
-            <p>Mattress cover, bucket, mug, basic items</p>
-          </div>
-          <span>₹499</span>
-        </label>
-
-        <label class="movein-option">
-          <input type="radio" name="combo_price" value="999" onclick="updateComboTotal()">
-          <div>
-            <strong>Student Kit</strong>
-            <p>Basic kit + pillow + laundry bag + study lamp</p>
-          </div>
-          <span>₹999</span>
-        </label>
-
-        <label class="movein-option">
-          <input type="radio" name="combo_price" value="1499" onclick="updateComboTotal()">
-          <div>
-            <strong>Premium Setup</strong>
-            <p>Student kit + bedsheet + room cleaning + welcome setup</p>
-          </div>
-          <span>₹1499</span>
-        </label>
+      <div class="payment-action-row">
+        <button type="submit" class="payment-success-btn">
+          I Have Paid
+        </button>
       </div>
 
-      <div class="movein-total-box">
-        <p><strong>Room Price:</strong> ₹<span id="roomPrice">2500</span></p>
-        <p><strong>Combo Price:</strong> ₹<span id="comboPrice">0</span></p>
-        <p class="final-total"><strong>Total:</strong> ₹<span id="finalTotal">2500</span></p>
-      </div>
-    </div>
-
-    <div class="payment-note-box">
-      <h3>Important Note</h3>
-      <p>
-        After payment, contact the admin through WhatsApp or message section and share your payment screenshot for faster confirmation.
-      </p>
-    </div>
-
-    <div class="payment-action-row">
-      <a href="/payment-success" class="payment-success-btn">
-        I Have Paid
-      </a>
-    </div>
+    </form>
 
   </div>
 </div>
@@ -120,10 +152,20 @@
     const roomPrice = Number(document.getElementById("roomPrice").innerText) || 0;
     const selected = document.querySelector('input[name="combo_price"]:checked');
     const comboPrice = selected ? Number(selected.value) : 0;
+    const comboName = selected ? (selected.getAttribute("data-name") || "No Combo") : "No Combo";
+    const total = roomPrice + comboPrice;
 
     document.getElementById("comboPrice").innerText = comboPrice;
-    document.getElementById("finalTotal").innerText = roomPrice + comboPrice;
+    document.getElementById("finalTotal").innerText = total;
+
+    document.getElementById("comboNameInput").value = comboName;
+    document.getElementById("roomPriceInput").value = roomPrice;
+    document.getElementById("totalAmountInput").value = total;
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    updateComboTotal();
+  });
 </script>
 
 <%- include("partials/footer") %>

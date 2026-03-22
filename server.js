@@ -1022,10 +1022,48 @@ app.get("/payment", auth, async (req, res) => {
   }
 });
 
+app.post("/payment-success", auth, async (req, res) => {
+  try {
+    const roomPrice = Number(req.body.room_price) || 0;
+    const comboPrice = Number(req.body.combo_price) || 0;
+    const totalAmount = Number(req.body.total_amount) || (roomPrice + comboPrice);
+    const comboName = (req.body.combo_name || "No Combo").trim() || "No Combo";
+
+    await pool.query(
+      `INSERT INTO payment_submissions
+       (user_id, booking_id, combo_name, combo_price, room_price, total_amount, payment_status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        req.session.user.id,
+        null,
+        comboName,
+        comboPrice,
+        roomPrice,
+        totalAmount,
+        "submitted"
+      ]
+    );
+
+    res.render("payment-success", {
+      user: req.session.user,
+      payment: {
+        combo_name: comboName,
+        combo_price: comboPrice,
+        room_price: roomPrice,
+        total_amount: totalAmount
+      }
+    });
+  } catch (error) {
+    console.log("PAYMENT SUCCESS SAVE ERROR:", error);
+    res.send("Error saving payment details");
+  }
+});
+
 app.get("/payment-success", auth, (req, res) => {
   try {
     res.render("payment-success", {
-      user: req.session.user
+      user: req.session.user,
+      payment: null
     });
   } catch (error) {
     console.log("PAYMENT SUCCESS PAGE ERROR:", error);
@@ -1073,6 +1111,26 @@ app.post("/payment-settings", admin, upload.single("qr_image"), async (req, res)
   } catch (error) {
     console.log("PAYMENT SETTINGS UPDATE ERROR:", error);
     res.send("Error updating payment settings");
+  }
+});
+
+/* -------- ADMIN PAYMENT SUBMISSIONS -------- */
+app.get("/admin-payment-submissions", admin, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT ps.*, u.name, u.email
+       FROM payment_submissions ps
+       JOIN users u ON u.id = ps.user_id
+       ORDER BY ps.id DESC`
+    );
+
+    res.render("admin-payment-submissions", {
+      user: req.session.user,
+      payments: result.rows || []
+    });
+  } catch (error) {
+    console.log("ADMIN PAYMENT SUBMISSIONS ERROR:", error);
+    res.send("Error loading payment submissions");
   }
 });
 /* -------------------- RATINGS -------------------- */

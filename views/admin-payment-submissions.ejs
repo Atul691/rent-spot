@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+    <h2>Payment Submissions</h2>
+
+    <% if(payments && payments.length > 0){ %>
+      <% payments.forEach(function(p){ %>
+        <div class="rating-box">
+          <h3><%= p.name %></h3>
+          <p><%= p.email %></p>
+          <p><strong>Combo:</strong> <%= p.combo_name %></p>
+          <p><strong>Room Price:</strong> ₹<%= p.room_price %></p>
+          <p><strong>Combo Price:</strong> ₹<%= p.combo_price %></p>
+          <p><strong>Total Amount:</strong> ₹<%= p.total_amount %></p>
+          <p class="status-badge pending"><%= p.payment_status.toUpperCase() %></p>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No payment submissions yet.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
