@@ -551,3 +551,53 @@
 .payment-success-btn:hover {
   background: #094bb5;
 }
+.movein-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 20px;
+}
+
+.movein-subtext {
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+.movein-option-list {
+  display: grid;
+  gap: 12px;
+}
+
+.movein-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  background: #f8fafc;
+}
+
+.movein-option input {
+  margin: 0;
+}
+
+.movein-option p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.movein-total-box {
+  margin-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 14px;
+}
+
+.final-total {
+  font-size: 18px;
+  color: #0b5ed7;
+}

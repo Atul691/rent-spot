@@ -1013,7 +1013,8 @@ app.get("/payment", auth, async (req, res) => {
 
     res.render("payment", {
       user: req.session.user,
-      setting: settingResult.rows[0] || null
+      setting: settingResult.rows[0] || null,
+      booking_price: req.session.booking_price || 2500
     });
   } catch (error) {
     console.log("PAYMENT PAGE ERROR:", error);

@@ -49,6 +49,56 @@
 
     </div>
 
+    <!-- MOVE-IN COMBO -->
+    <div class="movein-box">
+      <h3>Move-In Combo</h3>
+      <p class="movein-subtext">Make your room ready from day one.</p>
+
+      <div class="movein-option-list">
+        <label class="movein-option">
+          <input type="radio" name="combo_price" value="0" checked onclick="updateComboTotal()">
+          <div>
+            <strong>No Combo</strong>
+            <p>Book room only</p>
+          </div>
+          <span>₹0</span>
+        </label>
+
+        <label class="movein-option">
+          <input type="radio" name="combo_price" value="499" onclick="updateComboTotal()">
+          <div>
+            <strong>Basic Kit</strong>
+            <p>Mattress cover, bucket, mug, basic items</p>
+          </div>
+          <span>₹499</span>
+        </label>
+
+        <label class="movein-option">
+          <input type="radio" name="combo_price" value="999" onclick="updateComboTotal()">
+          <div>
+            <strong>Student Kit</strong>
+            <p>Basic kit + pillow + laundry bag + study lamp</p>
+          </div>
+          <span>₹999</span>
+        </label>
+
+        <label class="movein-option">
+          <input type="radio" name="combo_price" value="1499" onclick="updateComboTotal()">
+          <div>
+            <strong>Premium Setup</strong>
+            <p>Student kit + bedsheet + room cleaning + welcome setup</p>
+          </div>
+          <span>₹1499</span>
+        </label>
+      </div>
+
+      <div class="movein-total-box">
+        <p><strong>Room Price:</strong> ₹<span id="roomPrice">2500</span></p>
+        <p><strong>Combo Price:</strong> ₹<span id="comboPrice">0</span></p>
+        <p class="final-total"><strong>Total:</strong> ₹<span id="finalTotal">2500</span></p>
+      </div>
+    </div>
+
     <div class="payment-note-box">
       <h3>Important Note</h3>
       <p>
@@ -56,7 +106,6 @@
       </p>
     </div>
 
-    <!-- ✅ PAYMENT SUCCESS BUTTON -->
     <div class="payment-action-row">
       <a href="/payment-success" class="payment-success-btn">
         I Have Paid
@@ -65,5 +114,16 @@
 
   </div>
 </div>
+
+<script>
+  function updateComboTotal() {
+    const roomPrice = Number(document.getElementById("roomPrice").innerText) || 0;
+    const selected = document.querySelector('input[name="combo_price"]:checked');
+    const comboPrice = selected ? Number(selected.value) : 0;
+
+    document.getElementById("comboPrice").innerText = comboPrice;
+    document.getElementById("finalTotal").innerText = roomPrice + comboPrice;
+  }
+</script>
 
 <%- include("partials/footer") %>
