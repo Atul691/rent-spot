@@ -1,205 +1,192 @@
 <%- include("partials/header") %>
 
-<div class="detail-page">
-  <div class="detail-card">
-    <%
-      const mapUrl = pg.map && pg.map.trim() !== ""
-        ? pg.map
-        : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(pg.location || "");
-    %>
+<div class="container page pg-page" style="margin-top:30px;">
 
-    <div class="hero-image-box">
-      <% if(images && images.length > 0){ %>
-        <img src="<%= images[0].image %>" alt="PG Image" class="hero-image">
-        <div class="hero-photo-count">+<%= images.length %> Photos</div>
-      <% } else { %>
-        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" alt="PG Image" class="hero-image">
-      <% } %>
-    </div>
+  <%
+    const mapUrl = pg.map && pg.map.trim() !== ""
+      ? pg.map
+      : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(pg.location || "");
+  %>
 
-    <div class="detail-header">
-      <h1><%= pg.title %></h1>
-      <div class="detail-location">📍 <%= pg.location %></div>
-      <div class="overview-price">₹ <%= pg.price %> / month</div>
+  <div class="pg-premium">
 
-      <div class="detail-badge-row">
-        <span class="detail-badge verified">Verified</span>
-        <span class="detail-badge popular">Popular PG</span>
-      </div>
-    </div>
+    <!-- LEFT SIDE (IMAGE + GALLERY) -->
+    <div class="pg-left">
 
-    <div class="action-icon-row">
-      <% if(pg.whatsapp){ %>
-        <a href="tel:<%= pg.whatsapp %>" class="icon-action primary">
-          <span class="icon-circle">📞</span>
-          <span>Call Now</span>
-        </a>
-      <% } else { %>
-        <a href="/pg/<%= pg.id %>" class="icon-action primary">
-          <span class="icon-circle">📞</span>
-          <span>Call Now</span>
-        </a>
-      <% } %>
-
-      <% if(pg.whatsapp){ %>
-        <a href="https://wa.me/<%= pg.whatsapp %>?text=Hello%20I%20want%20details%20about%20<%= pg.title %>" target="_blank" class="icon-action">
-          <span class="icon-circle">💬</span>
-          <span>Enquire</span>
-        </a>
-      <% } else { %>
-        <a href="/messages" class="icon-action">
-          <span class="icon-circle">💬</span>
-          <span>Enquire</span>
-        </a>
-      <% } %>
-
-      <a href="<%= mapUrl %>" target="_blank" class="icon-action">
-        <span class="icon-circle">📍</span>
-        <span>Direction</span>
-      </a>
-
-      <button type="button" class="icon-action" onclick="sharePG()">
-        <span class="icon-circle">↗</span>
-        <span>Share</span>
-      </button>
-    </div>
-
-    <% if(pg.whatsapp){ %>
-      <a href="https://wa.me/<%= pg.whatsapp %>?text=Hello%20I%20am%20interested%20in%20<%= pg.title %>" target="_blank" class="big-whatsapp-btn">
-        WhatsApp
-      </a>
-    <% } %>
-
-    <div class="overview-section">
-      <% if(user){ %>
-        <a href="/book/<%= pg.id %>" class="book-main-btn">Book Now</a>
-      <% } else { %>
-        <a href="/login" class="book-main-btn">Login to Book</a>
-      <% } %>
-    </div>
-
-    <div class="detail-info-box">
-      <h3>Description</h3>
-      <p><%= pg.description ? pg.description : "No description added yet." %></p>
-    </div>
-
-    <div class="detail-info-box">
-      <h3>Facilities</h3>
-      <div class="facility-tags">
-        <span>🛏️ Bed</span>
-        <span>📶 Extra charges for WiFi</span>
-        <span>🍽️ Without Food</span>
-        <span>🛁 Bathroom</span>
-      </div>
-    </div>
-
-    <div class="detail-info-box">
-      <h3>Location</h3>
-      <a href="<%= mapUrl %>" target="_blank" class="map-link-btn">
-        Open in Google Maps
-      </a>
-    </div>
-
-    <div class="detail-info-box">
-      <h3>Gallery</h3>
-      <div class="gallery-grid">
+      <div class="hero-image-box">
         <% if(images && images.length > 0){ %>
-          <% images.forEach(function(img){ %>
-            <a href="<%= img.image %>" target="_blank" class="gallery-item">
-              <img src="<%= img.image %>" alt="PG Image">
-            </a>
-          <% }) %>
+          <img src="<%= images[0].image %>" class="main-img">
+          <div class="hero-photo-count">+<%= images.length %> Photos</div>
         <% } else { %>
-          <p>No image uploaded for this PG.</p>
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e" class="main-img">
         <% } %>
       </div>
-    </div>
 
-    <div class="detail-info-box">
-      <h3>Negotiate Price</h3>
-
-      <% if(user){ %>
-        <form action="/negotiate/<%= pg.id %>" method="POST" class="rating-form">
-          <input
-            type="number"
-            name="offered_price"
-            placeholder="Enter your offer price"
-            min="1"
-            required
-          >
-          <textarea
-            name="message"
-            placeholder="Optional message for admin (example: I am a student, please reduce the rent)"
-          ></textarea>
-          <button type="submit" class="submit-btn">Send Offer</button>
-        </form>
-      <% } else { %>
-        <p>Please login to negotiate rent.</p>
-        <a href="/login" class="book-main-btn">Login</a>
-      <% } %>
-    </div>
-
-    <% if(user){ %>
+      <!-- GALLERY -->
       <div class="detail-info-box">
-        <h3>Send Message to Admin</h3>
-        <form action="/message" method="POST" class="rating-form">
-          <textarea name="message" placeholder="Write your message to admin" required></textarea>
-          <button type="submit" class="submit-btn">Send Message</button>
-        </form>
-      </div>
-    <% } %>
-
-    <div class="detail-info-box">
-      <h3>Ratings</h3>
-
-      <% if(user){ %>
-        <form action="/rate/<%= pg.id %>" method="POST" class="rating-form">
-          <select name="rating" required>
-            <option value="">Select Rating</option>
-            <option value="1">1 Star</option>
-            <option value="2">2 Star</option>
-            <option value="3">3 Star</option>
-            <option value="4">4 Star</option>
-            <option value="5">5 Star</option>
-          </select>
-
-          <textarea name="comment" placeholder="Write review"></textarea>
-          <button type="submit" class="submit-btn">Submit Rating</button>
-        </form>
-      <% } %>
-
-      <% if(ratings && ratings.length > 0){ %>
-        <div class="rating-list">
-          <% ratings.forEach(function(r){ %>
-            <div class="rating-box">
-              <strong>Rating: <%= r.rating %>/5</strong>
-              <p><%= r.comment %></p>
-            </div>
-          <% }) %>
+        <h3>Gallery</h3>
+        <div class="gallery-grid">
+          <% if(images && images.length > 0){ %>
+            <% images.forEach(function(img){ %>
+              <a href="<%= img.image %>" target="_blank" class="gallery-item">
+                <img src="<%= img.image %>">
+              </a>
+            <% }) %>
+          <% } else { %>
+            <p>No image uploaded</p>
+          <% } %>
         </div>
-      <% } else { %>
-        <p>No ratings yet.</p>
-      <% } %>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE (BOOKING CARD) -->
+    <div class="pg-right">
+
+      <div class="card booking-card">
+
+        <h2><%= pg.title %></h2>
+        <p class="location">📍 <%= pg.location %></p>
+        <h3 class="price">₹<%= pg.price %> / month</h3>
+
+        <div class="detail-badge-row">
+          <span class="detail-badge verified">Verified</span>
+          <span class="detail-badge popular">Popular</span>
+        </div>
+
+        <hr>
+
+        <!-- ACTIONS -->
+        <div class="action-icon-row">
+
+          <% if(pg.whatsapp){ %>
+            <a href="tel:<%= pg.whatsapp %>" class="icon-action primary">📞 Call</a>
+          <% } %>
+
+          <% if(pg.whatsapp){ %>
+            <a href="https://wa.me/<%= pg.whatsapp %>?text=Hello%20I%20want%20details%20about%20<%= pg.title %>" target="_blank" class="icon-action">💬 Chat</a>
+          <% } %>
+
+          <a href="<%= mapUrl %>" target="_blank" class="icon-action">📍 Map</a>
+
+          <button onclick="sharePG()" class="icon-action">↗ Share</button>
+        </div>
+
+        <!-- BOOK BUTTON -->
+        <% if(user){ %>
+          <a href="/book/<%= pg.id %>" class="btn full-btn red-btn">Book Now</a>
+        <% } else { %>
+          <a href="/login" class="btn full-btn red-btn">Login to Book</a>
+        <% } %>
+
+        <p class="secure-text">🔒 Secure booking</p>
+
+      </div>
+
     </div>
 
   </div>
+
+  <!-- DESCRIPTION -->
+  <div class="detail-info-box">
+    <h3>Description</h3>
+    <p><%= pg.description || "No description available" %></p>
+  </div>
+
+  <!-- FACILITIES -->
+  <div class="detail-info-box">
+    <h3>Facilities</h3>
+    <div class="facility-tags">
+      <span>🛏️ Bed</span>
+      <span>📶 WiFi</span>
+      <span>🍽️ Without Food</span>
+      <span>🛁 Bathroom</span>
+    </div>
+  </div>
+
+  <!-- NEGOTIATE -->
+  <div class="detail-info-box">
+    <h3>Negotiate Price</h3>
+
+    <% if(user){ %>
+      <form action="/negotiate/<%= pg.id %>" method="POST" class="rating-form">
+        <input type="number" name="offered_price" placeholder="Enter your offer price" required>
+        <textarea name="message" placeholder="Message"></textarea>
+        <button type="submit" class="submit-btn">Send Offer</button>
+      </form>
+    <% } else { %>
+      <a href="/login" class="btn btn-outline">Login to negotiate</a>
+    <% } %>
+
+  </div>
+
+  <!-- MESSAGE -->
+  <% if(user){ %>
+  <div class="detail-info-box">
+    <h3>Message Admin</h3>
+    <form action="/message" method="POST" class="rating-form">
+      <textarea name="message" required></textarea>
+      <button class="submit-btn">Send</button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- RATINGS -->
+  <div class="detail-info-box">
+    <h3>Ratings</h3>
+
+    <% if(user){ %>
+      <form action="/rate/<%= pg.id %>" method="POST" class="rating-form">
+        <select name="rating" required>
+          <option value="">Select Rating</option>
+          <option value="1">1 Star</option>
+          <option value="2">2 Star</option>
+          <option value="3">3 Star</option>
+          <option value="4">4 Star</option>
+          <option value="5">5 Star</option>
+        </select>
+        <textarea name="comment"></textarea>
+        <button class="submit-btn">Submit</button>
+      </form>
+    <% } %>
+
+    <% if(ratings && ratings.length > 0){ %>
+      <% ratings.forEach(function(r){ %>
+        <div class="rating-box">
+          ⭐ <%= r.rating %>/5
+          <p><%= r.comment %></p>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No ratings yet</p>
+    <% } %>
+
+  </div>
+
 </div>
 
 <script>
 function sharePG() {
-  const shareData = {
-    title: "<%= pg.title %>",
-    text: "Check this PG on RentSpot: <%= pg.title %>",
-    url: window.location.href
-  };
-
   if (navigator.share) {
-    navigator.share(shareData).catch(() => {});
+    navigator.share({
+      title: "<%= pg.title %>",
+      url: window.location.href
+    });
   } else {
     navigator.clipboard.writeText(window.location.href);
     alert("Link copied");
   }
 }
 </script>
+</script>
+
+<!-- MOBILE STICKY BOOK BUTTON -->
+<div class="mobile-book-bar">
+  <% if(user){ %>
+    <a href="/book/<%= pg.id %>" class="mobile-book-btn">Book Now</a>
+  <% } else { %>
+    <a href="/login" class="mobile-book-btn">Login to Book</a>
+  <% } %>
+</div>
 
 <%- include("partials/footer") %>

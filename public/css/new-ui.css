@@ -680,3 +680,512 @@
 .payment-success-btn:hover {
   background: #15803d;
 }
+/* ===== PG PAGE ===== */
+
+.pg-page {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* MAIN LAYOUT */
+.pg-premium {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.pg-left {
+  flex: 1.2;
+}
+
+/* HERO IMAGE */
+.hero-image-box {
+  position: relative;
+}
+
+.main-img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* PHOTO COUNT BADGE */
+.hero-photo-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* RIGHT SIDE */
+.pg-right {
+  flex: 0.8;
+}
+
+/* BOOKING CARD */
+.booking-card {
+  position: sticky;
+  top: 90px;
+}
+
+.booking-card h2 {
+  margin-bottom: 8px;
+}
+
+.location {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.price {
+  color: #e63946;
+  margin-bottom: 10px;
+}
+
+/* BADGES */
+.detail-badge-row {
+  margin: 10px 0;
+}
+
+.detail-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.verified {
+  background: #e6f7ee;
+  color: #1a7f4b;
+}
+
+.popular {
+  background: #fff0f0;
+  color: #e63946;
+}
+
+/* ACTION BUTTON ROW */
+.action-icon-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.icon-action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.icon-action:hover {
+  background: #eee;
+}
+
+.icon-action.primary {
+  background: #e63946;
+  color: #fff;
+}
+
+/* FULL BUTTON */
+.full-btn {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  display: block;
+}
+
+/* SECURITY TEXT */
+.secure-text {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+  color: #777;
+}
+
+/* INFO BOXES */
+.detail-info-box {
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.detail-info-box h3 {
+  margin-bottom: 10px;
+}
+
+/* FACILITIES */
+.facility-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.facility-tags span {
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* GALLERY */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* FORMS */
+.rating-form input,
+.rating-form textarea,
+.rating-form select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.submit-btn {
+  background: #e63946;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* RATINGS */
+.rating-box {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .pg-premium {
+    flex-direction: column;
+  }
+
+  .booking-card {
+    position: static;
+  }
+
+  .main-img {
+    height: 220px;
+  }
+}
+/* IMAGE IMPROVEMENT */
+.main-img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  filter: brightness(0.9) contrast(1.05);
+}
+
+/* ADD OVERLAY */
+.hero-image-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+}
+
+/* TITLE */
+.booking-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* PRICE STRONG */
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e63946;
+}
+
+/* BOOK BUTTON BIG */
+.full-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ACTION BUTTONS PREMIUM */
+.icon-action {
+  flex: 1;
+  justify-content: center;
+  background: #f1f1f1;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.icon-action:hover {
+  transform: translateY(-2px);
+  background: #eaeaea;
+}
+
+/* CALL BUTTON SPECIAL */
+.icon-action.primary {
+  background: #e63946;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* BOOKING CARD STRONG */
+.booking-card {
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* INFO BOX IMPROVE */
+.detail-info-box {
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* GALLERY IMAGE HOVER */
+.gallery-item img {
+  transition: 0.3s;
+}
+
+.gallery-item img:hover {
+  transform: scale(1.05);
+}
+
+/* BADGES IMPROVE */
+.detail-badge {
+  font-weight: 500;
+}
+
+/* MOBILE BOOK BUTTON FIX */
+@media (max-width: 768px) {
+  .full-btn {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1000;
+  }
+}
+/* ===== RED ACTION BUTTONS (DIRECT PASTE) ===== */
+
+.icon-action {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  background: #e63946 !important;
+  color: #fff !important;
+
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: 0.2s;
+}
+
+.icon-action:hover {
+  background: #c92d3a !important;
+  transform: translateY(-2px);
+}
+
+/* BOOK NOW BUTTON SAME STYLE */
+.red-btn {
+  background: #e63946 !important;
+  color: #fff !important;
+
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+
+  display: block;
+  width: 100%;
+
+  transition: 0.2s;
+}
+
+.red-btn:hover {
+  background: #c92d3a !important;
+}
+/* ===== FORM UI (NEGOTIATE + MESSAGE + RATING) ===== */
+
+.rating-form {
+  max-width: 500px;
+  margin: 15px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* INPUTS */
+.rating-form input,
+.rating-form textarea,
+.rating-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+/* TEXTAREA FIX */
+.rating-form textarea {
+  height: 100px;
+  resize: none;
+}
+
+/* FOCUS EFFECT */
+.rating-form input:focus,
+.rating-form textarea:focus,
+.rating-form select:focus {
+  border-color: #e63946;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.1);
+}
+
+/* BUTTON */
+.submit-btn {
+  width: 100%;
+  background: #e63946;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background: #c92d3a;
+  transform: translateY(-1px);
+}
+
+/* SECTION CARD (FORM CONTAINER) */
+.detail-info-box {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+/* ===== MOBILE UI OPTIMIZATION ===== */
+
+@media (max-width: 768px) {
+
+  /* STACK LAYOUT */
+  .pg-premium {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* IMAGE */
+  .main-img {
+    height: 220px;
+    border-radius: 10px;
+  }
+
+  /* BOOKING CARD NORMAL */
+  .booking-card {
+    position: static;
+    box-shadow: none;
+    padding: 10px;
+  }
+
+  /* ACTION BUTTONS FULL WIDTH */
+  .action-icon-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .icon-action {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* INFO BOX */
+  .detail-info-box {
+    margin: 15px 0;
+    padding: 15px;
+  }
+
+  /* GALLERY SMALL */
+  .gallery-item img {
+    height: 70px;
+  }
+}
+
+/* ===== STICKY BOOK BUTTON ===== */
+
+.mobile-book-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 999;
+}
+
+.mobile-book-btn {
+  display: block;
+  width: 100%;
+  background: #e63946;
+  color: #fff;
+  text-align: center;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* SHOW ONLY ON MOBILE */
+@media (max-width: 768px) {
+  .mobile-book-bar {
+    display: block;
+  }
+
+  /* EXTRA SPACE SO CONTENT NOT HIDDEN */
+  body {
+    padding-bottom: 70px;
+  }
+}
