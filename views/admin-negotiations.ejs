@@ -2,6 +2,7 @@
 
 <div class="page-wrap">
   <div class="payment-card">
+    <span class="section-kicker">Admin Panel</span>
     <h2>Negotiation Requests</h2>
 
     <% if(negotiations && negotiations.length > 0){ %>
@@ -9,10 +10,14 @@
         <% negotiations.forEach(function(n){ %>
           <div class="rating-box">
             <h3><%= n.pg_title %></h3>
+
             <p><strong>User:</strong> <%= n.user_name %> (<%= n.email %>)</p>
             <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
             <p><strong>Offered Price:</strong> ₹ <%= n.offered_price %></p>
-            <p><strong>Status:</strong> <%= n.status %></p>
+
+            <p class="status-badge <%= n.status %>">
+              <%= n.status ? n.status.toUpperCase() : "PENDING" %>
+            </p>
 
             <% if(n.message){ %>
               <p><strong>User Message:</strong> <%= n.message %></p>

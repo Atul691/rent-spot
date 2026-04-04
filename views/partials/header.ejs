@@ -3,43 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>campus-RentSpot</title>
+  <title>RentSpot</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/new-ui.css">
+  <link rel="stylesheet" href="/css/premium-ui.css">
 </head>
 <body>
+  <header style="position:sticky;top:0;z-index:50;background:rgba(243,237,228,.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(108,89,73,.10);">
+    <div style="width:min(1180px, calc(100% - 28px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap;">
+      <a href="/" style="display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;color:#211b17;">
+        <span style="width:40px;height:40px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#b88a5a,#94663c);color:#fff;box-shadow:0 10px 20px rgba(148,102,60,.22);">R</span>
+        RentSpot
+      </a>
 
-<div class="site-shell">
-  <div class="top-nav home-page-wrap">
-    <a href="/" class="logo">🏡 Campus-RentSpot</a>
+      <nav style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <a href="/" class="admin-secondary-btn">Home</a>
+        <a href="/about" class="admin-secondary-btn">About</a>
 
-    <div class="nav-wrap" id="navWrap">
-      <div class="nav-center">
-        <a href="/">Properties</a>
-        <a href="/about">About</a>
-
-        <% if(user){ %>
-          <a href="/my-bookings">Bookings</a>
-          <a href="/my-negotiations">Deals</a>
-          <a href="/roommate-profile">Profile</a>
-          <a href="/roommate-matches">Match</a>
-          <a href="/roommate-requests">My Requests</a>
-          <a href="/received-roommate-requests">Received Requests</a>
-        <% } %>
-
-        <% if(user && user.role==="admin"){ %>
-          <a href="/admin">Admin</a>
-          <a href="/admin-negotiations">Admin Deals</a>
-          <a href="/admin-payment-submissions">Payment Submissions</a>
+        <% if(user && user.role === "admin"){ %>
+          <a href="/admin" class="admin-secondary-btn">Dashboard</a>
+          <a href="/users" class="admin-secondary-btn">Users</a>
+          <a href="/messages" class="admin-secondary-btn">Messages</a>
+          <a href="/addpg" class="submit-btn">Add PG</a>
         <% } %>
 
         <% if(user){ %>
-          <a href="/logout" class="btn-outline nav-auth-btn">Logout</a>
+          <a href="/my-bookings" class="admin-secondary-btn">My Bookings</a>
+          <a href="/roommate-matches" class="admin-secondary-btn">Roommates</a>
+          <a href="/logout" class="submit-btn">Logout</a>
         <% } else { %>
-          <a href="/register" class="btn-outline nav-auth-btn">Sign up</a>
-          <a href="/login" class="btn-fill nav-auth-btn">Log in</a>
+          <a href="/login" class="admin-secondary-btn">Login</a>
+          <a href="/register" class="submit-btn">Register</a>
         <% } %>
-      </div>
+      </nav>
     </div>
-  </div>
-</div>
+  </header>
