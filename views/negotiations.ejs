@@ -1,0 +1,77 @@
+<%- include("partials/header") %>
+
+<div class="page-wrap">
+  <div class="payment-card">
+
+    <h2>💰 Negotiation Requests</h2>
+
+    <% if(negotiations.length === 0){ %>
+      <p>No negotiation requests found.</p>
+    <% } else { %>
+
+      <div class="rating-list">
+
+        <% negotiations.forEach(function(n){ %>
+          <div class="rating-box">
+
+            <h3><%= n.pg_title %></h3>
+
+            <p><strong>User:</strong> <%= n.user_name %></p>
+
+            <p><strong>Original Price:</strong> ₹<%= n.original_price %></p>
+
+            <p><strong>Offered Price:</strong> ₹<%= n.offered_price %></p>
+
+            <% if(n.message){ %>
+              <p><strong>Message:</strong> <%= n.message %></p>
+            <% } %>
+
+            <p><strong>Status:</strong> 
+              <span class="status-badge <%= n.status %>">
+                <%= n.status.toUpperCase() %>
+              </span>
+            </p>
+
+            <!-- ACTIONS -->
+            <% if(n.status === "pending"){ %>
+
+              <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+
+                <a href="/accept-negotiation/<%= n.id %>" class="approve-btn">
+                  Accept
+                </a>
+
+                <a href="/reject-negotiation/<%= n.id %>" class="reject-btn">
+                  Reject
+                </a>
+
+              </div>
+
+              <!-- COUNTER OFFER -->
+              <form action="/counter-negotiation/<%= n.id %>" method="POST" style="margin-top:10px;">
+                <input 
+                  type="number" 
+                  name="counter_price" 
+                  placeholder="Enter counter price" 
+                  required
+                >
+                <button class="submit-btn">Send Counter</button>
+              </form>
+
+            <% } else { %>
+              <p style="margin-top:10px;color:green;font-weight:600;">
+                Finalized
+              </p>
+            <% } %>
+
+          </div>
+        <% }) %>
+
+      </div>
+
+    <% } %>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

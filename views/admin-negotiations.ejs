@@ -2,49 +2,95 @@
 
 <div class="page-wrap">
   <div class="payment-card">
-    <span class="section-kicker">Admin Panel</span>
-    <h2>Negotiation Requests</h2>
+    <div class="panel-head" style="margin-bottom:16px;">
+      <h2>Negotiation Requests</h2>
+      <p class="admin-subtext">Manage offers, send counter prices, and track user responses.</p>
+    </div>
 
     <% if(negotiations && negotiations.length > 0){ %>
       <div class="rating-list">
         <% negotiations.forEach(function(n){ %>
           <div class="rating-box">
-            <h3><%= n.pg_title %></h3>
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;">
+              <div>
+                <h3><%= n.pg_title %></h3>
+                <p><strong>User:</strong> <%= n.user_name %> (<%= n.email %>)</p>
+                <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
+                <p><strong>Offered Price:</strong> ₹ <%= n.offered_price %></p>
 
-            <p><strong>User:</strong> <%= n.user_name %> (<%= n.email %>)</p>
-            <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
-            <p><strong>Offered Price:</strong> ₹ <%= n.offered_price %></p>
+                <% if(n.message){ %>
+                  <p><strong>User Message:</strong> <%= n.message %></p>
+                <% } %>
 
-            <p class="status-badge <%= n.status %>">
-              <%= n.status ? n.status.toUpperCase() : "PENDING" %>
-            </p>
+                <% if(n.counter_price){ %>
+                  <p><strong>Counter Price:</strong> ₹ <%= n.counter_price %></p>
+                <% } %>
 
-            <% if(n.message){ %>
-              <p><strong>User Message:</strong> <%= n.message %></p>
-            <% } %>
+                <% if(n.created_at){ %>
+                  <p><strong>Sent On:</strong> <%= n.created_at %></p>
+                <% } %>
+              </div>
 
-            <% if(n.counter_price){ %>
-              <p><strong>Counter Price:</strong> ₹ <%= n.counter_price %></p>
-            <% } %>
+              <div>
+                <span class="status-badge <%= n.status %>">
+                  <%= n.status ? n.status.toUpperCase() : "PENDING" %>
+                </span>
+              </div>
+            </div>
 
-            <% if(n.status === "pending" || n.status === "countered"){ %>
-              <div class="action-btns">
+            <% if(n.status === "pending"){ %>
+              <div class="action-btns" style="margin-top:14px;">
                 <a href="/accept-negotiation/<%= n.id %>" class="approve-btn">Accept</a>
                 <a href="/reject-negotiation/<%= n.id %>" class="reject-btn">Reject</a>
               </div>
 
               <form action="/counter-negotiation/<%= n.id %>" method="POST" class="rating-form" style="margin-top:12px;">
-                <input type="number" name="counter_price" placeholder="Counter offer price" min="1" required>
+                <input
+                  type="number"
+                  name="counter_price"
+                  placeholder="Enter counter offer price"
+                  min="1"
+                  required
+                >
                 <button type="submit" class="submit-btn">Send Counter Offer</button>
               </form>
-            <% } else { %>
-              <span class="done-text">Finalized</span>
             <% } %>
+
+            <% if(n.status === "countered"){ %>
+              <p style="margin-top:12px;color:#a56b00;font-weight:800;">
+                Counter offer sent. Waiting for user response.
+              </p>
+            <% } %>
+
+            <% if(n.status === "accepted"){ %>
+              <p style="margin-top:12px;color:#1f8f5f;font-weight:800;">
+                Admin accepted the user's offer.
+              </p>
+            <% } %>
+
+            <% if(n.status === "rejected"){ %>
+              <p style="margin-top:12px;color:#da4f47;font-weight:800;">
+                Admin rejected the user's offer.
+              </p>
+            <% } %>
+
+            <% if(n.status === "counter_accepted"){ %>
+              <p style="margin-top:12px;color:#1f8f5f;font-weight:800;">
+                User accepted the counter offer.
+              </p>
+            <% } %>
+
+            <% if(n.status === "counter_rejected"){ %>
+              <p style="margin-top:12px;color:#da4f47;font-weight:800;">
+                User rejected the counter offer.
+              </p>
+            <% } %>
+
           </div>
         <% }) %>
       </div>
     <% } else { %>
-      <p>No negotiation requests.</p>
+      <p class="empty-text">No negotiation requests found.</p>
     <% } %>
   </div>
 </div>

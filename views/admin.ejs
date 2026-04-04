@@ -1,19 +1,30 @@
 <%- include("partials/header") %>
 
 <div class="admin-page">
+
+  <!-- TOP -->
   <div class="admin-top">
     <div>
       <p class="admin-small">Control Panel</p>
       <h1>Admin Dashboard</h1>
-      <p class="admin-subtext">Manage users, PG listings, bookings, messages, and notifications.</p>
+      <p class="admin-subtext">
+        Manage users, PG listings, bookings, messages, and notifications.
+      </p>
     </div>
 
+    <!-- UPDATED ACTION BUTTONS -->
     <div class="admin-top-actions">
       <a href="/addpg" class="admin-primary-btn">+ Add PG</a>
+
+      <a href="/admin-negotiations" class="admin-negotiable-btn">
+        💰 Negotiable
+      </a>
+
       <a href="/" class="admin-secondary-btn">View Website</a>
     </div>
   </div>
 
+  <!-- STATS -->
   <div class="admin-stats">
     <div class="admin-stat-card">
       <div class="stat-icon blue">👤</div>
@@ -48,7 +59,10 @@
     </div>
   </div>
 
+  <!-- MAIN GRID -->
   <div class="admin-main-grid">
+
+    <!-- QUICK ACTIONS -->
     <div class="admin-panel">
       <div class="panel-head">
         <h3>Quick Actions</h3>
@@ -93,24 +107,25 @@
       </div>
     </div>
 
+    <!-- NOTIFICATION -->
     <div class="admin-panel">
       <h3>Send Notification to Users</h3>
 
       <form action="/notify" method="POST" class="rating-form">
-        <textarea
-          name="text"
-          placeholder="Write notification for users"
-          required
-        ></textarea>
+        <textarea name="text" placeholder="Write notification for users" required></textarea>
 
         <button type="submit" class="admin-primary-btn">
           Send Notification
         </button>
       </form>
     </div>
+
   </div>
 
+  <!-- BOTTOM GRID -->
   <div class="admin-bottom-grid">
+
+    <!-- RECENT PROPERTIES -->
     <div class="admin-panel">
       <div class="panel-head">
         <h3>Recent Properties</h3>
@@ -138,6 +153,7 @@
       <% } %>
     </div>
 
+    <!-- RECENT MESSAGES -->
     <div class="admin-panel">
       <div class="panel-head">
         <h3>Recent Messages</h3>
@@ -158,7 +174,9 @@
         </div>
       <% } %>
     </div>
+
   </div>
+
 </div>
 
 <%- include("partials/footer") %>

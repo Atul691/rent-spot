@@ -13,32 +13,43 @@
   <link rel="stylesheet" href="/css/premium-ui.css">
 </head>
 <body>
-  <header style="position:sticky;top:0;z-index:50;background:rgba(243,237,228,.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(108,89,73,.10);">
-    <div style="width:min(1180px, calc(100% - 28px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap;">
-      <a href="/" style="display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;color:#211b17;">
-        <span style="width:40px;height:40px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#b88a5a,#94663c);color:#fff;box-shadow:0 10px 20px rgba(148,102,60,.22);">R</span>
-        RentSpot
-      </a>
 
-      <nav style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <a href="/" class="admin-secondary-btn">Home</a>
-        <a href="/about" class="admin-secondary-btn">About</a>
+<header class="premium-header">
+  <div class="header-container">
 
-        <% if(user && user.role === "admin"){ %>
-          <a href="/admin" class="admin-secondary-btn">Dashboard</a>
-          <a href="/users" class="admin-secondary-btn">Users</a>
-          <a href="/messages" class="admin-secondary-btn">Messages</a>
-          <a href="/addpg" class="submit-btn">Add PG</a>
-        <% } %>
+    <!-- LOGO -->
+    <a href="/" class="logo">
+      <span class="logo-icon">R</span>
+      <span class="logo-text">RentSpot</span>
+    </a>
 
-        <% if(user){ %>
-          <a href="/my-bookings" class="admin-secondary-btn">My Bookings</a>
-          <a href="/roommate-matches" class="admin-secondary-btn">Roommates</a>
-          <a href="/logout" class="submit-btn">Logout</a>
-        <% } else { %>
-          <a href="/login" class="admin-secondary-btn">Login</a>
-          <a href="/register" class="submit-btn">Register</a>
-        <% } %>
-      </nav>
-    </div>
-  </header>
+    <!-- NAV -->
+    <nav class="nav-links">
+
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+
+      <% if(user && user.role === "admin"){ %>
+        <a href="/admin" class="nav-link">Dashboard</a>
+        <a href="/users" class="nav-link">Users</a>
+        <a href="/messages" class="nav-link">Messages</a>
+        <a href="/addpg" class="btn-primary">+ Add PG</a>
+      <% } %>
+
+      <% if(user){ %>
+        <a href="/my-bookings" class="nav-link">Bookings</a>
+
+        <!-- 🔥 NEW BUTTON -->
+        <a href="/my-negotiations" class="nav-link">Negotiations</a>
+
+        <a href="/roommate-matches" class="nav-link">Roommates</a>
+        <a href="/logout" class="btn-primary">Logout</a>
+      <% } else { %>
+        <a href="/login" class="nav-link">Login</a>
+        <a href="/register" class="btn-primary">Register</a>
+      <% } %>
+
+    </nav>
+
+  </div>
+</header>

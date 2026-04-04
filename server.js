@@ -648,6 +648,31 @@ app.get("/admin-negotiations", async (req, res) => {
   }
 });
 
+/* alias route for top admin button */
+app.get("/negotiations", async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== "admin") {
+      return res.redirect("/login");
+    }
+
+    const result = await pool.query(
+      `SELECT n.*, u.name AS user_name, u.email, p.title AS pg_title, p.price AS original_price
+       FROM negotiations n
+       JOIN users u ON u.id = n.user_id
+       JOIN pg p ON p.id = n.pg_id
+       ORDER BY n.id DESC`
+    );
+
+    res.render("admin-negotiations", {
+      user: req.session.user,
+      negotiations: result.rows
+    });
+  } catch (error) {
+    console.log("NEGOTIATIONS ALIAS ERROR:", error);
+    res.send("Error loading negotiations");
+  }
+});
+
 app.get("/accept-negotiation/:id", async (req, res) => {
   try {
     if (!req.session.user || req.session.user.role !== "admin") {
@@ -719,7 +744,6 @@ app.post("/counter-negotiation/:id", async (req, res) => {
       [counterPrice, req.params.id]
     );
 
-    // 🔥 IMPORTANT: notification insert
     await pool.query(
       `INSERT INTO notifications(text, user_id)
        VALUES($1, $2)`,
@@ -730,10 +754,77 @@ app.post("/counter-negotiation/:id", async (req, res) => {
     );
 
     res.redirect("/admin-negotiations");
-
   } catch (error) {
     console.log("COUNTER NEGOTIATION ERROR:", error);
     res.send("Error sending counter offer");
+  }
+});
+
+/* USER ACCEPT COUNTER */
+app.get("/user-accept-counter/:id", auth, async (req, res) => {
+  try {
+    const negotiationResult = await pool.query(
+      "SELECT * FROM negotiations WHERE id = $1 AND user_id = $2",
+      [req.params.id, req.session.user.id]
+    );
+
+    const negotiation = negotiationResult.rows[0];
+
+    if (!negotiation) {
+      return res.send("Negotiation not found");
+    }
+
+    await pool.query(
+      `UPDATE negotiations
+       SET status = 'counter_accepted'
+       WHERE id = $1 AND user_id = $2`,
+      [req.params.id, req.session.user.id]
+    );
+
+    await pool.query(
+      `INSERT INTO notifications(text)
+       VALUES($1)`,
+      [`User accepted counter offer for negotiation #${req.params.id}`]
+    );
+
+    res.redirect("/my-negotiations");
+  } catch (error) {
+    console.log("USER ACCEPT COUNTER ERROR:", error);
+    res.send("Error accepting counter offer");
+  }
+});
+
+/* USER REJECT COUNTER */
+app.get("/user-reject-counter/:id", auth, async (req, res) => {
+  try {
+    const negotiationResult = await pool.query(
+      "SELECT * FROM negotiations WHERE id = $1 AND user_id = $2",
+      [req.params.id, req.session.user.id]
+    );
+
+    const negotiation = negotiationResult.rows[0];
+
+    if (!negotiation) {
+      return res.send("Negotiation not found");
+    }
+
+    await pool.query(
+      `UPDATE negotiations
+       SET status = 'counter_rejected'
+       WHERE id = $1 AND user_id = $2`,
+      [req.params.id, req.session.user.id]
+    );
+
+    await pool.query(
+      `INSERT INTO notifications(text)
+       VALUES($1)`,
+      [`User rejected counter offer for negotiation #${req.params.id}`]
+    );
+
+    res.redirect("/my-negotiations");
+  } catch (error) {
+    console.log("USER REJECT COUNTER ERROR:", error);
+    res.send("Error rejecting counter offer");
   }
 });
 /* -------------------- ROOMMATE MATCHING -------------------- */

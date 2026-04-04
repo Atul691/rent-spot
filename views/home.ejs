@@ -8,7 +8,7 @@
         <h1 class="home-title">Premium PG & Room Booking Experience</h1>
         <p class="home-subtext">
           Discover verified PGs, compare room options, check maps, chat instantly,
-          and book your stay with a modern RentSpot experience.
+          negotiate pricing, and book your stay with a modern RentSpot experience.
         </p>
       </div>
 
@@ -58,7 +58,11 @@
               <% if(item.firstImage){ %>
                 <img src="<%= item.firstImage %>" alt="<%= item.title %>" class="home-pg-image">
               <% } else { %>
-                <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" alt="<%= item.title %>" class="home-pg-image">
+                <img
+                  src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+                  alt="<%= item.title %>"
+                  class="home-pg-image"
+                >
               <% } %>
 
               <div class="home-pg-badge">Verified</div>
@@ -66,15 +70,35 @@
 
             <div class="home-pg-body">
               <div class="home-pg-top">
-                <div>
+                <div class="home-pg-left">
                   <h3 class="home-pg-title"><%= item.title %></h3>
                   <p class="home-pg-location">📍 <%= item.location %></p>
+
+                  <div class="home-pg-badges">
+                    <span class="home-mini-badge verified">Verified</span>
+                    <span class="home-mini-badge negotiable">Negotiable</span>
+
+                    <% if((item.single_rooms || 0) > 0){ %>
+                      <span class="home-mini-badge available">Single Available</span>
+                    <% } else if((item.twin_rooms || 0) > 0){ %>
+                      <span class="home-mini-badge available">Twin Available</span>
+                    <% } else if((item.triple_rooms || 0) > 0){ %>
+                      <span class="home-mini-badge available">Triple Available</span>
+                    <% } else { %>
+                      <span class="home-mini-badge muted">Check Availability</span>
+                    <% } %>
+                  </div>
                 </div>
-                <div class="home-pg-price">₹<%= item.price %><span>/month</span></div>
+
+                <div class="home-pg-price">
+                  ₹<%= item.price %><span>/month</span>
+                </div>
               </div>
 
               <p class="home-pg-desc">
-                <%= item.description ? item.description.substring(0, 120) : "Comfortable PG with good amenities and booking support." %>...
+                <%= item.description
+                  ? item.description.substring(0, 120)
+                  : "Comfortable PG with good amenities and booking support." %>...
               </p>
 
               <div class="home-room-grid">
@@ -82,10 +106,12 @@
                   <span>Single</span>
                   <strong><%= item.single_rooms || 0 %></strong>
                 </div>
+
                 <div class="home-room-chip">
                   <span>Twin</span>
                   <strong><%= item.twin_rooms || 0 %></strong>
                 </div>
+
                 <div class="home-room-chip">
                   <span>Triple</span>
                   <strong><%= item.triple_rooms || 0 %></strong>

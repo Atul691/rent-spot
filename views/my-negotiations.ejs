@@ -8,24 +8,86 @@
       <div class="rating-list">
         <% negotiations.forEach(function(n){ %>
           <div class="rating-box">
-            <h3><%= n.pg_title %></h3>
-            <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
-            <p><strong>Your Offer:</strong> ₹ <%= n.offered_price %></p>
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;">
+              <div>
+                <h3><%= n.pg_title %></h3>
+                <p><strong>Original Price:</strong> ₹ <%= n.original_price %></p>
+                <p><strong>Your Offer:</strong> ₹ <%= n.offered_price %></p>
 
-            <% if(n.counter_price){ %>
-              <p><strong>Counter Offer:</strong> ₹ <%= n.counter_price %></p>
-            <% } %>
+                <% if(n.counter_price){ %>
+                  <p><strong>Counter Offer:</strong> ₹ <%= n.counter_price %></p>
+                <% } %>
 
-            <p><strong>Status:</strong> <%= n.status %></p>
+                <% if(n.message){ %>
+                  <p><strong>Your Message:</strong> <%= n.message %></p>
+                <% } %>
 
-            <% if(n.message){ %>
-              <p><strong>Your Message:</strong> <%= n.message %></p>
-            <% } %>
+                <% if(n.created_at){ %>
+                  <p><strong>Sent On:</strong> <%= n.created_at %></p>
+                <% } %>
+              </div>
 
-            <p><strong>Sent On:</strong> <%= n.created_at %></p>
+              <div>
+                <span class="status-badge <%= n.status %>">
+                  <%= n.status ? n.status.toUpperCase() : "PENDING" %>
+                </span>
+              </div>
+            </div>
 
             <% if(n.status === "accepted"){ %>
-              <a href="/pg/<%= n.pg_id %>" class="book-main-btn">Proceed to Book</a>
+              <div class="action-btns" style="margin-top:14px;">
+                <a href="/pg/<%= n.pg_id %>" class="book-main-btn">Proceed to Book</a>
+              </div>
+            <% } %>
+
+            <% if(n.status === "countered"){ %>
+              <div class="action-btns" style="margin-top:14px;">
+                <a href="/user-accept-counter/<%= n.id %>" class="approve-btn">
+                  Accept Counter
+                </a>
+                <a href="/user-reject-counter/<%= n.id %>" class="reject-btn">
+                  Reject Counter
+                </a>
+              </div>
+            <% } %>
+
+            <% if(n.status === "pending"){ %>
+              <p style="margin-top:12px;color:#7b7068;font-weight:700;">
+                Waiting for admin response.
+              </p>
+            <% } %>
+
+            <% if(n.status === "accepted"){ %>
+              <p style="margin-top:12px;color:#1f8f5f;font-weight:800;">
+                Your offer was accepted.
+              </p>
+            <% } %>
+
+            <% if(n.status === "rejected"){ %>
+              <p style="margin-top:12px;color:#da4f47;font-weight:800;">
+                Your offer was rejected.
+              </p>
+            <% } %>
+
+            <% if(n.status === "countered"){ %>
+              <p style="margin-top:12px;color:#a56b00;font-weight:800;">
+                Admin sent you a counter offer. Accept or reject it.
+              </p>
+            <% } %>
+
+            <% if(n.status === "counter_accepted"){ %>
+              <p style="margin-top:12px;color:#1f8f5f;font-weight:800;">
+                You accepted the admin counter offer.
+              </p>
+              <div class="action-btns" style="margin-top:14px;">
+                <a href="/pg/<%= n.pg_id %>" class="book-main-btn">Proceed to Book</a>
+              </div>
+            <% } %>
+
+            <% if(n.status === "counter_rejected"){ %>
+              <p style="margin-top:12px;color:#da4f47;font-weight:800;">
+                You rejected the admin counter offer.
+              </p>
             <% } %>
           </div>
         <% }) %>
