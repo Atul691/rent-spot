@@ -2030,3 +2030,43 @@ img{width:100%;display:block}
     height:52px;
   }
 }
+/* ================= MOBILE BUTTON FIX (FINAL) ================= */
+
+.home-card-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* DEFAULT (DESKTOP) */
+.home-card-actions .submit-btn,
+.home-card-actions .btn-outline,
+.home-card-actions .book-main-btn{
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px){
+
+  .home-card-actions{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .home-card-actions .submit-btn,
+  .home-card-actions .btn-outline,
+  .home-card-actions .book-main-btn{
+    width: 100%;
+    min-height: 46px;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+}
