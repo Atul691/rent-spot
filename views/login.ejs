@@ -4,55 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - RentSpot</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/premium-ui.css">
 </head>
-<body class="auth-body">
+<body class="auth-neo-body">
 
-  <div class="auth-topbar">
-    <div class="auth-brand">RentSpot</div>
-    <div class="auth-top-links">
-      <a href="/">Home</a>
-      <a href="/register">Register</a>
-    </div>
-  </div>
+  <div class="auth-neo-shell">
+    <div class="auth-neo-bg-shape auth-neo-shape-1"></div>
+    <div class="auth-neo-bg-shape auth-neo-shape-2"></div>
+    <div class="auth-neo-bg-shape auth-neo-shape-3"></div>
 
-  <div class="auth-page-wrap">
-    <div class="auth-box">
+    <div class="auth-neo-card-wrap">
 
-      <div class="auth-welcome purple-panel">
-        <div class="welcome-content">
-          <h2>Hello, Welcome!</h2>
-          <p>Don't have an account?</p>
-          <a href="/register" class="welcome-btn">Register</a>
+      <div class="auth-neo-showcase">
+        <div class="auth-neo-glow"></div>
+
+        <div class="auth-neo-floating auth-neo-panel auth-neo-login-mini">
+          <p class="auth-neo-mini-top">RentSpot Stay</p>
+          <h3>Welcome back</h3>
+          <div class="auth-neo-mini-line">Safe booking </div>
+          <div class="auth-neo-mini-line">Premium PG listings</div>
+        </div>
+
+        <div class="auth-neo-floating auth-neo-panel auth-neo-info-mini">
+          <div class="auth-neo-big-date">Stay</div>
+          <p>Find PG rooms, compare options, and book with confidence.</p>
+          <div class="auth-neo-dot"></div>
+        </div>
+
+        <div class="auth-neo-bottom-card">
+          <span>New here?</span>
+          <a href="/register">Create account</a>
         </div>
       </div>
 
-      <div class="auth-form-side">
-        <h1>Login</h1>
+      <div class="auth-neo-form-card">
+        <div class="auth-neo-form-top">
+          <span class="auth-neo-kicker">RentSpot</span>
+          <a href="/" class="auth-neo-home-link">Home</a>
+        </div>
 
-        <form action="/login" method="POST" class="auth-form">
-          <div class="input-group">
-            <input type="email" name="email" placeholder="Email" required>
-            <span>👤</span>
+        <h1>Log in</h1>
+        <p class="auth-neo-subtext">Continue to your bookings, offers, and messages.</p>
+
+        <form action="/login" method="POST" class="auth-neo-form">
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">✉</span>
+            <input type="email" name="email" placeholder="Email address" required>
           </div>
 
-          <div class="input-group">
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">🔒</span>
             <input type="password" name="password" placeholder="Password" required>
-            <span>🔒</span>
           </div>
 
-          <a href="#" class="mini-link">Forgot Password?</a>
-
-          <button type="submit" class="primary-auth-btn">Login</button>
+          <button type="submit" class="auth-neo-submit">
+            <span>Login</span>
+            <span class="auth-neo-arrow">→</span>
+          </button>
         </form>
 
-        <p class="social-text">or login with social platforms</p>
-
-        <div class="social-icons">
-          <div>G</div>
-          <div>f</div>
-          <div>⌂</div>
-          <div>in</div>
+        <div class="auth-neo-footer-text">
+          Don’t have an account?
+          <a href="/register">Register</a>
         </div>
       </div>
 

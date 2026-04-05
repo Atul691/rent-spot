@@ -4,62 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - RentSpot</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/premium-ui.css">
 </head>
-<body class="auth-body">
+<body class="auth-neo-body">
 
-  <div class="auth-topbar">
-    <div class="auth-brand">RentSpot</div>
-    <div class="auth-top-links">
-      <a href="/">Home</a>
-      <a href="/login">Login</a>
-    </div>
-  </div>
+  <div class="auth-neo-shell">
+    <div class="auth-neo-bg-shape auth-neo-shape-1"></div>
+    <div class="auth-neo-bg-shape auth-neo-shape-2"></div>
+    <div class="auth-neo-bg-shape auth-neo-shape-3"></div>
 
-  <div class="auth-page-wrap">
-    <div class="auth-box">
+    <div class="auth-neo-card-wrap">
 
-      <div class="auth-welcome purple-panel">
-        <div class="welcome-content">
-          <h2>Join RentSpot</h2>
-          <p>Already have an account?</p>
-          <a href="/login" class="welcome-btn">Login</a>
+      <div class="auth-neo-showcase">
+        <div class="auth-neo-glow"></div>
+
+        <div class="auth-neo-floating auth-neo-panel auth-neo-login-mini">
+          <p class="auth-neo-mini-top">RentSpot Join</p>
+          <h3>Create account</h3>
+          <div class="auth-neo-mini-line">Save bookings easily</div>
+          <div class="auth-neo-mini-line">Track negotiations</div>
+        </div>
+
+        <div class="auth-neo-floating auth-neo-panel auth-neo-info-mini">
+          <div class="auth-neo-big-date">Join</div>
+          <p>Register to access PG listings, booking features, and personalized offers.</p>
+          <div class="auth-neo-dot"></div>
+        </div>
+
+        <div class="auth-neo-bottom-card">
+          <span>Already registered?</span>
+          <a href="/login">Login now</a>
         </div>
       </div>
 
-      <div class="auth-form-side">
+      <div class="auth-neo-form-card">
+        <div class="auth-neo-form-top">
+          <span class="auth-neo-kicker">RentSpot</span>
+          <a href="/" class="auth-neo-home-link">Home</a>
+        </div>
+
         <h1>Register</h1>
+        <p class="auth-neo-subtext">Create your account and start exploring premium PG options.</p>
 
-        <form action="/register" method="POST" class="auth-form">
-
-          <!-- NAME -->
-          <div class="input-group">
-            <input type="text" name="name" placeholder="Full Name" required>
-            <span>👤</span>
+        <form action="/register" method="POST" class="auth-neo-form">
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">👤</span>
+            <input type="text" name="name" placeholder="Full name" required>
           </div>
 
-          <!-- EMAIL -->
-          <div class="input-group">
-            <input type="email" name="email" placeholder="Email" required>
-            <span>✉</span>
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">✉</span>
+            <input type="email" name="email" placeholder="Email address" required>
           </div>
 
-          <!-- PHONE (NEW) -->
-          <div class="input-group">
-            <input type="text" name="phone" placeholder="WhatsApp Number (91xxxxxxxxxx)" required>
-            <span>📱</span>
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">📱</span>
+            <input type="text" name="phone" placeholder="WhatsApp number" required>
           </div>
 
-          <!-- PASSWORD -->
-          <div class="input-group">
+          <div class="auth-neo-input">
+            <span class="auth-neo-input-icon">🔒</span>
             <input type="password" name="password" placeholder="Password" required>
-            <span>🔒</span>
           </div>
 
-          <button type="submit" class="primary-auth-btn">Register</button>
+          <button type="submit" class="auth-neo-submit">
+            <span>Create Account</span>
+            <span class="auth-neo-arrow">→</span>
+          </button>
         </form>
 
-        <p class="social-text">Create your account to continue</p>
+        <div class="auth-neo-footer-text">
+          Already have an account?
+          <a href="/login">Login</a>
+        </div>
       </div>
 
     </div>

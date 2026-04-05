@@ -66,28 +66,30 @@ function admin(req, res, next) {
   }
   next();
 }
-
 /* -------------------- HOME -------------------- */
 
 app.get("/", async (req, res) => {
   try {
-    const pgListResult = await pool.query('SELECT * FROM pg ORDER BY id DESC');
+    const pgListResult = await pool.query(
+      "SELECT * FROM pg ORDER BY id DESC"
+    );
+
     let notesResult;
 
-if (req.session.user) {
-  notesResult = await pool.query(
-    `SELECT * FROM notifications
-     WHERE user_id IS NULL OR user_id = $1
-     ORDER BY id DESC`,
-    [req.session.user.id]
-  );
-} else {
-  notesResult = await pool.query(
-    `SELECT * FROM notifications
-     WHERE user_id IS NULL
-     ORDER BY id DESC`
-  );
-}
+    if (req.session.user) {
+      notesResult = await pool.query(
+        `SELECT * FROM notifications
+         WHERE user_id IS NULL OR user_id = $1
+         ORDER BY id DESC`,
+        [req.session.user.id]
+      );
+    } else {
+      notesResult = await pool.query(
+        `SELECT * FROM notifications
+         WHERE user_id IS NULL
+         ORDER BY id DESC`
+      );
+    }
 
     const pgList = pgListResult.rows;
     const notes = notesResult.rows;
@@ -96,19 +98,22 @@ if (req.session.user) {
 
     for (const item of pgList) {
       const firstImageResult = await pool.query(
-        'SELECT * FROM images WHERE pg_id=$1 ORDER BY id ASC LIMIT 1',
+        "SELECT * FROM images WHERE pg_id=$1 ORDER BY id ASC LIMIT 1",
         [item.id]
       );
 
       pg.push({
         ...item,
-        firstImage: firstImageResult.rows[0] ? firstImageResult.rows[0].image : null
+        firstImage: firstImageResult.rows[0]
+          ? firstImageResult.rows[0].image
+          : null
       });
     }
 
     res.render("home", {
       pg,
       notes,
+      q: "",
       user: req.session.user
     });
   } catch (error) {
@@ -116,6 +121,78 @@ if (req.session.user) {
     res.send("Error loading home page");
   }
 });
+
+/* -------------------- SEARCH -------------------- */
+
+app.get("/search", async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+
+    let pgListResult;
+
+    if (q) {
+      pgListResult = await pool.query(
+        `SELECT * FROM pg
+         WHERE LOWER(title) LIKE LOWER($1)
+            OR LOWER(location) LIKE LOWER($1)
+            OR LOWER(description) LIKE LOWER($1)
+         ORDER BY id DESC`,
+        [`%${q}%`]
+      );
+    } else {
+      pgListResult = await pool.query(
+        "SELECT * FROM pg ORDER BY id DESC"
+      );
+    }
+
+    let notesResult;
+
+    if (req.session.user) {
+      notesResult = await pool.query(
+        `SELECT * FROM notifications
+         WHERE user_id IS NULL OR user_id = $1
+         ORDER BY id DESC`,
+        [req.session.user.id]
+      );
+    } else {
+      notesResult = await pool.query(
+        `SELECT * FROM notifications
+         WHERE user_id IS NULL
+         ORDER BY id DESC`
+      );
+    }
+
+    const pgList = pgListResult.rows;
+    const notes = notesResult.rows;
+
+    const pg = [];
+
+    for (const item of pgList) {
+      const firstImageResult = await pool.query(
+        "SELECT * FROM images WHERE pg_id=$1 ORDER BY id ASC LIMIT 1",
+        [item.id]
+      );
+
+      pg.push({
+        ...item,
+        firstImage: firstImageResult.rows[0]
+          ? firstImageResult.rows[0].image
+          : null
+      });
+    }
+
+    res.render("home", {
+      pg,
+      notes,
+      q,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.log("SEARCH ERROR:", error);
+    res.send("Error loading search results");
+  }
+});
+
 
 /* -------------------- LOGIN / REGISTER -------------------- */
 
