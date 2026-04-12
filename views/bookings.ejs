@@ -3,7 +3,6 @@
 <div class="admin-page">
 
   <div class="admin-top">
-
     <div>
       <p class="admin-small">Admin Panel</p>
       <h1>Manage Bookings</h1>
@@ -11,7 +10,6 @@
     </div>
 
     <a href="/admin" class="admin-secondary-btn">Back</a>
-
   </div>
 
   <div class="admin-panel">
@@ -34,6 +32,8 @@
               <th>Booking Type</th>
               <th>Roommate</th>
               <th>Status</th>
+              <th>Documents</th>
+              <th>Doc Verify</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -43,7 +43,6 @@
             <% bookings.forEach(function(b){ %>
 
               <tr>
-
                 <td><%= b.id %></td>
                 <td><%= b.pg_title || b.pg_id %></td>
                 <td><%= b.user_id %></td>
@@ -65,17 +64,70 @@
                 </td>
 
                 <td>
-                  <% if(b.status==="approved"){ %>
+                  <% if(b.status === "approved"){ %>
                     <span class="status approved">Approved</span>
-                  <% }else if(b.status==="rejected"){ %>
+                  <% } else if(b.status === "rejected"){ %>
                     <span class="status rejected">Rejected</span>
-                  <% }else{ %>
+                  <% } else { %>
                     <span class="status pending">Pending</span>
                   <% } %>
                 </td>
 
+                <!-- DOCUMENT VIEW -->
                 <td>
-                  <% if(b.status==="pending"){ %>
+                  <div class="doc-section">
+
+                    <% if(b.id_card){ %>
+                      <p style="margin-bottom:8px;">
+                        <a href="<%= b.id_card %>" target="_blank" class="btn-outline">
+                          👁 View Aadhaar
+                        </a>
+                      </p>
+                    <% } else { %>
+                      <p style="margin-bottom:8px;">No Aadhaar</p>
+                    <% } %>
+
+                    <% if(b.pan_card){ %>
+                      <p style="margin-bottom:8px;">
+                        <a href="<%= b.pan_card %>" target="_blank" class="btn-outline">
+                          👁 View PAN
+                        </a>
+                      </p>
+                    <% } else { %>
+                      <p style="margin-bottom:8px;">No PAN</p>
+                    <% } %>
+
+                  </div>
+                </td>
+
+                <!-- DOCUMENT STATUS -->
+                <td>
+                  <p style="margin-bottom:8px;">
+                    <span class="status-badge <%= b.document_status || 'pending' %>">
+                      <%= b.document_status ? b.document_status.toUpperCase() : "PENDING" %>
+                    </span>
+                  </p>
+
+                  <% if(b.document_reject_reason){ %>
+                    <p style="color:red; font-size:12px; margin-bottom:8px;">
+                      <%= b.document_reject_reason %>
+                    </p>
+                  <% } %>
+
+                  <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <a href="/mark-doc-valid/<%= b.id %>" class="approve-btn">
+                      ✅ Valid
+                    </a>
+
+                    <a href="/mark-doc-invalid/<%= b.id %>" class="reject-btn">
+                      ❌ Invalid
+                    </a>
+                  </div>
+                </td>
+
+                <!-- BOOKING ACTION -->
+                <td>
+                  <% if(b.status === "pending"){ %>
                     <div class="action-btns">
                       <a href="/approve-booking/<%= b.id %>" class="approve-btn">Approve</a>
                       <a href="/reject-booking/<%= b.id %>" class="reject-btn">Reject</a>

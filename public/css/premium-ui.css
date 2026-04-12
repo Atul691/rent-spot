@@ -2070,3 +2070,16 @@ img{width:100%;display:block}
   }
 
 }
+.doc-section{
+  min-width: 140px;
+}
+
+.status-badge.valid{
+  background:#e6f7ef;
+  color:#1f8f5f;
+}
+
+.status-badge.invalid{
+  background:#fdecea;
+  color:#da4f47;
+}

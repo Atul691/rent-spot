@@ -534,7 +534,10 @@ app.get("/book/:id", auth, async (req, res) => {
   }
 });
 
-app.post("/book/:id", auth, async (req, res) => {
+app.post("/book/:id", auth, upload.fields([
+  { name: "id_card", maxCount: 1 },
+  { name: "pan_card", maxCount: 1 }
+]), async (req, res) => {
   try {
     const pgResult = await pool.query(
       "SELECT * FROM pg WHERE id=$1",
@@ -547,28 +550,52 @@ app.post("/book/:id", auth, async (req, res) => {
       return res.send("PG not found");
     }
 
-    const { full_name, phone, age, entry_date, notes, booking_type, roommate_user_id } = req.body;
+    const {
+      full_name,
+      phone,
+      age,
+      entry_date,
+      notes,
+      booking_type,
+      roommate_user_id
+    } = req.body;
 
     if (!full_name || !phone || !age || !entry_date) {
       return res.send("Please fill all booking details");
     }
 
-   await pool.query(
-  `INSERT INTO bookings(user_id,pg_id,full_name,phone,age,entry_date,notes,status,roommate_user_id,booking_type)
-   VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-  [
-    req.session.user.id,
-    req.params.id,
-    full_name,
-    phone,
-    age,
-    entry_date,
-    notes || "",
-    "pending",
-    booking_type === "roommate" && roommate_user_id ? roommate_user_id : null,
-    booking_type || "solo"
-  ]
-);
+    const idCard = req.files && req.files.id_card ? req.files.id_card[0] : null;
+    const panCard = req.files && req.files.pan_card ? req.files.pan_card[0] : null;
+
+    if (!idCard || !panCard) {
+      return res.send("Please upload both Aadhaar Card and PAN Card");
+    }
+
+    await pool.query(
+      `INSERT INTO bookings(
+        user_id, pg_id, full_name, phone, age, entry_date, notes,
+        status, roommate_user_id, booking_type,
+        id_card, pan_card, document_status, document_reject_reason
+      )
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+      [
+        req.session.user.id,
+        req.params.id,
+        full_name,
+        phone,
+        age,
+        entry_date,
+        notes || "",
+        "pending",
+        booking_type === "roommate" && roommate_user_id ? roommate_user_id : null,
+        booking_type || "solo",
+        idCard.path,
+        panCard.path,
+        "pending",
+        null
+      ]
+    );
+
     res.redirect("/payment");
   } catch (error) {
     console.log("BOOKING SUBMIT ERROR:", error);
@@ -579,14 +606,14 @@ app.post("/book/:id", auth, async (req, res) => {
 app.get("/bookings", admin, async (req, res) => {
   try {
     const bookingsResult = await pool.query(`
-  SELECT bookings.*, 
-         pg.title AS pg_title,
-         u2.name AS roommate_name
-  FROM bookings
-  LEFT JOIN pg ON bookings.pg_id = pg.id
-  LEFT JOIN users u2 ON bookings.roommate_user_id = u2.id
-  ORDER BY bookings.id DESC
-`);
+      SELECT bookings.*, 
+             pg.title AS pg_title,
+             u2.name AS roommate_name
+      FROM bookings
+      LEFT JOIN pg ON bookings.pg_id = pg.id
+      LEFT JOIN users u2 ON bookings.roommate_user_id = u2.id
+      ORDER BY bookings.id DESC
+    `);
 
     res.render("bookings", {
       bookings: bookingsResult.rows,
@@ -600,10 +627,26 @@ app.get("/bookings", admin, async (req, res) => {
 
 app.get("/approve-booking/:id", admin, async (req, res) => {
   try {
+    const bookingResult = await pool.query(
+      "SELECT * FROM bookings WHERE id = $1",
+      [req.params.id]
+    );
+
+    const booking = bookingResult.rows[0];
+
+    if (!booking) {
+      return res.send("Booking not found");
+    }
+
+    if (booking.document_status !== "valid") {
+      return res.send("Please verify user documents before approving booking");
+    }
+
     await pool.query(
       "UPDATE bookings SET status='approved' WHERE id=$1",
       [req.params.id]
     );
+
     res.redirect("/bookings");
   } catch (error) {
     console.log("APPROVE BOOKING ERROR:", error);
@@ -621,6 +664,40 @@ app.get("/reject-booking/:id", admin, async (req, res) => {
   } catch (error) {
     console.log("REJECT BOOKING ERROR:", error);
     res.send("Error rejecting booking");
+  }
+});
+
+app.get("/mark-doc-valid/:id", admin, async (req, res) => {
+  try {
+    await pool.query(
+      `UPDATE bookings
+       SET document_status = 'valid',
+           document_reject_reason = NULL
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.redirect("/bookings");
+  } catch (error) {
+    console.log("MARK DOC VALID ERROR:", error);
+    res.send("Error marking documents valid");
+  }
+});
+
+app.get("/mark-doc-invalid/:id", admin, async (req, res) => {
+  try {
+    await pool.query(
+      `UPDATE bookings
+       SET document_status = 'invalid',
+           document_reject_reason = 'Uploaded documents are invalid or unclear.'
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.redirect("/bookings");
+  } catch (error) {
+    console.log("MARK DOC INVALID ERROR:", error);
+    res.send("Error marking documents invalid");
   }
 });
 
