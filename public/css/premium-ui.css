@@ -2176,3 +2176,68 @@ img{width:100%;display:block}
     text-align: center;
   }
 }
+/* ===== MOBILE FIX FOR BOOKING CARDS ===== */
+
+@media (max-width: 768px){
+
+  .booking-admin-card{
+    padding:12px;
+    border-radius:16px;
+  }
+
+  .booking-admin-info-grid{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .booking-info-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 12px;
+  }
+
+  .booking-info-box span{
+    font-size:13px;
+    font-weight:600;
+    color:#6b5f55;
+  }
+
+  .booking-info-box strong{
+    font-size:14px;
+    text-align:right;
+    max-width:60%;
+    word-break:break-word;
+  }
+
+  .booking-admin-title{
+    font-size:16px;
+  }
+
+  .booking-admin-user{
+    font-size:13px;
+  }
+
+  .booking-doc-actions{
+    flex-direction:column;
+  }
+
+  .booking-doc-actions a,
+  .doc-missing{
+    width:100%;
+    text-align:center;
+  }
+
+  .booking-verify-actions,
+  .booking-final-actions{
+    flex-direction:column;
+  }
+
+  .approve-btn,
+  .reject-btn{
+    width:100%;
+    text-align:center;
+    padding:10px;
+  }
+
+}
