@@ -2083,3 +2083,96 @@ img{width:100%;display:block}
   background:#fdecea;
   color:#da4f47;
 }
+/* ===== TABLE FIX FOR ALL DEVICES ===== */
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* NORMAL TABLE */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px; /* important for scroll */
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap; /* text break na ho */
+}
+
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  .admin-table {
+    display: block;
+    min-width: 100%;
+  }
+
+  .admin-table thead {
+    display: none; /* header hide */
+  }
+
+  .admin-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .admin-table tr {
+    display: block;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  }
+
+  .admin-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    white-space: normal;
+  }
+
+  .admin-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* LABELS (IMPORTANT) */
+  .admin-table td::before {
+    font-weight: 600;
+    color: #555;
+  }
+
+  .admin-table td:nth-child(1)::before { content: "ID"; }
+  .admin-table td:nth-child(2)::before { content: "PG"; }
+  .admin-table td:nth-child(3)::before { content: "User"; }
+  .admin-table td:nth-child(4)::before { content: "Name"; }
+  .admin-table td:nth-child(5)::before { content: "Phone"; }
+  .admin-table td:nth-child(6)::before { content: "Age"; }
+  .admin-table td:nth-child(7)::before { content: "Entry"; }
+  .admin-table td:nth-child(8)::before { content: "Type"; }
+  .admin-table td:nth-child(9)::before { content: "Roommate"; }
+  .admin-table td:nth-child(10)::before { content: "Status"; }
+  .admin-table td:nth-child(11)::before { content: "Docs"; }
+  .admin-table td:nth-child(12)::before { content: "Verify"; }
+  .admin-table td:nth-child(13)::before { content: "Action"; }
+
+  /* BUTTON FIX */
+  .action-btns,
+  .doc-section {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .approve-btn,
+  .reject-btn,
+  .btn-outline {
+    width: 100%;
+    text-align: center;
+  }
+}
